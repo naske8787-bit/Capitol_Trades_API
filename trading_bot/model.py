@@ -1,13 +1,14 @@
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import LSTM, Dense, Dropout
 import os
+
 import joblib
+import numpy as np
+from keras.layers import LSTM, Dense, Dropout
+from keras.models import Sequential, load_model
+from sklearn.preprocessing import MinMaxScaler
+
 from config import MODEL_PATH
 
-SCALER_PATH = "models/scaler.pkl"
+SCALER_PATH = os.path.join(os.path.dirname(MODEL_PATH), "scaler.pkl")
 
 def create_model(input_shape):
     """Create LSTM model for price prediction."""
@@ -43,13 +44,15 @@ def train_model(data, epochs=50):
     return model, scaler
 
 def load_trained_model():
-    """Load pre-trained model."""
-    if os.path.exists(MODEL_PATH):
-        model = load_model(MODEL_PATH)
-        scaler = joblib.load(SCALER_PATH)
-        return model, scaler
-    else:
-        raise FileNotFoundError("Model not found. Train the model first.")
+    """Load pre-trained model artifacts."""
+    if not os.path.exists(MODEL_PATH) or not os.path.exists(SCALER_PATH):
+        raise FileNotFoundError(
+            "Model artifacts not found. Run `python train.py` from `trading_bot/` first."
+        )
+
+    model = load_model(MODEL_PATH)
+    scaler = joblib.load(SCALER_PATH)
+    return model, scaler
 
 def predict_price(model, scaler, recent_data):
     """Predict next price."""

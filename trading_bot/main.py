@@ -1,7 +1,7 @@
-from strategy import TradingStrategy
-from broker import Broker
 import time
-from config import MAX_POSITIONS
+
+from broker import Broker
+from strategy import TradingStrategy
 
 def main():
     broker = Broker()

@@ -5,7 +5,9 @@
 **/__pycache__/
 *.py[cod]
 
-# Trading bot runtime files
+# Local secrets and generated bot artifacts
+trading_bot/.env
 trading_bot/bot.log
 trading_bot/output.log
-trading_bot/bot.pid
+trading_bot/*.pid
+trading_bot/models/scaler.pkl

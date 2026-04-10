@@ -181,9 +181,22 @@ def fetch_capitol_trades():
         _LAST_FETCH_TS = now
         return _CAPITOL_TRADES_CACHE
 
-def fetch_stock_data(symbol, period="1y"):
-    """Fetch historical stock data using yfinance."""
-    data = yf.download(symbol, period=period, progress=False)
+def fetch_stock_data(symbol, period="1y", start=None, end=None):
+    """Fetch historical stock data using yfinance.
+
+    Supports either a relative `period` (used by the live strategy) or explicit
+    `start` / `end` dates (used by backtesting).
+    """
+    download_kwargs = {"progress": False}
+    if start is not None or end is not None:
+        if start is not None:
+            download_kwargs["start"] = start
+        if end is not None:
+            download_kwargs["end"] = end
+    else:
+        download_kwargs["period"] = period
+
+    data = yf.download(symbol, **download_kwargs)
     if isinstance(data, pd.Series):
         data = data.to_frame()
     return data

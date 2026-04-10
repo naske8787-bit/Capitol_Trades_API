@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # API Keys
 CAPITOL_TRADES_API_URL = os.getenv("CAPITOL_TRADES_API_URL", "https://api.capitoltrades.com")
@@ -16,4 +17,4 @@ RISK_PER_TRADE = 0.01  # 1%
 MAX_POSITIONS = 5
 
 # Model settings
-MODEL_PATH = "models/trading_model.h5"
+MODEL_PATH = os.path.join(BASE_DIR, "models", "trading_model.h5")
