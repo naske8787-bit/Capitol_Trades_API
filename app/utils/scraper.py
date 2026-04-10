@@ -27,8 +27,8 @@ def scrape_trade(page_number):
     trade_rows = soup.select("tbody > tr")  # Locate all <tr> directly under <tbody>
     raw_trades = []
     for row in trade_rows:
-        # Extract each cell's text and clean it
-        cells = [cell.text.strip() for cell in row.find_all("td")]
+        # Extract each cell's text and preserve spacing between nested elements
+        cells = [cell.get_text(" ", strip=True) for cell in row.find_all("td")]
         raw_trades.append(cells)
 
     return raw_trades

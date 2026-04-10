@@ -1,34 +1,26 @@
-import json
 from datetime import UTC, datetime
 
-
-def _json_response(start_response, payload, status="200 OK"):
-    body = json.dumps(payload).encode("utf-8")
-    headers = [
-        ("Content-Type", "application/json; charset=utf-8"),
-        ("Content-Length", str(len(body))),
-    ]
-    start_response(status, headers)
-    return [body]
+from app.routes import ROUTES
+from app.utils.helpers import error_response, json_response
 
 
 def app(environ, start_response):
-    """Minimal WSGI app for the Capitol Trades API workspace."""
+    """WSGI application for the Capitol Trades API workspace."""
     method = environ.get("REQUEST_METHOD", "GET").upper()
     path = environ.get("PATH_INFO", "/")
 
     if method == "GET" and path == "/":
-        return _json_response(
+        return json_response(
             start_response,
             {
                 "name": "Capitol Trades API",
                 "status": "ok",
-                "routes": ["/health"],
+                "routes": ["/health", "/trades", "/politicians", "/sectors", "/news"],
             },
         )
 
     if method == "GET" and path == "/health":
-        return _json_response(
+        return json_response(
             start_response,
             {
                 "status": "ok",
@@ -36,8 +28,23 @@ def app(environ, start_response):
             },
         )
 
-    return _json_response(
-        start_response,
-        {"error": "Not Found", "path": path},
-        status="404 Not Found",
-    )
+    handler = ROUTES.get((method, path))
+    if handler is None:
+        return error_response(
+            start_response,
+            "Not Found",
+            status="404 Not Found",
+            details={"path": path},
+        )
+
+    try:
+        return json_response(start_response, handler(environ))
+    except ValueError as exc:
+        return error_response(start_response, str(exc), status="400 Bad Request")
+    except Exception as exc:
+        return error_response(
+            start_response,
+            "Unable to fetch Capitol Trades data right now.",
+            status="502 Bad Gateway",
+            details={"message": str(exc)},
+        )
