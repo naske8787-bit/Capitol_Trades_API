@@ -1,0 +1,11 @@
+# Python environment
+.venv/
+
+# Bytecode caches
+**/__pycache__/
+*.py[cod]
+
+# Trading bot runtime files
+trading_bot/bot.log
+trading_bot/output.log
+trading_bot/bot.pid
