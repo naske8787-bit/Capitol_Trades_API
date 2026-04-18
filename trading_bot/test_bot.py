@@ -11,7 +11,7 @@ def main():
     print("Bot initialized successfully")
     print(f"Account balance: ${broker.get_account_balance()}")
 
-    signal = strategy.analyze_signal("AAPL")
+    signal = strategy.analyze_signal("AAPL", broker=broker)
     print(f"AAPL signal: {signal}")
     print("Smoke test completed successfully.")
 

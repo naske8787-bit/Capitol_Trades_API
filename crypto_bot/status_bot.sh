@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 cd "$(dirname "$0")"
 
 PID_FILE="bot.pid"
 LOG_FILE="bot.log"
 SUPERVISOR_LOG="supervisor.log"
-SESSION_NAME="trading_bot"
+SESSION_NAME="crypto_bot"
 
 if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-  echo "Bot is running in tmux session '$SESSION_NAME'."
+  echo "Crypto bot is running in tmux session '$SESSION_NAME'."
   echo "Last 20 bot log lines:"
   [ -f "$LOG_FILE" ] && tail -20 "$LOG_FILE"
   echo
@@ -18,13 +18,13 @@ if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$SESSION_NAME" 2>/dev
 fi
 
 if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-  echo "Bot is running with PID $(cat "$PID_FILE")."
+  echo "Crypto bot is running with PID $(cat "$PID_FILE")."
   echo "Last 20 log lines:"
-  tail -20 "$LOG_FILE"
+  [ -f "$LOG_FILE" ] && tail -20 "$LOG_FILE"
   exit 0
 fi
 
-echo "Bot is not running."
+echo "Crypto bot is not running."
 if [ -f "$LOG_FILE" ]; then
   echo "Last 20 log lines:"
   tail -20 "$LOG_FILE"

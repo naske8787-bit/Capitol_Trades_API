@@ -10,7 +10,7 @@ if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
   exit 1
 fi
 
-nohup python main.py > "$LOG_FILE" 2>&1 &
+nohup python -u main.py > "$LOG_FILE" 2>&1 &
 PID=$!
 echo "$PID" > "$PID_FILE"
 echo "Bot started in background with PID $PID. Logs: $LOG_FILE"

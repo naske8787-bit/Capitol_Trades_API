@@ -9,5 +9,7 @@
 trading_bot/.env
 trading_bot/bot.log
 trading_bot/output.log
+trading_bot/supervisor.log
 trading_bot/*.pid
+trading_bot/logs/
 trading_bot/models/scaler.pkl

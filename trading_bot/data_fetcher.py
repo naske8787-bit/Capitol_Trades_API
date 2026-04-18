@@ -6,9 +6,10 @@ import requests
 import yfinance as yf
 from bs4 import BeautifulSoup
 
-from config import CAPITOL_TRADES_API_URL, CAPITOL_TRADES_MAX_PAGES
+from config import CAPITOL_TRADES_API_URL, CAPITOL_TRADES_MAX_PAGES, STOCK_DATA_CACHE_TTL_SECONDS
 
 _CAPITOL_TRADES_CACHE = []
+_STOCK_DATA_CACHE = {}
 _LAST_FETCH_TS = 0.0
 _LAST_WARNING_TS = 0.0
 _CACHE_TTL_SECONDS = 300
@@ -181,12 +182,21 @@ def fetch_capitol_trades():
         _LAST_FETCH_TS = now
         return _CAPITOL_TRADES_CACHE
 
-def fetch_stock_data(symbol, period="1y", start=None, end=None):
+def fetch_stock_data(symbol, period="1y", start=None, end=None, use_cache=True):
     """Fetch historical stock data using yfinance.
 
     Supports either a relative `period` (used by the live strategy) or explicit
-    `start` / `end` dates (used by backtesting).
+    `start` / `end` dates (used by backtesting). Live requests are cached briefly
+    to avoid repeated downloads for each symbol check.
     """
+    cache_key = (str(symbol).upper(), period, start, end)
+    now = time.time()
+
+    if use_cache and start is None and end is None:
+        cached = _STOCK_DATA_CACHE.get(cache_key)
+        if cached and now - cached[0] < STOCK_DATA_CACHE_TTL_SECONDS:
+            return cached[1].copy()
+
     download_kwargs = {"progress": False}
     if start is not None or end is not None:
         if start is not None:
@@ -199,6 +209,11 @@ def fetch_stock_data(symbol, period="1y", start=None, end=None):
     data = yf.download(symbol, **download_kwargs)
     if isinstance(data, pd.Series):
         data = data.to_frame()
+    if isinstance(data.columns, pd.MultiIndex):
+        data.columns = data.columns.get_level_values(0)
+
+    if use_cache and start is None and end is None:
+        _STOCK_DATA_CACHE[cache_key] = (now, data.copy())
     return data
 
 def preprocess_data(data):

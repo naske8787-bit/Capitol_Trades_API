@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 cd "$(dirname "$0")"
 
 PID_FILE="bot.pid"
-SESSION_NAME="trading_bot"
+SESSION_NAME="crypto_bot"
 stopped_any=0
 
 if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
@@ -16,7 +16,7 @@ if [ -f "$PID_FILE" ]; then
   PID=$(cat "$PID_FILE")
   if kill -0 "$PID" 2>/dev/null; then
     kill "$PID"
-    echo "Stopped bot with PID $PID."
+    echo "Stopped crypto bot with PID $PID."
     stopped_any=1
   else
     echo "Process $PID is not running. Removing stale PID file."
@@ -25,5 +25,5 @@ if [ -f "$PID_FILE" ]; then
 fi
 
 if [ "$stopped_any" -eq 0 ]; then
-  echo "No running bot process found."
+  echo "No running crypto bot process found."
 fi
