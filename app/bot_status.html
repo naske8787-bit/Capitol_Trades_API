@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bot Control Panel</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #1a1a2e; color: #eee; text-align: center; margin: 0; padding: 40px 20px; }
+        h1 { font-size: 1.8em; margin-bottom: 30px; color: #fff; }
+        .grid { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+        .card { background: #16213e; border-radius: 12px; padding: 28px 32px; min-width: 260px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .card h2 { margin: 0 0 12px; font-size: 1.2em; color: #aaa; }
+        .indicator { font-size: 1.5em; font-weight: bold; margin-bottom: 20px; padding: 10px 18px; border-radius: 8px; display: inline-block; }
+        .running  { background: #1a3a2a; color: #3fb950; border: 1px solid #3fb950; }
+        .stopped  { background: #3a1a1a; color: #f85149; border: 1px solid #f85149; }
+        .checking { background: #2a2a2a; color: #aaa;    border: 1px solid #555; }
+        .log { background: #0d1117; border-radius: 6px; padding: 10px; text-align: left; font-size: 11px; color: #8b949e; max-height: 140px; overflow-y: auto; margin-bottom: 18px; white-space: pre-wrap; word-break: break-word; }
+        .btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        button { padding: 8px 20px; border: none; border-radius: 6px; font-size: 0.95em; cursor: pointer; font-weight: bold; transition: opacity .15s; }
+        button:hover { opacity: 0.8; }
+        button:disabled { opacity: 0.4; cursor: default; }
+        .btn-start   { background: #238636; color: #fff; }
+        .btn-stop    { background: #da3633; color: #fff; }
+        .fault-box { background: #2d1a1a; border: 1px solid #6e3030; border-radius: 6px; padding: 8px 10px; text-align: left; font-size: 11px; color: #f85149; max-height: 100px; overflow-y: auto; margin-bottom: 10px; white-space: pre-wrap; word-break: break-word; display: none; }
+        .fault-header { font-size: 0.85em; color: #f85149; margin-bottom: 6px; cursor: pointer; user-select: none; }
+        .fault-header.none { color: #3fb950; cursor: default; }
+        .fault-box { background: #2d1a1a; border: 1px solid #6e3030; border-radius: 6px; padding: 8px 10px; text-align: left; font-size: 11px; color: #f85149; max-height: 100px; overflow-y: auto; margin-bottom: 10px; white-space: pre-wrap; word-break: break-word; display: none; }
+        .fault-header { font-size: 0.85em; margin-bottom: 6px; cursor: pointer; user-select: none; }
+        .fault-header.has-faults { color: #f85149; }
+        .fault-header.no-faults  { color: #3fb950; cursor: default; }
+        .btn-restart { background: #9e6a03; color: #fff; }
+        .btn-reset   { background: #6e3030; color: #fff; }
+        #msg { margin-top: 20px; font-size: 0.95em; color: #8b949e; min-height: 24px; }
+    </style>
+</head>
+<body>
+    <h1>🤖 Bot Control Panel</h1>
+    <div class="grid">
+        <div class="card">
+            <h2>Trading Bot</h2>
+            <div id="trading-status" class="indicator checking">Checking…</div>
+            <div id="trading-log" class="log"></div>
+            <div id="trading-fault-header" class="fault-header no-faults">✅ No faults</div>
+            <div id="trading-fault-box" class="fault-box"></div>
+            <div class="btns">
+                <button class="btn-start"   onclick="control('trading_bot','start')">▶ Start</button>
+                <button class="btn-stop"    onclick="control('trading_bot','stop')">■ Stop</button>
+                <button class="btn-restart" onclick="restart('trading_bot')">↺ Restart</button>
+                <button class="btn-reset"   onclick="resetFaults('trading_bot')" id="trading-reset-btn" disabled>🔄 Reset Faults</button>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Crypto Bot</h2>
+            <div id="crypto-status" class="indicator checking">Checking…</div>
+            <div id="crypto-log" class="log"></div>
+            <div id="crypto-fault-header" class="fault-header no-faults">✅ No faults</div>
+            <div id="crypto-fault-box" class="fault-box"></div>
+            <div class="btns">
+                <button class="btn-start"   onclick="control('crypto_bot','start')">▶ Start</button>
+                <button class="btn-stop"    onclick="control('crypto_bot','stop')">■ Stop</button>
+                <button class="btn-restart" onclick="restart('crypto_bot')">↺ Restart</button>
+                <button class="btn-reset"   onclick="resetFaults('crypto_bot')" id="crypto-reset-btn" disabled>🔄 Reset Faults</button>
+            </div>
+        </div>
+    </div>
+    <div id="msg"></div>
+
+    <script>
+        function setStatus(id, running, log, faults, faultCount) {
+            const el = document.getElementById(id + '-status');
+            el.textContent = running ? '🟢 Running' : '🔴 Stopped';
+            el.className = 'indicator ' + (running ? 'running' : 'stopped');
+            const logEl = document.getElementById(id + '-log');
+            if (log && log.length) logEl.textContent = log.slice(-8).join('\n');
+
+            const faultHeader = document.getElementById(id + '-fault-header');
+            const faultBox    = document.getElementById(id + '-fault-box');
+            const resetBtn    = document.getElementById(id.replace('-','_').replace('-','_') + '-reset-btn');
+            // id is 'trading' or 'crypto', button id is 'trading-reset-btn'
+            const btn = document.getElementById(id + '-reset-btn');
+
+            if (faultCount > 0) {
+                faultHeader.textContent = `⚠️ ${faultCount} fault${faultCount > 1 ? 's' : ''} detected — click to expand`;
+                faultHeader.className = 'fault-header has-faults';
+                faultHeader.onclick = () => { faultBox.style.display = faultBox.style.display === 'block' ? 'none' : 'block'; };
+                faultBox.textContent = (faults || []).join('\n');
+                if (btn) btn.disabled = false;
+            } else {
+                faultHeader.textContent = '✅ No faults';
+                faultHeader.className = 'fault-header no-faults';
+                faultHeader.onclick = null;
+                faultBox.style.display = 'none';
+                if (btn) btn.disabled = true;
+            }
+        }
+
+        function refresh() {
+            fetch('/bot_status')
+                .then(r => r.json())
+                .then(data => {
+                    const tb = data.trading_bot || {};
+                    const cb = data.crypto_bot  || {};
+                    setStatus('trading', tb.running ?? false, tb.log, tb.faults, tb.fault_count ?? 0);
+                    setStatus('crypto',  cb.running ?? false, cb.log, cb.faults, cb.fault_count ?? 0);
+                })
+                .catch(() => {
+                    setStatus('trading', false, [], [], 0);
+                    setStatus('crypto',  false, [], [], 0);
+                });
+        }
+
+        function msg(text) {
+            document.getElementById('msg').textContent = text;
+            setTimeout(() => document.getElementById('msg').textContent = '', 4000);
+        }
+
+        function control(bot, action) {
+            fetch('/bot_control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bot, action })
+            })
+            .then(r => r.json())
+            .then(d => { msg(d.message || d.error || 'Done'); setTimeout(refresh, 1500); })
+            .catch(() => msg('Request failed'));
+        }
+
+        async function restart(bot) {
+            msg('Restarting…');
+            await fetch('/bot_control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bot, action: 'stop' })
+            });
+            setTimeout(() => control(bot, 'start'), 2000);
+        }
+
+        function resetFaults(bot) {
+            if (!confirm(`Clear all fault logs for ${bot}?`)) return;
+            control(bot, 'clear_faults');
+        }
+
+        refresh();
+        setInterval(refresh, 10000);
+    </script>
+</body>
+</html>

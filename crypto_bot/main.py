@@ -25,6 +25,9 @@ def main():
                     f"{symbol}: {signal} | "
                     f"trend={analysis.get('trend_strength_pct', 0.0):.2f}% | "
                     f"rsi={analysis.get('rsi', 0.0):.1f} | "
+                    f"macd_hist={analysis.get('macd_hist', 0.0):.4f} | "
+                    f"atr={analysis.get('atr', 0.0):.4f} | "
+                    f"vol_ok={analysis.get('volume_ok', True)} | "
                     f"momentum={analysis.get('momentum_pct', 0.0):.2f}%"
                 )
                 strategy.execute_trade(signal, symbol, broker)

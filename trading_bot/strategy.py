@@ -2,6 +2,7 @@ import time
 
 from config import (
     BUY_THRESHOLD_PCT,
+    ETF_SYMBOLS,
     MARKET_REGIME_LONG_WINDOW,
     MARKET_REGIME_SHORT_WINDOW,
     MARKET_REGIME_SYMBOL,
@@ -147,8 +148,11 @@ class TradingStrategy:
                 entry_price = float(position.get("entry_price") or current_price)
                 if entry_price <= 0:
                     entry_price = current_price
-                stop_loss_price = entry_price * (1 - STOP_LOSS_PCT)
-                take_profit_price = entry_price * (1 + TAKE_PROFIT_PCT)
+                is_etf = symbol in ETF_SYMBOLS
+                sl_pct = STOP_LOSS_PCT * 0.6 if is_etf else STOP_LOSS_PCT
+                tp_pct = TAKE_PROFIT_PCT * 0.5 if is_etf else TAKE_PROFIT_PCT
+                stop_loss_price   = entry_price * (1 - sl_pct)
+                take_profit_price = entry_price * (1 + tp_pct)
                 self.last_analysis[symbol].update(
                     {
                         "entry_price": entry_price,
@@ -179,6 +183,13 @@ class TradingStrategy:
                 open_positions_count = len(self.positions)
 
             has_capacity = open_positions_count < MAX_POSITIONS
+            is_etf = symbol in ETF_SYMBOLS
+
+            # ETFs use tighter risk params: smaller stop, smaller target, longer cooldown
+            etf_stop_loss   = STOP_LOSS_PCT * 0.6        # 3% default
+            etf_take_profit = TAKE_PROFIT_PCT * 0.5      # 6% default
+            etf_cooldown    = TRADE_COOLDOWN_MINUTES * 4  # 60 min default
+
             has_model_edge = predicted_change >= BUY_THRESHOLD_PCT
             has_strong_model_edge = predicted_change >= BUY_THRESHOLD_PCT * 1.5
             has_positive_sentiment = sentiment >= MIN_SENTIMENT_TO_BUY
@@ -190,16 +201,24 @@ class TradingStrategy:
 
             if not has_capacity or in_cooldown:
                 return "HOLD"
-            if not market_state.get("favorable", True) and not has_strong_sentiment:
+            if not market_state.get("favorable", True) and not has_strong_sentiment and not is_etf:
                 return "HOLD"
 
-            if trend_confirmation:
-                if has_model_edge and has_positive_sentiment:
+            if is_etf:
+                # ETFs: sentiment is unreliable — rely on ML prediction + trend only
+                # Also allow buying ETFs in unfavorable markets as a hedge (e.g. GLD)
+                if trend_confirmation and has_model_edge and positive_momentum:
                     return "BUY"
-                if has_strong_model_edge and positive_momentum:
+                if has_strong_model_edge and trend_strength >= MIN_TREND_STRENGTH_PCT:
                     return "BUY"
-                if has_strong_sentiment and positive_momentum:
-                    return "BUY"
+            else:
+                if trend_confirmation:
+                    if has_model_edge and has_positive_sentiment:
+                        return "BUY"
+                    if has_strong_model_edge and positive_momentum:
+                        return "BUY"
+                    if has_strong_sentiment and positive_momentum:
+                        return "BUY"
 
             return "HOLD"
         except Exception as e:

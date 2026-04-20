@@ -1,9 +1,10 @@
 import time
 
 from broker import Broker
-from config import WATCHLIST
+from config import AUTO_RETRAIN_ENABLED, AUTO_RETRAIN_INTERVAL_HOURS, WATCHLIST
 from performance_tracker import PerformanceTracker
 from strategy import TradingStrategy
+from train import retrain_models
 
 
 def main():
@@ -12,6 +13,7 @@ def main():
     tracker = PerformanceTracker()
 
     symbols = WATCHLIST
+    last_retrain_ts = 0.0
 
     print("Trading bot started. Press Ctrl+C to stop.")
     startup_snapshot = tracker.record_equity_snapshot(broker, note="startup")
@@ -23,6 +25,19 @@ def main():
     )
 
     while True:
+        now = time.time()
+
+        # Auto-retrain on schedule
+        if AUTO_RETRAIN_ENABLED:
+            retrain_interval_secs = AUTO_RETRAIN_INTERVAL_HOURS * 3600
+            if now - last_retrain_ts >= retrain_interval_secs:
+                print(f"Auto-retraining models (every {AUTO_RETRAIN_INTERVAL_HOURS}h)...")
+                retrain_models(symbols=symbols)
+                # Flush cached models so strategy picks up the fresh weights
+                strategy.model_cache.clear()
+                last_retrain_ts = time.time()
+                print("Auto-retrain complete. Resuming trading loop.")
+
         for symbol in symbols:
             try:
                 signal = strategy.analyze_signal(symbol, broker=broker)

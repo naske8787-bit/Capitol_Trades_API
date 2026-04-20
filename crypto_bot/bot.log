@@ -1,0 +1,1403 @@
+BTC/USD: HOLD | trend=-0.66% | rsi=41.3 | macd_hist=48.6643 | atr=397.0076 | vol_ok=True | momentum=-0.18%
+ETH/USD: HOLD | trend=-1.04% | rsi=36.9 | macd_hist=1.9211 | atr=15.4920 | vol_ok=True | momentum=-0.34%
+SOL/USD: BUY | trend=-0.84% | rsi=41.6 | macd_hist=0.0521 | atr=0.6423 | vol_ok=True | momentum=0.05%
+Error executing trade for SOL/USD: {"available":"177.18","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.08, available: 177.18)","symbol":"USD"}
+AVAX/USD: HOLD | trend=-0.96% | rsi=41.3 | macd_hist=0.0099 | atr=0.0678 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.54% | rsi=47.1 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.18%
+XRP/USD: HOLD | trend=-0.71% | rsi=41.0 | macd_hist=0.0010 | atr=0.0085 | vol_ok=True | momentum=-0.01%
+LINK/USD: HOLD | trend=-0.56% | rsi=46.5 | macd_hist=0.0113 | atr=0.0642 | vol_ok=True | momentum=0.02%
+LTC/USD: HOLD | trend=-0.68% | rsi=47.4 | macd_hist=0.0739 | atr=0.3239 | vol_ok=True | momentum=0.66%
+Portfolio snapshot: cash=$1870.78, portfolio=$96962.23
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=41.6 | macd_hist=50.9124 | atr=397.0076 | vol_ok=True | momentum=-0.15%
+ETH/USD: HOLD | trend=-1.04% | rsi=37.3 | macd_hist=2.0122 | atr=15.5000 | vol_ok=True | momentum=-0.29%
+SOL/USD: BUY | trend=-0.84% | rsi=41.7 | macd_hist=0.0530 | atr=0.6423 | vol_ok=True | momentum=0.06%
+Error executing trade for SOL/USD: {"available":"177.18","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.42, available: 177.18)","symbol":"USD"}
+AVAX/USD: HOLD | trend=-0.96% | rsi=41.3 | macd_hist=0.0099 | atr=0.0678 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.54% | rsi=46.9 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.17%
+XRP/USD: HOLD | trend=-0.71% | rsi=40.8 | macd_hist=0.0010 | atr=0.0085 | vol_ok=True | momentum=-0.04%
+LINK/USD: HOLD | trend=-0.56% | rsi=46.7 | macd_hist=0.0115 | atr=0.0642 | vol_ok=True | momentum=0.04%
+LTC/USD: HOLD | trend=-0.68% | rsi=46.7 | macd_hist=0.0713 | atr=0.3252 | vol_ok=True | momentum=0.61%
+Portfolio snapshot: cash=$1870.78, portfolio=$97066.20
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=42.8 | macd_hist=58.7823 | atr=397.0076 | vol_ok=True | momentum=-0.03%
+ETH/USD: HOLD | trend=-1.02% | rsi=38.7 | macd_hist=2.3588 | atr=15.5000 | vol_ok=True | momentum=-0.12%
+SOL/USD: BUY | trend=-0.82% | rsi=42.8 | macd_hist=0.0635 | atr=0.6423 | vol_ok=True | momentum=0.20%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.36, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.95% | rsi=42.1 | macd_hist=0.0108 | atr=0.0678 | vol_ok=True | momentum=0.00%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.91, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.52% | rsi=48.5 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.31%
+XRP/USD: BUY | trend=-0.70% | rsi=41.6 | macd_hist=0.0011 | atr=0.0085 | vol_ok=True | momentum=0.05%
+Error executing trade for XRP/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.35, available: 118.78)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.53% | rsi=48.7 | macd_hist=0.0131 | atr=0.0642 | vol_ok=True | momentum=0.25%
+LTC/USD: HOLD | trend=-0.67% | rsi=47.9 | macd_hist=0.0756 | atr=0.3265 | vol_ok=True | momentum=0.70%
+Portfolio snapshot: cash=$1870.78, portfolio=$97034.03
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.65% | rsi=42.4 | macd_hist=55.7587 | atr=397.0076 | vol_ok=True | momentum=-0.08%
+ETH/USD: HOLD | trend=-1.02% | rsi=38.2 | macd_hist=2.2380 | atr=15.5000 | vol_ok=True | momentum=-0.18%
+SOL/USD: BUY | trend=-0.82% | rsi=42.9 | macd_hist=0.0644 | atr=0.6423 | vol_ok=True | momentum=0.21%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.42, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.95% | rsi=42.1 | macd_hist=0.0108 | atr=0.0678 | vol_ok=True | momentum=0.00%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 383.17, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.51% | rsi=49.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.38%
+XRP/USD: BUY | trend=-0.70% | rsi=41.6 | macd_hist=0.0011 | atr=0.0085 | vol_ok=True | momentum=0.06%
+Error executing trade for XRP/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.39, available: 118.78)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.54% | rsi=48.1 | macd_hist=0.0126 | atr=0.0642 | vol_ok=True | momentum=0.19%
+LTC/USD: HOLD | trend=-0.68% | rsi=47.2 | macd_hist=0.0730 | atr=0.3265 | vol_ok=True | momentum=0.64%
+Portfolio snapshot: cash=$1870.78, portfolio=$97030.44
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=42.8 | macd_hist=58.5682 | atr=397.0076 | vol_ok=True | momentum=-0.03%
+ETH/USD: HOLD | trend=-1.02% | rsi=38.5 | macd_hist=2.3265 | atr=15.5000 | vol_ok=True | momentum=-0.14%
+SOL/USD: BUY | trend=-0.82% | rsi=43.0 | macd_hist=0.0652 | atr=0.6463 | vol_ok=True | momentum=0.23%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.2, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.92% | rsi=43.8 | macd_hist=0.0125 | atr=0.0678 | vol_ok=True | momentum=0.22%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.78, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.50% | rsi=50.8 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.53%
+XRP/USD: BUY | trend=-0.70% | rsi=42.2 | macd_hist=0.0012 | atr=0.0085 | vol_ok=True | momentum=0.11%
+Error executing trade for XRP/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.42, available: 118.78)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.53% | rsi=48.7 | macd_hist=0.0131 | atr=0.0642 | vol_ok=True | momentum=0.25%
+LTC/USD: HOLD | trend=-0.67% | rsi=47.6 | macd_hist=0.0748 | atr=0.3265 | vol_ok=True | momentum=0.68%
+Portfolio snapshot: cash=$1870.78, portfolio=$97103.30
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=42.8 | macd_hist=58.7857 | atr=397.0076 | vol_ok=True | momentum=-0.03%
+ETH/USD: HOLD | trend=-1.01% | rsi=38.8 | macd_hist=2.3869 | atr=15.5000 | vol_ok=True | momentum=-0.11%
+SOL/USD: BUY | trend=-0.82% | rsi=43.2 | macd_hist=0.0670 | atr=0.6463 | vol_ok=True | momentum=0.25%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.4, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.93% | rsi=42.9 | macd_hist=0.0116 | atr=0.0678 | vol_ok=True | momentum=0.11%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.88, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.49% | rsi=51.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.56%
+XRP/USD: BUY | trend=-0.70% | rsi=41.8 | macd_hist=0.0011 | atr=0.0085 | vol_ok=True | momentum=0.07%
+Error executing trade for XRP/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.45, available: 118.78)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.53% | rsi=48.9 | macd_hist=0.0133 | atr=0.0642 | vol_ok=True | momentum=0.27%
+LTC/USD: HOLD | trend=-0.67% | rsi=47.6 | macd_hist=0.0748 | atr=0.3265 | vol_ok=True | momentum=0.68%
+Portfolio snapshot: cash=$1870.78, portfolio=$97103.30
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=42.5 | macd_hist=57.0226 | atr=397.0076 | vol_ok=True | momentum=-0.06%
+ETH/USD: HOLD | trend=-1.02% | rsi=38.3 | macd_hist=2.2660 | atr=15.5000 | vol_ok=True | momentum=-0.17%
+SOL/USD: BUY | trend=-0.82% | rsi=42.8 | macd_hist=0.0635 | atr=0.6463 | vol_ok=True | momentum=0.20%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.35, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.92% | rsi=43.8 | macd_hist=0.0125 | atr=0.0678 | vol_ok=True | momentum=0.22%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.79, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.50% | rsi=50.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.47%
+XRP/USD: BUY | trend=-0.70% | rsi=42.0 | macd_hist=0.0011 | atr=0.0085 | vol_ok=True | momentum=0.09%
+Error executing trade for XRP/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.45, available: 118.78)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.54% | rsi=48.3 | macd_hist=0.0128 | atr=0.0642 | vol_ok=True | momentum=0.21%
+LTC/USD: HOLD | trend=-0.67% | rsi=47.9 | macd_hist=0.0756 | atr=0.3279 | vol_ok=True | momentum=0.70%
+Portfolio snapshot: cash=$1870.78, portfolio=$97043.80
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=42.7 | macd_hist=58.2639 | atr=397.0076 | vol_ok=True | momentum=-0.04%
+ETH/USD: HOLD | trend=-1.02% | rsi=38.5 | macd_hist=2.3221 | atr=15.5000 | vol_ok=True | momentum=-0.14%
+SOL/USD: BUY | trend=-0.81% | rsi=43.5 | macd_hist=0.0696 | atr=0.6463 | vol_ok=True | momentum=0.28%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.46, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.93% | rsi=42.9 | macd_hist=0.0116 | atr=0.0678 | vol_ok=True | momentum=0.11%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.79, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.50% | rsi=50.5 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.50%
+XRP/USD: BUY | trend=-0.70% | rsi=42.0 | macd_hist=0.0011 | atr=0.0085 | vol_ok=True | momentum=0.09%
+Error executing trade for XRP/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.45, available: 118.78)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.54% | rsi=48.2 | macd_hist=0.0127 | atr=0.0642 | vol_ok=True | momentum=0.20%
+LTC/USD: HOLD | trend=-0.68% | rsi=46.4 | macd_hist=0.0704 | atr=0.3279 | vol_ok=True | momentum=0.59%
+Portfolio snapshot: cash=$1870.78, portfolio=$97009.84
+Waiting 120 seconds before next cycle...
+BTC/USD: BUY | trend=-0.60% | rsi=42.6 | macd_hist=61.0288 | atr=345.6555 | vol_ok=True | momentum=0.19%
+Error executing trade for BTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.44, available: 118.78)","symbol":"USD"}
+ETH/USD: BUY | trend=-0.97% | rsi=38.3 | macd_hist=2.3772 | atr=13.5427 | vol_ok=True | momentum=0.21%
+Error executing trade for ETH/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.82, available: 118.78)","symbol":"USD"}
+SOL/USD: BUY | trend=-0.76% | rsi=43.2 | macd_hist=0.0814 | atr=0.5601 | vol_ok=True | momentum=0.43%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.46, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.87% | rsi=42.9 | macd_hist=0.0117 | atr=0.0587 | vol_ok=True | momentum=0.33%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.79, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.41% | rsi=51.1 | macd_hist=0.0001 | atr=0.0006 | vol_ok=True | momentum=0.53%
+XRP/USD: BUY | trend=-0.66% | rsi=41.8 | macd_hist=0.0012 | atr=0.0074 | vol_ok=True | momentum=0.08%
+Error executing trade for XRP/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.45, available: 118.78)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.47% | rsi=48.2 | macd_hist=0.0120 | atr=0.0558 | vol_ok=True | momentum=0.32%
+LTC/USD: HOLD | trend=-0.59% | rsi=47.2 | macd_hist=0.0820 | atr=0.2855 | vol_ok=True | momentum=0.62%
+Portfolio snapshot: cash=$1870.78, portfolio=$97017.60
+Waiting 120 seconds before next cycle...
+BTC/USD: BUY | trend=-0.61% | rsi=41.8 | macd_hist=56.5779 | atr=352.6753 | vol_ok=True | momentum=0.12%
+Error executing trade for BTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.59, available: 118.78)","symbol":"USD"}
+ETH/USD: BUY | trend=-0.98% | rsi=37.4 | macd_hist=2.1820 | atr=13.8400 | vol_ok=True | momentum=0.12%
+Error executing trade for ETH/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.78, available: 118.78)","symbol":"USD"}
+SOL/USD: BUY | trend=-0.76% | rsi=42.7 | macd_hist=0.0770 | atr=0.5681 | vol_ok=True | momentum=0.37%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.37, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.87% | rsi=42.9 | macd_hist=0.0117 | atr=0.0587 | vol_ok=True | momentum=0.33%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.27, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.40% | rsi=51.3 | macd_hist=0.0001 | atr=0.0006 | vol_ok=True | momentum=0.55%
+XRP/USD: HOLD | trend=-0.68% | rsi=39.9 | macd_hist=0.0009 | atr=0.0077 | vol_ok=True | momentum=-0.11%
+LINK/USD: HOLD | trend=-0.49% | rsi=46.8 | macd_hist=0.0110 | atr=0.0574 | vol_ok=True | momentum=0.19%
+LTC/USD: HOLD | trend=-0.60% | rsi=46.7 | macd_hist=0.0803 | atr=0.2895 | vol_ok=True | momentum=0.59%
+Portfolio snapshot: cash=$1870.78, portfolio=$97045.79
+Waiting 120 seconds before next cycle...
+BTC/USD: BUY | trend=-0.62% | rsi=41.3 | macd_hist=53.0844 | atr=360.4732 | vol_ok=True | momentum=0.07%
+Error executing trade for BTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.01, available: 118.78)","symbol":"USD"}
+ETH/USD: BUY | trend=-0.99% | rsi=37.1 | macd_hist=2.0953 | atr=14.1693 | vol_ok=True | momentum=0.07%
+Error executing trade for ETH/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.82, available: 118.78)","symbol":"USD"}
+SOL/USD: BUY | trend=-0.77% | rsi=42.3 | macd_hist=0.0744 | atr=0.5788 | vol_ok=True | momentum=0.33%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.42, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.89% | rsi=41.2 | macd_hist=0.0099 | atr=0.0614 | vol_ok=True | momentum=0.11%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.79, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.41% | rsi=51.1 | macd_hist=0.0001 | atr=0.0006 | vol_ok=True | momentum=0.53%
+XRP/USD: HOLD | trend=-0.68% | rsi=40.1 | macd_hist=0.0010 | atr=0.0078 | vol_ok=True | momentum=-0.09%
+LINK/USD: HOLD | trend=-0.49% | rsi=46.2 | macd_hist=0.0104 | atr=0.0593 | vol_ok=True | momentum=0.12%
+LTC/USD: HOLD | trend=-0.61% | rsi=45.6 | macd_hist=0.0759 | atr=0.2988 | vol_ok=True | momentum=0.50%
+Portfolio snapshot: cash=$1870.78, portfolio=$97034.04
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=40.0 | macd_hist=44.8206 | atr=372.3576 | vol_ok=True | momentum=-0.06%
+ETH/USD: HOLD | trend=-1.01% | rsi=35.7 | macd_hist=1.7399 | atr=14.6213 | vol_ok=True | momentum=-0.10%
+SOL/USD: BUY | trend=-0.79% | rsi=40.9 | macd_hist=0.0612 | atr=0.5921 | vol_ok=True | momentum=0.15%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.32, available: 118.78)","symbol":"USD"}
+AVAX/USD: BUY | trend=-0.90% | rsi=40.3 | macd_hist=0.0091 | atr=0.0641 | vol_ok=True | momentum=0.00%
+Error executing trade for AVAX/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 383.29, available: 118.78)","symbol":"USD"}
+DOGE/USD: HOLD | trend=-0.46% | rsi=46.6 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.10%
+XRP/USD: HOLD | trend=-0.70% | rsi=38.5 | macd_hist=0.0007 | atr=0.0080 | vol_ok=True | momentum=-0.26%
+LINK/USD: HOLD | trend=-0.51% | rsi=44.7 | macd_hist=0.0091 | atr=0.0613 | vol_ok=True | momentum=-0.04%
+LTC/USD: BUY | trend=-0.62% | rsi=44.7 | macd_hist=0.0724 | atr=0.3068 | vol_ok=True | momentum=0.42%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.53, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96989.37
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.6 | macd_hist=41.8181 | atr=375.9389 | vol_ok=True | momentum=-0.10%
+ETH/USD: HOLD | trend=-1.01% | rsi=35.1 | macd_hist=1.5893 | atr=14.7946 | vol_ok=True | momentum=-0.18%
+SOL/USD: BUY | trend=-0.79% | rsi=40.7 | macd_hist=0.0595 | atr=0.5961 | vol_ok=True | momentum=0.13%
+Error executing trade for SOL/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.16, available: 118.78)","symbol":"USD"}
+AVAX/USD: HOLD | trend=-0.92% | rsi=39.6 | macd_hist=0.0082 | atr=0.0641 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.47% | rsi=45.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.05%
+XRP/USD: HOLD | trend=-0.72% | rsi=37.1 | macd_hist=0.0005 | atr=0.0083 | vol_ok=True | momentum=-0.43%
+LINK/USD: HOLD | trend=-0.53% | rsi=43.5 | macd_hist=0.0081 | atr=0.0618 | vol_ok=True | momentum=-0.17%
+LTC/USD: BUY | trend=-0.62% | rsi=44.3 | macd_hist=0.0707 | atr=0.3068 | vol_ok=True | momentum=0.39%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.26, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96855.45
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.1 | macd_hist=38.0853 | atr=380.6003 | vol_ok=True | momentum=-0.16%
+ETH/USD: HOLD | trend=-1.03% | rsi=34.4 | macd_hist=1.3906 | atr=15.0453 | vol_ok=True | momentum=-0.28%
+SOL/USD: HOLD | trend=-0.81% | rsi=39.3 | macd_hist=0.0464 | atr=0.6148 | vol_ok=True | momentum=-0.05%
+AVAX/USD: HOLD | trend=-0.92% | rsi=39.6 | macd_hist=0.0082 | atr=0.0641 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.49% | rsi=44.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.16%
+XRP/USD: HOLD | trend=-0.73% | rsi=36.3 | macd_hist=0.0004 | atr=0.0086 | vol_ok=True | momentum=-0.53%
+LINK/USD: HOLD | trend=-0.54% | rsi=42.7 | macd_hist=0.0073 | atr=0.0633 | vol_ok=True | momentum=-0.27%
+LTC/USD: BUY | trend=-0.64% | rsi=42.4 | macd_hist=0.0619 | atr=0.3162 | vol_ok=True | momentum=0.20%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.65, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96853.73
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.4 | macd_hist=40.5276 | atr=384.1107 | vol_ok=True | momentum=-0.12%
+ETH/USD: HOLD | trend=-1.02% | rsi=34.7 | macd_hist=1.4738 | atr=15.3240 | vol_ok=True | momentum=-0.24%
+SOL/USD: HOLD | trend=-0.81% | rsi=39.4 | macd_hist=0.0472 | atr=0.6241 | vol_ok=True | momentum=-0.04%
+AVAX/USD: HOLD | trend=-0.93% | rsi=38.8 | macd_hist=0.0073 | atr=0.0654 | vol_ok=True | momentum=-0.22%
+DOGE/USD: HOLD | trend=-0.50% | rsi=43.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.25%
+XRP/USD: HOLD | trend=-0.73% | rsi=36.4 | macd_hist=0.0004 | atr=0.0086 | vol_ok=True | momentum=-0.50%
+LINK/USD: HOLD | trend=-0.54% | rsi=42.7 | macd_hist=0.0073 | atr=0.0645 | vol_ok=True | momentum=-0.27%
+LTC/USD: BUY | trend=-0.64% | rsi=42.4 | macd_hist=0.0619 | atr=0.3202 | vol_ok=True | momentum=0.20%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.79, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96853.73
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.65% | rsi=39.0 | macd_hist=37.1880 | atr=384.1107 | vol_ok=True | momentum=-0.18%
+ETH/USD: HOLD | trend=-1.04% | rsi=33.9 | macd_hist=1.2391 | atr=15.3240 | vol_ok=True | momentum=-0.36%
+SOL/USD: HOLD | trend=-0.82% | rsi=38.8 | macd_hist=0.0411 | atr=0.6241 | vol_ok=True | momentum=-0.12%
+AVAX/USD: HOLD | trend=-0.92% | rsi=39.6 | macd_hist=0.0082 | atr=0.0654 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.51% | rsi=42.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.33%
+XRP/USD: HOLD | trend=-0.74% | rsi=36.0 | macd_hist=0.0004 | atr=0.0086 | vol_ok=True | momentum=-0.55%
+LINK/USD: HOLD | trend=-0.55% | rsi=42.3 | macd_hist=0.0069 | atr=0.0645 | vol_ok=True | momentum=-0.32%
+LTC/USD: BUY | trend=-0.64% | rsi=42.2 | macd_hist=0.0610 | atr=0.3202 | vol_ok=True | momentum=0.18%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.79, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96843.85
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.65% | rsi=38.7 | macd_hist=34.9249 | atr=385.4139 | vol_ok=True | momentum=-0.21%
+ETH/USD: HOLD | trend=-1.04% | rsi=33.9 | macd_hist=1.2391 | atr=15.3240 | vol_ok=True | momentum=-0.36%
+SOL/USD: HOLD | trend=-0.82% | rsi=38.5 | macd_hist=0.0385 | atr=0.6268 | vol_ok=True | momentum=-0.15%
+AVAX/USD: HOLD | trend=-0.92% | rsi=39.6 | macd_hist=0.0082 | atr=0.0654 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.51% | rsi=42.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.38%
+XRP/USD: HOLD | trend=-0.74% | rsi=36.0 | macd_hist=0.0004 | atr=0.0086 | vol_ok=True | momentum=-0.55%
+LINK/USD: HOLD | trend=-0.54% | rsi=42.5 | macd_hist=0.0071 | atr=0.0645 | vol_ok=True | momentum=-0.29%
+LTC/USD: BUY | trend=-0.65% | rsi=42.0 | macd_hist=0.0602 | atr=0.3202 | vol_ok=True | momentum=0.17%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.79, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96740.03
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=38.3 | macd_hist=32.0893 | atr=389.8493 | vol_ok=True | momentum=-0.25%
+ETH/USD: HOLD | trend=-1.05% | rsi=33.3 | macd_hist=1.0580 | atr=15.5826 | vol_ok=True | momentum=-0.45%
+SOL/USD: HOLD | trend=-0.83% | rsi=38.1 | macd_hist=0.0341 | atr=0.6335 | vol_ok=True | momentum=-0.21%
+AVAX/USD: HOLD | trend=-0.93% | rsi=38.8 | macd_hist=0.0073 | atr=0.0654 | vol_ok=True | momentum=-0.22%
+DOGE/USD: HOLD | trend=-0.52% | rsi=42.0 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.45%
+XRP/USD: HOLD | trend=-0.74% | rsi=35.9 | macd_hist=0.0004 | atr=0.0086 | vol_ok=True | momentum=-0.58%
+LINK/USD: HOLD | trend=-0.55% | rsi=41.9 | macd_hist=0.0065 | atr=0.0645 | vol_ok=True | momentum=-0.37%
+LTC/USD: BUY | trend=-0.65% | rsi=41.5 | macd_hist=0.0575 | atr=0.3228 | vol_ok=True | momentum=0.11%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.81, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96730.42
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.65% | rsi=38.3 | macd_hist=32.2815 | atr=394.4566 | vol_ok=True | momentum=-0.25%
+ETH/USD: HOLD | trend=-1.04% | rsi=33.6 | macd_hist=1.1717 | atr=15.6960 | vol_ok=True | momentum=-0.39%
+SOL/USD: HOLD | trend=-0.83% | rsi=38.2 | macd_hist=0.0350 | atr=0.6388 | vol_ok=True | momentum=-0.20%
+AVAX/USD: HOLD | trend=-0.93% | rsi=38.8 | macd_hist=0.0073 | atr=0.0667 | vol_ok=True | momentum=-0.22%
+DOGE/USD: HOLD | trend=-0.52% | rsi=42.1 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.44%
+XRP/USD: HOLD | trend=-0.74% | rsi=35.9 | macd_hist=0.0004 | atr=0.0087 | vol_ok=True | momentum=-0.57%
+LINK/USD: HOLD | trend=-0.55% | rsi=42.2 | macd_hist=0.0068 | atr=0.0646 | vol_ok=True | momentum=-0.33%
+LTC/USD: BUY | trend=-0.65% | rsi=41.3 | macd_hist=0.0567 | atr=0.3268 | vol_ok=True | momentum=0.09%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.76, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96716.60
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.67% | rsi=37.5 | macd_hist=26.1255 | atr=398.8159 | vol_ok=True | momentum=-0.35%
+ETH/USD: HOLD | trend=-1.06% | rsi=32.7 | macd_hist=0.8802 | atr=15.8226 | vol_ok=True | momentum=-0.54%
+SOL/USD: HOLD | trend=-0.84% | rsi=37.5 | macd_hist=0.0271 | atr=0.6441 | vol_ok=True | momentum=-0.31%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0064 | atr=0.0667 | vol_ok=True | momentum=-0.33%
+DOGE/USD: HOLD | trend=-0.53% | rsi=41.7 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.49%
+XRP/USD: HOLD | trend=-0.74% | rsi=35.5 | macd_hist=0.0003 | atr=0.0087 | vol_ok=True | momentum=-0.62%
+LINK/USD: HOLD | trend=-0.57% | rsi=40.6 | macd_hist=0.0051 | atr=0.0663 | vol_ok=True | momentum=-0.55%
+LTC/USD: BUY | trend=-0.66% | rsi=40.6 | macd_hist=0.0532 | atr=0.3295 | vol_ok=True | momentum=0.02%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.7, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96623.59
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.67% | rsi=37.4 | macd_hist=25.3110 | atr=400.4889 | vol_ok=True | momentum=-0.36%
+ETH/USD: HOLD | trend=-1.06% | rsi=32.5 | macd_hist=0.8312 | atr=15.8973 | vol_ok=True | momentum=-0.56%
+SOL/USD: HOLD | trend=-0.85% | rsi=36.8 | macd_hist=0.0201 | atr=0.6548 | vol_ok=True | momentum=-0.40%
+AVAX/USD: HOLD | trend=-0.96% | rsi=37.4 | macd_hist=0.0056 | atr=0.0681 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.53% | rsi=41.5 | macd_hist=0.0000 | atr=0.0008 | vol_ok=True | momentum=-0.52%
+XRP/USD: HOLD | trend=-0.74% | rsi=35.6 | macd_hist=0.0003 | atr=0.0088 | vol_ok=True | momentum=-0.61%
+LINK/USD: HOLD | trend=-0.57% | rsi=40.5 | macd_hist=0.0050 | atr=0.0665 | vol_ok=True | momentum=-0.56%
+LTC/USD: BUY | trend=-0.66% | rsi=40.8 | macd_hist=0.0540 | atr=0.3295 | vol_ok=True | momentum=0.04%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.69, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96597.90
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=37.7 | macd_hist=27.5454 | atr=400.4889 | vol_ok=True | momentum=-0.32%
+ETH/USD: HOLD | trend=-1.05% | rsi=33.1 | macd_hist=1.0019 | atr=15.8973 | vol_ok=True | momentum=-0.47%
+SOL/USD: HOLD | trend=-0.84% | rsi=37.4 | macd_hist=0.0262 | atr=0.6561 | vol_ok=True | momentum=-0.32%
+AVAX/USD: HOLD | trend=-0.96% | rsi=37.4 | macd_hist=0.0056 | atr=0.0694 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.53% | rsi=41.7 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.49%
+XRP/USD: HOLD | trend=-0.74% | rsi=35.9 | macd_hist=0.0004 | atr=0.0088 | vol_ok=True | momentum=-0.57%
+LINK/USD: HOLD | trend=-0.57% | rsi=40.7 | macd_hist=0.0053 | atr=0.0665 | vol_ok=True | momentum=-0.52%
+LTC/USD: BUY | trend=-0.66% | rsi=40.9 | macd_hist=0.0549 | atr=0.3295 | vol_ok=True | momentum=0.06%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.69, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96674.29
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.67% | rsi=37.1 | macd_hist=22.6779 | atr=404.2847 | vol_ok=True | momentum=-0.40%
+ETH/USD: HOLD | trend=-1.06% | rsi=32.6 | macd_hist=0.8584 | atr=15.9680 | vol_ok=True | momentum=-0.55%
+SOL/USD: HOLD | trend=-0.86% | rsi=36.7 | macd_hist=0.0183 | atr=0.6575 | vol_ok=True | momentum=-0.43%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.7 | macd_hist=0.0047 | atr=0.0694 | vol_ok=True | momentum=-0.55%
+DOGE/USD: HOLD | trend=-0.52% | rsi=41.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.46%
+XRP/USD: HOLD | trend=-0.75% | rsi=35.4 | macd_hist=0.0003 | atr=0.0088 | vol_ok=True | momentum=-0.63%
+LINK/USD: HOLD | trend=-0.58% | rsi=40.2 | macd_hist=0.0047 | atr=0.0671 | vol_ok=True | momentum=-0.59%
+LTC/USD: BUY | trend=-0.66% | rsi=40.6 | macd_hist=0.0532 | atr=0.3335 | vol_ok=True | momentum=0.02%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.87, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96630.47
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=37.8 | macd_hist=28.8893 | atr=404.5441 | vol_ok=True | momentum=-0.30%
+ETH/USD: HOLD | trend=-1.05% | rsi=33.2 | macd_hist=1.0466 | atr=15.9680 | vol_ok=True | momentum=-0.45%
+SOL/USD: HOLD | trend=-0.85% | rsi=37.1 | macd_hist=0.0236 | atr=0.6575 | vol_ok=True | momentum=-0.36%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.7 | macd_hist=0.0047 | atr=0.0694 | vol_ok=True | momentum=-0.55%
+DOGE/USD: HOLD | trend=-0.51% | rsi=42.7 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.36%
+XRP/USD: HOLD | trend=-0.73% | rsi=36.3 | macd_hist=0.0004 | atr=0.0088 | vol_ok=True | momentum=-0.52%
+LINK/USD: HOLD | trend=-0.57% | rsi=41.0 | macd_hist=0.0055 | atr=0.0671 | vol_ok=True | momentum=-0.49%
+LTC/USD: BUY | trend=-0.65% | rsi=41.3 | macd_hist=0.0567 | atr=0.3335 | vol_ok=True | momentum=0.09%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.75, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96581.80
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=37.8 | macd_hist=28.3257 | atr=404.5441 | vol_ok=True | momentum=-0.31%
+ETH/USD: HOLD | trend=-1.04% | rsi=33.4 | macd_hist=1.1131 | atr=15.9680 | vol_ok=True | momentum=-0.42%
+SOL/USD: HOLD | trend=-0.85% | rsi=37.1 | macd_hist=0.0236 | atr=0.6575 | vol_ok=True | momentum=-0.36%
+AVAX/USD: HOLD | trend=-0.96% | rsi=37.4 | macd_hist=0.0056 | atr=0.0694 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.50% | rsi=43.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.29%
+XRP/USD: HOLD | trend=-0.73% | rsi=36.3 | macd_hist=0.0004 | atr=0.0088 | vol_ok=True | momentum=-0.53%
+LINK/USD: HOLD | trend=-0.56% | rsi=41.3 | macd_hist=0.0059 | atr=0.0671 | vol_ok=True | momentum=-0.45%
+LTC/USD: BUY | trend=-0.64% | rsi=42.8 | macd_hist=0.0637 | atr=0.3335 | vol_ok=True | momentum=0.24%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.95, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96588.48
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=37.9 | macd_hist=29.2709 | atr=404.5441 | vol_ok=True | momentum=-0.30%
+ETH/USD: HOLD | trend=-1.05% | rsi=33.2 | macd_hist=1.0518 | atr=15.9680 | vol_ok=True | momentum=-0.45%
+SOL/USD: HOLD | trend=-0.84% | rsi=37.4 | macd_hist=0.0262 | atr=0.6575 | vol_ok=True | momentum=-0.32%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.7 | macd_hist=0.0047 | atr=0.0694 | vol_ok=True | momentum=-0.55%
+DOGE/USD: HOLD | trend=-0.49% | rsi=43.8 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.22%
+XRP/USD: HOLD | trend=-0.73% | rsi=36.7 | macd_hist=0.0005 | atr=0.0088 | vol_ok=True | momentum=-0.48%
+LINK/USD: HOLD | trend=-0.56% | rsi=41.5 | macd_hist=0.0061 | atr=0.0671 | vol_ok=True | momentum=-0.43%
+LTC/USD: BUY | trend=-0.64% | rsi=42.8 | macd_hist=0.0637 | atr=0.3335 | vol_ok=True | momentum=0.24%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.6, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96588.48
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.67% | rsi=37.4 | macd_hist=25.3130 | atr=404.5441 | vol_ok=True | momentum=-0.36%
+ETH/USD: HOLD | trend=-1.05% | rsi=32.8 | macd_hist=0.9214 | atr=15.9680 | vol_ok=True | momentum=-0.52%
+SOL/USD: HOLD | trend=-0.86% | rsi=36.8 | macd_hist=0.0192 | atr=0.6575 | vol_ok=True | momentum=-0.42%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.7 | macd_hist=0.0047 | atr=0.0694 | vol_ok=True | momentum=-0.55%
+DOGE/USD: HOLD | trend=-0.50% | rsi=43.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.29%
+XRP/USD: HOLD | trend=-0.75% | rsi=34.9 | macd_hist=0.0002 | atr=0.0089 | vol_ok=True | momentum=-0.71%
+LINK/USD: HOLD | trend=-0.56% | rsi=41.3 | macd_hist=0.0059 | atr=0.0671 | vol_ok=True | momentum=-0.45%
+LTC/USD: BUY | trend=-0.64% | rsi=42.8 | macd_hist=0.0637 | atr=0.3335 | vol_ok=True | momentum=0.24%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.81, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96569.12
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=38.0 | macd_hist=30.1183 | atr=404.5441 | vol_ok=True | momentum=-0.28%
+ETH/USD: HOLD | trend=-1.05% | rsi=33.2 | macd_hist=1.0544 | atr=15.9680 | vol_ok=True | momentum=-0.45%
+SOL/USD: HOLD | trend=-0.85% | rsi=36.8 | macd_hist=0.0201 | atr=0.6575 | vol_ok=True | momentum=-0.40%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.7 | macd_hist=0.0047 | atr=0.0694 | vol_ok=True | momentum=-0.55%
+DOGE/USD: HOLD | trend=-0.50% | rsi=43.7 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.23%
+XRP/USD: HOLD | trend=-0.75% | rsi=35.1 | macd_hist=0.0002 | atr=0.0089 | vol_ok=True | momentum=-0.67%
+LINK/USD: HOLD | trend=-0.56% | rsi=41.5 | macd_hist=0.0061 | atr=0.0671 | vol_ok=True | momentum=-0.43%
+LTC/USD: BUY | trend=-0.63% | rsi=42.9 | macd_hist=0.0645 | atr=0.3335 | vol_ok=True | momentum=0.26%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.81, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96608.82
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.67% | rsi=37.5 | macd_hist=26.5106 | atr=404.5441 | vol_ok=True | momentum=-0.34%
+ETH/USD: HOLD | trend=-1.06% | rsi=32.5 | macd_hist=0.8190 | atr=15.9680 | vol_ok=True | momentum=-0.57%
+SOL/USD: HOLD | trend=-0.86% | rsi=36.7 | macd_hist=0.0183 | atr=0.6575 | vol_ok=True | momentum=-0.43%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.7 | macd_hist=0.0047 | atr=0.0694 | vol_ok=True | momentum=-0.55%
+DOGE/USD: HOLD | trend=-0.50% | rsi=43.6 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.24%
+XRP/USD: HOLD | trend=-0.77% | rsi=33.7 | macd_hist=-0.0000 | atr=0.0092 | vol_ok=True | momentum=-0.87%
+LINK/USD: HOLD | trend=-0.57% | rsi=40.7 | macd_hist=0.0053 | atr=0.0671 | vol_ok=True | momentum=-0.52%
+LTC/USD: BUY | trend=-0.64% | rsi=42.4 | macd_hist=0.0619 | atr=0.3335 | vol_ok=True | momentum=0.20%
+Error executing trade for LTC/USD: {"available":"118.78","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.74, available: 118.78)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96622.64
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=37.6 | macd_hist=27.2896 | atr=404.9607 | vol_ok=True | momentum=-0.33%
+ETH/USD: HOLD | trend=-1.05% | rsi=32.8 | macd_hist=0.9152 | atr=16.1160 | vol_ok=True | momentum=-0.52%
+SOL/USD: HOLD | trend=-0.86% | rsi=36.3 | macd_hist=0.0140 | atr=0.6708 | vol_ok=True | momentum=-0.49%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.7 | macd_hist=0.0047 | atr=0.0694 | vol_ok=True | momentum=-0.55%
+DOGE/USD: HOLD | trend=-0.49% | rsi=43.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.21%
+XRP/USD: HOLD | trend=-0.77% | rsi=34.0 | macd_hist=0.0001 | atr=0.0093 | vol_ok=True | momentum=-0.82%
+LINK/USD: HOLD | trend=-0.56% | rsi=41.2 | macd_hist=0.0058 | atr=0.0671 | vol_ok=True | momentum=-0.46%
+LTC/USD: BUY | trend=-0.64% | rsi=42.4 | macd_hist=0.0619 | atr=0.3335 | vol_ok=True | momentum=0.20%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.76, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96541.57
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=37.9 | macd_hist=29.2709 | atr=404.9607 | vol_ok=True | momentum=-0.30%
+ETH/USD: HOLD | trend=-1.05% | rsi=33.0 | macd_hist=0.9783 | atr=16.1160 | vol_ok=True | momentum=-0.49%
+SOL/USD: HOLD | trend=-0.86% | rsi=36.5 | macd_hist=0.0157 | atr=0.6708 | vol_ok=True | momentum=-0.46%
+AVAX/USD: HOLD | trend=-0.96% | rsi=37.4 | macd_hist=0.0056 | atr=0.0707 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.50% | rsi=43.7 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.23%
+XRP/USD: HOLD | trend=-0.76% | rsi=34.5 | macd_hist=0.0001 | atr=0.0093 | vol_ok=True | momentum=-0.77%
+LINK/USD: HOLD | trend=-0.56% | rsi=41.4 | macd_hist=0.0060 | atr=0.0671 | vol_ok=True | momentum=-0.44%
+LTC/USD: BUY | trend=-0.65% | rsi=42.0 | macd_hist=0.0602 | atr=0.3335 | vol_ok=True | momentum=0.17%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.82, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96537.87
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.66% | rsi=38.2 | macd_hist=31.9054 | atr=404.9607 | vol_ok=True | momentum=-0.26%
+ETH/USD: HOLD | trend=-1.04% | rsi=33.4 | macd_hist=1.1148 | atr=16.1160 | vol_ok=True | momentum=-0.42%
+SOL/USD: HOLD | trend=-0.86% | rsi=36.4 | macd_hist=0.0148 | atr=0.6708 | vol_ok=True | momentum=-0.47%
+AVAX/USD: HOLD | trend=-0.96% | rsi=37.4 | macd_hist=0.0056 | atr=0.0707 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.50% | rsi=43.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.27%
+XRP/USD: HOLD | trend=-0.76% | rsi=34.8 | macd_hist=0.0002 | atr=0.0093 | vol_ok=True | momentum=-0.72%
+LINK/USD: HOLD | trend=-0.56% | rsi=41.6 | macd_hist=0.0061 | atr=0.0671 | vol_ok=True | momentum=-0.41%
+LTC/USD: BUY | trend=-0.65% | rsi=41.8 | macd_hist=0.0593 | atr=0.3335 | vol_ok=True | momentum=0.15%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.82, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96547.22
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.65% | rsi=38.5 | macd_hist=33.7397 | atr=404.9607 | vol_ok=True | momentum=-0.23%
+ETH/USD: HOLD | trend=-1.04% | rsi=33.7 | macd_hist=1.1788 | atr=16.1160 | vol_ok=True | momentum=-0.39%
+SOL/USD: HOLD | trend=-0.86% | rsi=36.5 | macd_hist=0.0166 | atr=0.6708 | vol_ok=True | momentum=-0.45%
+AVAX/USD: HOLD | trend=-0.96% | rsi=37.4 | macd_hist=0.0056 | atr=0.0707 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.49% | rsi=43.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.21%
+XRP/USD: HOLD | trend=-0.75% | rsi=35.2 | macd_hist=0.0003 | atr=0.0093 | vol_ok=True | momentum=-0.66%
+LINK/USD: HOLD | trend=-0.55% | rsi=41.7 | macd_hist=0.0063 | atr=0.0671 | vol_ok=True | momentum=-0.39%
+LTC/USD: BUY | trend=-0.64% | rsi=42.4 | macd_hist=0.0619 | atr=0.3335 | vol_ok=True | momentum=0.20%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.82, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96589.53
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.3 | macd_hist=39.3246 | atr=404.9607 | vol_ok=True | momentum=-0.14%
+ETH/USD: HOLD | trend=-1.02% | rsi=34.6 | macd_hist=1.4414 | atr=16.1160 | vol_ok=True | momentum=-0.25%
+SOL/USD: HOLD | trend=-0.84% | rsi=37.4 | macd_hist=0.0262 | atr=0.6708 | vol_ok=True | momentum=-0.32%
+AVAX/USD: HOLD | trend=-0.93% | rsi=38.8 | macd_hist=0.0073 | atr=0.0707 | vol_ok=True | momentum=-0.22%
+DOGE/USD: HOLD | trend=-0.47% | rsi=45.2 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.05%
+XRP/USD: HOLD | trend=-0.74% | rsi=35.8 | macd_hist=0.0003 | atr=0.0093 | vol_ok=True | momentum=-0.59%
+LINK/USD: HOLD | trend=-0.54% | rsi=43.0 | macd_hist=0.0075 | atr=0.0671 | vol_ok=True | momentum=-0.24%
+LTC/USD: BUY | trend=-0.64% | rsi=42.8 | macd_hist=0.0637 | atr=0.3335 | vol_ok=True | momentum=0.24%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.83, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96673.45
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.65% | rsi=38.8 | macd_hist=35.7668 | atr=404.9607 | vol_ok=True | momentum=-0.20%
+ETH/USD: HOLD | trend=-1.03% | rsi=34.0 | macd_hist=1.2698 | atr=16.1160 | vol_ok=True | momentum=-0.34%
+SOL/USD: HOLD | trend=-0.85% | rsi=36.8 | macd_hist=0.0201 | atr=0.6708 | vol_ok=True | momentum=-0.40%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0064 | atr=0.0707 | vol_ok=True | momentum=-0.33%
+DOGE/USD: HOLD | trend=-0.49% | rsi=44.1 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.18%
+XRP/USD: HOLD | trend=-0.75% | rsi=35.1 | macd_hist=0.0002 | atr=0.0093 | vol_ok=True | momentum=-0.67%
+LINK/USD: HOLD | trend=-0.54% | rsi=42.4 | macd_hist=0.0070 | atr=0.0671 | vol_ok=True | momentum=-0.31%
+LTC/USD: BUY | trend=-0.64% | rsi=42.2 | macd_hist=0.0610 | atr=0.3335 | vol_ok=True | momentum=0.18%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.83, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96667.66
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.4 | macd_hist=29.2430 | atr=354.8191 | vol_ok=True | momentum=-0.45%
+ETH/USD: HOLD | trend=-1.03% | rsi=34.4 | macd_hist=0.9238 | atr=14.0605 | vol_ok=True | momentum=-0.69%
+SOL/USD: HOLD | trend=-0.87% | rsi=37.2 | macd_hist=0.0041 | atr=0.5854 | vol_ok=True | momentum=-0.83%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0041 | atr=0.0613 | vol_ok=True | momentum=-0.87%
+DOGE/USD: HOLD | trend=-0.48% | rsi=44.1 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.32%
+XRP/USD: HOLD | trend=-0.77% | rsi=35.7 | macd_hist=-0.0000 | atr=0.0081 | vol_ok=True | momentum=-0.82%
+LINK/USD: HOLD | trend=-0.54% | rsi=42.3 | macd_hist=0.0039 | atr=0.0583 | vol_ok=True | momentum=-0.74%
+LTC/USD: HOLD | trend=-0.60% | rsi=42.7 | macd_hist=0.0566 | atr=0.2904 | vol_ok=True | momentum=-0.05%
+Portfolio snapshot: cash=$1870.78, portfolio=$96619.57
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.6 | macd_hist=30.1499 | atr=356.9420 | vol_ok=True | momentum=-0.44%
+ETH/USD: HOLD | trend=-1.02% | rsi=35.6 | macd_hist=1.0980 | atr=14.3258 | vol_ok=True | momentum=-0.60%
+SOL/USD: HOLD | trend=-0.88% | rsi=36.5 | macd_hist=-0.0012 | atr=0.5947 | vol_ok=True | momentum=-0.90%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0041 | atr=0.0613 | vol_ok=True | momentum=-0.87%
+DOGE/USD: HOLD | trend=-0.47% | rsi=45.1 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.22%
+XRP/USD: HOLD | trend=-0.76% | rsi=37.3 | macd_hist=0.0001 | atr=0.0083 | vol_ok=True | momentum=-0.71%
+LINK/USD: HOLD | trend=-0.53% | rsi=43.9 | macd_hist=0.0050 | atr=0.0601 | vol_ok=True | momentum=-0.60%
+LTC/USD: HOLD | trend=-0.59% | rsi=43.2 | macd_hist=0.0583 | atr=0.2944 | vol_ok=True | momentum=-0.02%
+Portfolio snapshot: cash=$1870.78, portfolio=$96731.13
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=41.1 | macd_hist=37.0472 | atr=371.8347 | vol_ok=True | momentum=-0.33%
+ETH/USD: HOLD | trend=-1.01% | rsi=36.8 | macd_hist=1.2678 | atr=14.6912 | vol_ok=True | momentum=-0.52%
+SOL/USD: HOLD | trend=-0.87% | rsi=37.9 | macd_hist=0.0085 | atr=0.6040 | vol_ok=True | momentum=-0.77%
+AVAX/USD: HOLD | trend=-0.93% | rsi=39.3 | macd_hist=0.0049 | atr=0.0626 | vol_ok=True | momentum=-0.76%
+DOGE/USD: HOLD | trend=-0.44% | rsi=47.6 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.01%
+XRP/USD: HOLD | trend=-0.74% | rsi=38.8 | macd_hist=0.0003 | atr=0.0086 | vol_ok=True | momentum=-0.60%
+LINK/USD: HOLD | trend=-0.51% | rsi=45.4 | macd_hist=0.0060 | atr=0.0621 | vol_ok=True | momentum=-0.47%
+LTC/USD: BUY | trend=-0.58% | rsi=44.6 | macd_hist=0.0627 | atr=0.3050 | vol_ok=True | momentum=0.07%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.83, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96804.58
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=40.8 | macd_hist=35.2732 | atr=374.4556 | vol_ok=True | momentum=-0.36%
+ETH/USD: HOLD | trend=-1.01% | rsi=36.3 | macd_hist=1.1917 | atr=14.8072 | vol_ok=True | momentum=-0.55%
+SOL/USD: HOLD | trend=-0.86% | rsi=38.0 | macd_hist=0.0093 | atr=0.6067 | vol_ok=True | momentum=-0.76%
+AVAX/USD: HOLD | trend=-0.93% | rsi=39.3 | macd_hist=0.0049 | atr=0.0640 | vol_ok=True | momentum=-0.76%
+DOGE/USD: HOLD | trend=-0.46% | rsi=46.4 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.11%
+XRP/USD: HOLD | trend=-0.74% | rsi=39.3 | macd_hist=0.0003 | atr=0.0087 | vol_ok=True | momentum=-0.56%
+LINK/USD: HOLD | trend=-0.52% | rsi=44.9 | macd_hist=0.0057 | atr=0.0623 | vol_ok=True | momentum=-0.51%
+LTC/USD: BUY | trend=-0.58% | rsi=44.3 | macd_hist=0.0618 | atr=0.3064 | vol_ok=True | momentum=0.05%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.76, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96782.67
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=40.5 | macd_hist=34.2206 | atr=374.4556 | vol_ok=True | momentum=-0.38%
+ETH/USD: HOLD | trend=-1.01% | rsi=36.2 | macd_hist=1.1759 | atr=14.8072 | vol_ok=True | momentum=-0.56%
+SOL/USD: HOLD | trend=-0.86% | rsi=38.3 | macd_hist=0.0111 | atr=0.6134 | vol_ok=True | momentum=-0.73%
+AVAX/USD: HOLD | trend=-0.93% | rsi=39.3 | macd_hist=0.0049 | atr=0.0640 | vol_ok=True | momentum=-0.76%
+DOGE/USD: HOLD | trend=-0.45% | rsi=47.1 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.04%
+XRP/USD: HOLD | trend=-0.74% | rsi=39.3 | macd_hist=0.0003 | atr=0.0087 | vol_ok=True | momentum=-0.56%
+LINK/USD: HOLD | trend=-0.51% | rsi=45.3 | macd_hist=0.0060 | atr=0.0623 | vol_ok=True | momentum=-0.48%
+LTC/USD: BUY | trend=-0.58% | rsi=44.8 | macd_hist=0.0636 | atr=0.3064 | vol_ok=True | momentum=0.09%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.76, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96780.91
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.9 | macd_hist=31.3160 | atr=374.4556 | vol_ok=True | momentum=-0.42%
+ETH/USD: HOLD | trend=-1.03% | rsi=34.8 | macd_hist=0.9816 | atr=14.8072 | vol_ok=True | momentum=-0.66%
+SOL/USD: HOLD | trend=-0.87% | rsi=37.5 | macd_hist=0.0058 | atr=0.6134 | vol_ok=True | momentum=-0.80%
+AVAX/USD: HOLD | trend=-0.95% | rsi=37.3 | macd_hist=0.0032 | atr=0.0653 | vol_ok=True | momentum=-0.98%
+DOGE/USD: HOLD | trend=-0.45% | rsi=47.1 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.04%
+XRP/USD: HOLD | trend=-0.74% | rsi=38.7 | macd_hist=0.0002 | atr=0.0087 | vol_ok=True | momentum=-0.61%
+LINK/USD: HOLD | trend=-0.52% | rsi=44.3 | macd_hist=0.0053 | atr=0.0623 | vol_ok=True | momentum=-0.57%
+LTC/USD: BUY | trend=-0.59% | rsi=43.5 | macd_hist=0.0592 | atr=0.3064 | vol_ok=True | momentum=0.00%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.78, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96688.72
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=39.8 | macd_hist=30.8345 | atr=374.4556 | vol_ok=True | momentum=-0.43%
+ETH/USD: HOLD | trend=-1.03% | rsi=34.6 | macd_hist=0.9536 | atr=14.8072 | vol_ok=True | momentum=-0.67%
+SOL/USD: HOLD | trend=-0.87% | rsi=37.3 | macd_hist=0.0050 | atr=0.6134 | vol_ok=True | momentum=-0.82%
+AVAX/USD: HOLD | trend=-0.95% | rsi=37.3 | macd_hist=0.0032 | atr=0.0666 | vol_ok=True | momentum=-0.98%
+DOGE/USD: HOLD | trend=-0.48% | rsi=44.1 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.32%
+XRP/USD: HOLD | trend=-0.75% | rsi=38.1 | macd_hist=0.0002 | atr=0.0087 | vol_ok=True | momentum=-0.65%
+LINK/USD: HOLD | trend=-0.53% | rsi=43.9 | macd_hist=0.0050 | atr=0.0623 | vol_ok=True | momentum=-0.60%
+LTC/USD: BUY | trend=-0.59% | rsi=43.8 | macd_hist=0.0601 | atr=0.3064 | vol_ok=True | momentum=0.02%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.92, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96703.83
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.65% | rsi=38.8 | macd_hist=26.3015 | atr=374.4556 | vol_ok=True | momentum=-0.50%
+ETH/USD: HOLD | trend=-1.04% | rsi=33.7 | macd_hist=0.7820 | atr=14.9299 | vol_ok=True | momentum=-0.76%
+SOL/USD: HOLD | trend=-0.88% | rsi=36.8 | macd_hist=0.0015 | atr=0.6134 | vol_ok=True | momentum=-0.86%
+AVAX/USD: HOLD | trend=-0.97% | rsi=36.6 | macd_hist=0.0023 | atr=0.0666 | vol_ok=True | momentum=-1.09%
+DOGE/USD: HOLD | trend=-0.48% | rsi=44.1 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.32%
+XRP/USD: HOLD | trend=-0.76% | rsi=37.2 | macd_hist=0.0001 | atr=0.0087 | vol_ok=True | momentum=-0.72%
+LINK/USD: HOLD | trend=-0.53% | rsi=43.4 | macd_hist=0.0046 | atr=0.0623 | vol_ok=True | momentum=-0.64%
+LTC/USD: HOLD | trend=-0.59% | rsi=42.9 | macd_hist=0.0574 | atr=0.3064 | vol_ok=True | momentum=-0.04%
+Portfolio snapshot: cash=$1870.78, portfolio=$96703.83
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.64% | rsi=40.0 | macd_hist=31.9418 | atr=375.6326 | vol_ok=True | momentum=-0.41%
+ETH/USD: HOLD | trend=-1.03% | rsi=34.6 | macd_hist=0.9448 | atr=15.0152 | vol_ok=True | momentum=-0.68%
+SOL/USD: HOLD | trend=-0.87% | rsi=37.9 | macd_hist=0.0085 | atr=0.6134 | vol_ok=True | momentum=-0.77%
+AVAX/USD: HOLD | trend=-0.95% | rsi=37.3 | macd_hist=0.0032 | atr=0.0666 | vol_ok=True | momentum=-0.98%
+DOGE/USD: HOLD | trend=-0.48% | rsi=44.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.30%
+XRP/USD: HOLD | trend=-0.75% | rsi=38.5 | macd_hist=0.0002 | atr=0.0087 | vol_ok=True | momentum=-0.62%
+LINK/USD: HOLD | trend=-0.52% | rsi=45.0 | macd_hist=0.0058 | atr=0.0623 | vol_ok=True | momentum=-0.50%
+LTC/USD: HOLD | trend=-0.58% | rsi=45.1 | macd_hist=0.0644 | atr=0.3064 | vol_ok=True | momentum=0.11%
+Portfolio snapshot: cash=$1870.78, portfolio=$96700.90
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.62% | rsi=41.4 | macd_hist=38.2140 | atr=375.6326 | vol_ok=True | momentum=-0.32%
+ETH/USD: HOLD | trend=-1.01% | rsi=36.4 | macd_hist=1.2109 | atr=15.0152 | vol_ok=True | momentum=-0.54%
+SOL/USD: HOLD | trend=-0.86% | rsi=38.8 | macd_hist=0.0146 | atr=0.6134 | vol_ok=True | momentum=-0.69%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0041 | atr=0.0666 | vol_ok=True | momentum=-0.87%
+DOGE/USD: HOLD | trend=-0.47% | rsi=44.9 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.24%
+XRP/USD: HOLD | trend=-0.72% | rsi=40.8 | macd_hist=0.0004 | atr=0.0089 | vol_ok=True | momentum=-0.45%
+LINK/USD: HOLD | trend=-0.51% | rsi=45.7 | macd_hist=0.0063 | atr=0.0630 | vol_ok=True | momentum=-0.43%
+LTC/USD: HOLD | trend=-0.57% | rsi=45.8 | macd_hist=0.0671 | atr=0.3090 | vol_ok=True | momentum=0.16%
+Portfolio snapshot: cash=$1870.78, portfolio=$96703.22
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=40.1 | macd_hist=32.5231 | atr=375.6326 | vol_ok=True | momentum=-0.40%
+ETH/USD: HOLD | trend=-1.02% | rsi=35.2 | macd_hist=1.0376 | atr=15.0152 | vol_ok=True | momentum=-0.63%
+SOL/USD: HOLD | trend=-0.86% | rsi=38.0 | macd_hist=0.0093 | atr=0.6134 | vol_ok=True | momentum=-0.76%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0041 | atr=0.0666 | vol_ok=True | momentum=-0.87%
+DOGE/USD: HOLD | trend=-0.49% | rsi=43.6 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.37%
+XRP/USD: HOLD | trend=-0.74% | rsi=39.5 | macd_hist=0.0003 | atr=0.0089 | vol_ok=True | momentum=-0.55%
+LINK/USD: HOLD | trend=-0.52% | rsi=44.7 | macd_hist=0.0055 | atr=0.0630 | vol_ok=True | momentum=-0.53%
+LTC/USD: BUY | trend=-0.59% | rsi=43.8 | macd_hist=0.0601 | atr=0.3090 | vol_ok=True | momentum=0.02%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.7, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96702.79
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=40.5 | macd_hist=34.1077 | atr=375.6326 | vol_ok=True | momentum=-0.38%
+ETH/USD: HOLD | trend=-1.02% | rsi=35.9 | macd_hist=1.1400 | atr=15.0152 | vol_ok=True | momentum=-0.58%
+SOL/USD: HOLD | trend=-0.86% | rsi=38.2 | macd_hist=0.0102 | atr=0.6134 | vol_ok=True | momentum=-0.74%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0041 | atr=0.0666 | vol_ok=True | momentum=-0.87%
+DOGE/USD: HOLD | trend=-0.49% | rsi=43.7 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.36%
+XRP/USD: HOLD | trend=-0.73% | rsi=39.8 | macd_hist=0.0004 | atr=0.0089 | vol_ok=True | momentum=-0.52%
+LINK/USD: HOLD | trend=-0.52% | rsi=44.9 | macd_hist=0.0057 | atr=0.0630 | vol_ok=True | momentum=-0.51%
+LTC/USD: BUY | trend=-0.58% | rsi=44.6 | macd_hist=0.0627 | atr=0.3090 | vol_ok=True | momentum=0.07%
+Error executing trade for LTC/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.7, available: 60.38)","symbol":"USD"}
+Portfolio snapshot: cash=$1870.78, portfolio=$96699.54
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=40.7 | macd_hist=34.8902 | atr=375.6326 | vol_ok=True | momentum=-0.37%
+ETH/USD: HOLD | trend=-1.01% | rsi=36.7 | macd_hist=1.2494 | atr=15.0152 | vol_ok=True | momentum=-0.52%
+SOL/USD: HOLD | trend=-0.86% | rsi=38.3 | macd_hist=0.0111 | atr=0.6134 | vol_ok=True | momentum=-0.73%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0041 | atr=0.0666 | vol_ok=True | momentum=-0.87%
+DOGE/USD: HOLD | trend=-0.49% | rsi=43.7 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.36%
+XRP/USD: HOLD | trend=-0.73% | rsi=40.6 | macd_hist=0.0004 | atr=0.0089 | vol_ok=True | momentum=-0.46%
+LINK/USD: HOLD | trend=-0.51% | rsi=45.7 | macd_hist=0.0063 | atr=0.0630 | vol_ok=True | momentum=-0.43%
+LTC/USD: HOLD | trend=-0.58% | rsi=45.1 | macd_hist=0.0644 | atr=0.3090 | vol_ok=True | momentum=0.11%
+Portfolio snapshot: cash=$1870.78, portfolio=$96667.96
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.63% | rsi=41.0 | macd_hist=36.4816 | atr=375.6326 | vol_ok=True | momentum=-0.34%
+ETH/USD: HOLD | trend=-1.01% | rsi=37.0 | macd_hist=1.2985 | atr=15.0152 | vol_ok=True | momentum=-0.50%
+SOL/USD: HOLD | trend=-0.85% | rsi=39.0 | macd_hist=0.0155 | atr=0.6134 | vol_ok=True | momentum=-0.67%
+AVAX/USD: HOLD | trend=-0.94% | rsi=38.1 | macd_hist=0.0041 | atr=0.0666 | vol_ok=True | momentum=-0.87%
+DOGE/USD: HOLD | trend=-0.49% | rsi=43.7 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.36%
+XRP/USD: HOLD | trend=-0.73% | rsi=40.5 | macd_hist=0.0004 | atr=0.0089 | vol_ok=True | momentum=-0.47%
+LINK/USD: HOLD | trend=-0.50% | rsi=46.2 | macd_hist=0.0067 | atr=0.0630 | vol_ok=True | momentum=-0.39%
+LTC/USD: HOLD | trend=-0.57% | rsi=45.6 | macd_hist=0.0662 | atr=0.3090 | vol_ok=True | momentum=0.15%
+Portfolio snapshot: cash=$1870.78, portfolio=$96667.96
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.62% | rsi=42.1 | macd_hist=41.3430 | atr=375.6326 | vol_ok=True | momentum=-0.27%
+ETH/USD: HOLD | trend=-0.99% | rsi=38.4 | macd_hist=1.5269 | atr=15.1872 | vol_ok=True | momentum=-0.39%
+SOL/USD: HOLD | trend=-0.84% | rsi=40.4 | macd_hist=0.0251 | atr=0.6254 | vol_ok=True | momentum=-0.54%
+AVAX/USD: HOLD | trend=-0.91% | rsi=40.5 | macd_hist=0.0058 | atr=0.0666 | vol_ok=True | momentum=-0.66%
+DOGE/USD: HOLD | trend=-0.47% | rsi=44.9 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.24%
+XRP/USD: HOLD | trend=-0.71% | rsi=42.0 | macd_hist=0.0006 | atr=0.0090 | vol_ok=True | momentum=-0.35%
+LINK/USD: HOLD | trend=-0.48% | rsi=47.9 | macd_hist=0.0081 | atr=0.0649 | vol_ok=True | momentum=-0.22%
+LTC/USD: HOLD | trend=-0.57% | rsi=46.1 | macd_hist=0.0679 | atr=0.3104 | vol_ok=True | momentum=0.18%
+Portfolio snapshot: cash=$1870.78, portfolio=$96710.19
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.61% | rsi=43.3 | macd_hist=47.5092 | atr=384.5576 | vol_ok=True | momentum=-0.17%
+ETH/USD: HOLD | trend=-0.98% | rsi=39.5 | macd_hist=1.6942 | atr=15.4418 | vol_ok=True | momentum=-0.30%
+SOL/USD: HOLD | trend=-0.82% | rsi=42.3 | macd_hist=0.0391 | atr=0.6467 | vol_ok=True | momentum=-0.35%
+AVAX/USD: HOLD | trend=-0.89% | rsi=42.7 | macd_hist=0.0076 | atr=0.0693 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.45% | rsi=46.6 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.08%
+XRP/USD: HOLD | trend=-0.69% | rsi=43.9 | macd_hist=0.0008 | atr=0.0093 | vol_ok=True | momentum=-0.18%
+LINK/USD: HOLD | trend=-0.46% | rsi=49.7 | macd_hist=0.0095 | atr=0.0670 | vol_ok=True | momentum=-0.03%
+LTC/USD: HOLD | trend=-0.55% | rsi=47.7 | macd_hist=0.0741 | atr=0.3184 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$96715.47
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.61% | rsi=43.4 | macd_hist=47.9045 | atr=386.2806 | vol_ok=True | momentum=-0.17%
+ETH/USD: HOLD | trend=-0.99% | rsi=39.0 | macd_hist=1.6145 | atr=15.5485 | vol_ok=True | momentum=-0.34%
+SOL/USD: HOLD | trend=-0.82% | rsi=41.9 | macd_hist=0.0356 | atr=0.6467 | vol_ok=True | momentum=-0.40%
+AVAX/USD: HOLD | trend=-0.88% | rsi=43.8 | macd_hist=0.0084 | atr=0.0706 | vol_ok=True | momentum=-0.33%
+DOGE/USD: HOLD | trend=-0.46% | rsi=46.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.12%
+XRP/USD: HOLD | trend=-0.70% | rsi=43.7 | macd_hist=0.0008 | atr=0.0093 | vol_ok=True | momentum=-0.20%
+LINK/USD: HOLD | trend=-0.47% | rsi=48.8 | macd_hist=0.0088 | atr=0.0674 | vol_ok=True | momentum=-0.13%
+LTC/USD: HOLD | trend=-0.55% | rsi=47.7 | macd_hist=0.0741 | atr=0.3237 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$96826.17
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.60% | rsi=43.7 | macd_hist=49.3661 | atr=390.4931 | vol_ok=True | momentum=-0.15%
+ETH/USD: HOLD | trend=-0.99% | rsi=38.7 | macd_hist=1.5620 | atr=15.5485 | vol_ok=True | momentum=-0.37%
+SOL/USD: HOLD | trend=-0.83% | rsi=41.3 | macd_hist=0.0312 | atr=0.6467 | vol_ok=True | momentum=-0.46%
+AVAX/USD: HOLD | trend=-0.89% | rsi=42.7 | macd_hist=0.0076 | atr=0.0706 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.46% | rsi=45.7 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.17%
+XRP/USD: HOLD | trend=-0.70% | rsi=43.0 | macd_hist=0.0007 | atr=0.0093 | vol_ok=True | momentum=-0.26%
+LINK/USD: HOLD | trend=-0.48% | rsi=48.4 | macd_hist=0.0085 | atr=0.0674 | vol_ok=True | momentum=-0.16%
+LTC/USD: HOLD | trend=-0.56% | rsi=47.3 | macd_hist=0.0723 | atr=0.3237 | vol_ok=True | momentum=0.27%
+Portfolio snapshot: cash=$1870.78, portfolio=$96822.68
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.60% | rsi=44.5 | macd_hist=53.4477 | atr=393.6024 | vol_ok=True | momentum=-0.08%
+ETH/USD: HOLD | trend=-0.99% | rsi=39.0 | macd_hist=1.6224 | atr=15.5485 | vol_ok=True | momentum=-0.34%
+SOL/USD: HOLD | trend=-0.82% | rsi=41.9 | macd_hist=0.0356 | atr=0.6467 | vol_ok=True | momentum=-0.40%
+AVAX/USD: HOLD | trend=-0.89% | rsi=42.7 | macd_hist=0.0076 | atr=0.0706 | vol_ok=True | momentum=-0.44%
+DOGE/USD: HOLD | trend=-0.46% | rsi=46.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.12%
+XRP/USD: HOLD | trend=-0.70% | rsi=43.1 | macd_hist=0.0007 | atr=0.0093 | vol_ok=True | momentum=-0.26%
+LINK/USD: HOLD | trend=-0.47% | rsi=49.1 | macd_hist=0.0090 | atr=0.0674 | vol_ok=True | momentum=-0.10%
+LTC/USD: HOLD | trend=-0.56% | rsi=47.0 | macd_hist=0.0714 | atr=0.3237 | vol_ok=True | momentum=0.26%
+Portfolio snapshot: cash=$1870.78, portfolio=$96822.68
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.56% | rsi=48.3 | macd_hist=74.6534 | atr=434.5149 | vol_ok=True | momentum=0.24%
+ETH/USD: BUY | trend=-0.95% | rsi=43.1 | macd_hist=2.3306 | atr=16.6392 | vol_ok=True | momentum=0.02%
+Error executing trade for ETH/USD: {"available":"60.38","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.17, available: 60.38)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.76% | rsi=46.8 | macd_hist=0.0750 | atr=0.7027 | vol_ok=True | momentum=0.13%
+AVAX/USD: HOLD | trend=-0.84% | rsi=46.7 | macd_hist=0.0111 | atr=0.0760 | vol_ok=True | momentum=0.00%
+DOGE/USD: HOLD | trend=-0.43% | rsi=48.6 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.12%
+XRP/USD: HOLD | trend=-0.65% | rsi=47.5 | macd_hist=0.0012 | atr=0.0101 | vol_ok=True | momentum=0.16%
+LINK/USD: HOLD | trend=-0.42% | rsi=52.6 | macd_hist=0.0123 | atr=0.0722 | vol_ok=True | momentum=0.32%
+LTC/USD: HOLD | trend=-0.53% | rsi=50.1 | macd_hist=0.0837 | atr=0.3330 | vol_ok=True | momentum=0.51%
+Portfolio snapshot: cash=$1870.78, portfolio=$96881.62
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.57% | rsi=47.5 | macd_hist=69.8448 | atr=434.5149 | vol_ok=True | momentum=0.17%
+ETH/USD: HOLD | trend=-0.96% | rsi=41.5 | macd_hist=2.0347 | atr=16.6392 | vol_ok=True | momentum=-0.13%
+SOL/USD: HOLD | trend=-0.78% | rsi=45.3 | macd_hist=0.0619 | atr=0.7040 | vol_ok=True | momentum=-0.05%
+AVAX/USD: HOLD | trend=-0.84% | rsi=46.7 | macd_hist=0.0111 | atr=0.0760 | vol_ok=True | momentum=0.00%
+DOGE/USD: HOLD | trend=-0.45% | rsi=47.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.01%
+XRP/USD: HOLD | trend=-0.65% | rsi=47.5 | macd_hist=0.0012 | atr=0.0101 | vol_ok=True | momentum=0.16%
+LINK/USD: HOLD | trend=-0.44% | rsi=51.1 | macd_hist=0.0109 | atr=0.0722 | vol_ok=True | momentum=0.13%
+LTC/USD: HOLD | trend=-0.53% | rsi=49.7 | macd_hist=0.0819 | atr=0.3344 | vol_ok=True | momentum=0.48%
+Portfolio snapshot: cash=$1870.78, portfolio=$96888.78
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.57% | rsi=47.1 | macd_hist=67.5864 | atr=434.5149 | vol_ok=True | momentum=0.13%
+ETH/USD: HOLD | trend=-0.97% | rsi=41.1 | macd_hist=1.9682 | atr=16.6392 | vol_ok=True | momentum=-0.17%
+SOL/USD: HOLD | trend=-0.80% | rsi=44.1 | macd_hist=0.0522 | atr=0.7040 | vol_ok=True | momentum=-0.18%
+AVAX/USD: HOLD | trend=-0.84% | rsi=46.7 | macd_hist=0.0111 | atr=0.0760 | vol_ok=True | momentum=0.00%
+DOGE/USD: HOLD | trend=-0.45% | rsi=47.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.02%
+XRP/USD: HOLD | trend=-0.66% | rsi=47.0 | macd_hist=0.0011 | atr=0.0101 | vol_ok=True | momentum=0.11%
+LINK/USD: HOLD | trend=-0.45% | rsi=50.7 | macd_hist=0.0105 | atr=0.0722 | vol_ok=True | momentum=0.09%
+LTC/USD: HOLD | trend=-0.53% | rsi=50.4 | macd_hist=0.0846 | atr=0.3344 | vol_ok=True | momentum=0.53%
+Portfolio snapshot: cash=$1870.78, portfolio=$97078.35
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.56% | rsi=48.3 | macd_hist=74.6630 | atr=434.5149 | vol_ok=True | momentum=0.24%
+ETH/USD: BUY | trend=-0.95% | rsi=43.1 | macd_hist=2.3210 | atr=16.6392 | vol_ok=True | momentum=0.01%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.84, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.79% | rsi=44.6 | macd_hist=0.0566 | atr=0.7040 | vol_ok=True | momentum=-0.12%
+AVAX/USD: HOLD | trend=-0.84% | rsi=46.7 | macd_hist=0.0111 | atr=0.0760 | vol_ok=True | momentum=0.00%
+DOGE/USD: HOLD | trend=-0.43% | rsi=48.6 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.12%
+XRP/USD: HOLD | trend=-0.66% | rsi=47.3 | macd_hist=0.0012 | atr=0.0101 | vol_ok=True | momentum=0.14%
+LINK/USD: HOLD | trend=-0.43% | rsi=51.8 | macd_hist=0.0116 | atr=0.0722 | vol_ok=True | momentum=0.22%
+LTC/USD: HOLD | trend=-0.53% | rsi=49.9 | macd_hist=0.0828 | atr=0.3357 | vol_ok=True | momentum=0.49%
+Portfolio snapshot: cash=$1870.78, portfolio=$97081.10
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.58% | rsi=46.6 | macd_hist=65.0409 | atr=434.5149 | vol_ok=True | momentum=0.09%
+ETH/USD: HOLD | trend=-0.97% | rsi=41.0 | macd_hist=1.9559 | atr=16.6392 | vol_ok=True | momentum=-0.17%
+SOL/USD: HOLD | trend=-0.80% | rsi=43.7 | macd_hist=0.0496 | atr=0.7040 | vol_ok=True | momentum=-0.21%
+AVAX/USD: HOLD | trend=-0.84% | rsi=46.7 | macd_hist=0.0111 | atr=0.0760 | vol_ok=True | momentum=0.00%
+DOGE/USD: HOLD | trend=-0.44% | rsi=47.6 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.01%
+XRP/USD: HOLD | trend=-0.67% | rsi=46.2 | macd_hist=0.0010 | atr=0.0101 | vol_ok=True | momentum=0.03%
+LINK/USD: HOLD | trend=-0.45% | rsi=50.6 | macd_hist=0.0104 | atr=0.0722 | vol_ok=True | momentum=0.08%
+LTC/USD: HOLD | trend=-0.54% | rsi=49.5 | macd_hist=0.0811 | atr=0.3357 | vol_ok=True | momentum=0.46%
+Portfolio snapshot: cash=$1870.78, portfolio=$97127.92
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.57% | rsi=46.7 | macd_hist=65.6379 | atr=434.5149 | vol_ok=True | momentum=0.10%
+ETH/USD: HOLD | trend=-0.97% | rsi=40.9 | macd_hist=1.9375 | atr=16.6392 | vol_ok=True | momentum=-0.18%
+SOL/USD: HOLD | trend=-0.80% | rsi=44.0 | macd_hist=0.0514 | atr=0.7040 | vol_ok=True | momentum=-0.19%
+AVAX/USD: HOLD | trend=-0.86% | rsi=44.8 | macd_hist=0.0093 | atr=0.0760 | vol_ok=True | momentum=-0.22%
+DOGE/USD: HOLD | trend=-0.45% | rsi=47.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.02%
+XRP/USD: HOLD | trend=-0.66% | rsi=46.5 | macd_hist=0.0011 | atr=0.0101 | vol_ok=True | momentum=0.06%
+LINK/USD: HOLD | trend=-0.45% | rsi=50.3 | macd_hist=0.0102 | atr=0.0722 | vol_ok=True | momentum=0.04%
+LTC/USD: HOLD | trend=-0.54% | rsi=49.5 | macd_hist=0.0811 | atr=0.3357 | vol_ok=True | momentum=0.46%
+Portfolio snapshot: cash=$1870.78, portfolio=$97129.38
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.58% | rsi=46.5 | macd_hist=64.4267 | atr=434.5149 | vol_ok=True | momentum=0.08%
+ETH/USD: HOLD | trend=-0.97% | rsi=41.0 | macd_hist=1.9507 | atr=16.6392 | vol_ok=True | momentum=-0.17%
+SOL/USD: HOLD | trend=-0.80% | rsi=43.4 | macd_hist=0.0470 | atr=0.7040 | vol_ok=True | momentum=-0.25%
+AVAX/USD: HOLD | trend=-0.86% | rsi=44.8 | macd_hist=0.0093 | atr=0.0760 | vol_ok=True | momentum=-0.22%
+DOGE/USD: HOLD | trend=-0.45% | rsi=47.1 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.04%
+XRP/USD: HOLD | trend=-0.66% | rsi=47.2 | macd_hist=0.0012 | atr=0.0101 | vol_ok=True | momentum=0.13%
+LINK/USD: HOLD | trend=-0.45% | rsi=50.2 | macd_hist=0.0100 | atr=0.0722 | vol_ok=True | momentum=0.02%
+LTC/USD: HOLD | trend=-0.54% | rsi=49.3 | macd_hist=0.0802 | atr=0.3357 | vol_ok=True | momentum=0.44%
+Portfolio snapshot: cash=$1870.78, portfolio=$97136.88
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.56% | rsi=47.9 | macd_hist=72.2699 | atr=434.5149 | vol_ok=True | momentum=0.20%
+ETH/USD: HOLD | trend=-0.95% | rsi=42.9 | macd_hist=2.2912 | atr=16.6392 | vol_ok=True | momentum=-0.00%
+SOL/USD: HOLD | trend=-0.79% | rsi=44.4 | macd_hist=0.0549 | atr=0.7040 | vol_ok=True | momentum=-0.14%
+AVAX/USD: HOLD | trend=-0.85% | rsi=45.8 | macd_hist=0.0102 | atr=0.0760 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.44% | rsi=47.6 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.01%
+XRP/USD: HOLD | trend=-0.64% | rsi=48.2 | macd_hist=0.0013 | atr=0.0101 | vol_ok=True | momentum=0.23%
+LINK/USD: HOLD | trend=-0.44% | rsi=51.6 | macd_hist=0.0113 | atr=0.0722 | vol_ok=True | momentum=0.18%
+LTC/USD: HOLD | trend=-0.53% | rsi=49.9 | macd_hist=0.0828 | atr=0.3357 | vol_ok=True | momentum=0.49%
+Portfolio snapshot: cash=$1870.78, portfolio=$97134.08
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.56% | rsi=48.0 | macd_hist=72.7692 | atr=434.5149 | vol_ok=True | momentum=0.21%
+ETH/USD: HOLD | trend=-0.95% | rsi=42.6 | macd_hist=2.2413 | atr=16.6392 | vol_ok=True | momentum=-0.03%
+SOL/USD: HOLD | trend=-0.79% | rsi=44.3 | macd_hist=0.0540 | atr=0.7040 | vol_ok=True | momentum=-0.15%
+AVAX/USD: HOLD | trend=-0.85% | rsi=45.8 | macd_hist=0.0102 | atr=0.0760 | vol_ok=True | momentum=-0.11%
+DOGE/USD: HOLD | trend=-0.44% | rsi=47.6 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.01%
+XRP/USD: HOLD | trend=-0.65% | rsi=47.9 | macd_hist=0.0012 | atr=0.0101 | vol_ok=True | momentum=0.20%
+LINK/USD: HOLD | trend=-0.44% | rsi=51.6 | macd_hist=0.0113 | atr=0.0722 | vol_ok=True | momentum=0.18%
+LTC/USD: HOLD | trend=-0.54% | rsi=49.1 | macd_hist=0.0793 | atr=0.3357 | vol_ok=True | momentum=0.42%
+Portfolio snapshot: cash=$1870.78, portfolio=$97167.03
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=48.5 | macd_hist=89.1180 | atr=385.3588 | vol_ok=True | momentum=0.35%
+ETH/USD: BUY | trend=-0.87% | rsi=43.2 | macd_hist=2.7741 | atr=14.6846 | vol_ok=True | momentum=0.15%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.84, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.72% | rsi=45.5 | macd_hist=0.0796 | atr=0.6275 | vol_ok=True | momentum=-0.01%
+AVAX/USD: HOLD | trend=-0.76% | rsi=46.8 | macd_hist=0.0124 | atr=0.0672 | vol_ok=True | momentum=0.22%
+DOGE/USD: HOLD | trend=-0.40% | rsi=47.8 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.35%
+XRP/USD: HOLD | trend=-0.57% | rsi=47.7 | macd_hist=0.0016 | atr=0.0091 | vol_ok=True | momentum=0.32%
+LINK/USD: HOLD | trend=-0.34% | rsi=52.4 | macd_hist=0.0132 | atr=0.0640 | vol_ok=True | momentum=0.38%
+LTC/USD: HOLD | trend=-0.45% | rsi=50.5 | macd_hist=0.0858 | atr=0.2989 | vol_ok=True | momentum=0.22%
+Portfolio snapshot: cash=$1870.78, portfolio=$97173.57
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.50% | rsi=47.4 | macd_hist=83.1234 | atr=390.4463 | vol_ok=True | momentum=0.26%
+ETH/USD: BUY | trend=-0.88% | rsi=42.7 | macd_hist=2.6743 | atr=14.8859 | vol_ok=True | momentum=0.11%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.84, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.73% | rsi=44.9 | macd_hist=0.0753 | atr=0.6302 | vol_ok=True | momentum=-0.07%
+AVAX/USD: HOLD | trend=-0.76% | rsi=46.8 | macd_hist=0.0124 | atr=0.0672 | vol_ok=True | momentum=0.22%
+DOGE/USD: HOLD | trend=-0.40% | rsi=47.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.40%
+XRP/USD: HOLD | trend=-0.57% | rsi=47.9 | macd_hist=0.0017 | atr=0.0091 | vol_ok=True | momentum=0.33%
+LINK/USD: HOLD | trend=-0.35% | rsi=51.6 | macd_hist=0.0124 | atr=0.0640 | vol_ok=True | momentum=0.28%
+LTC/USD: HOLD | trend=-0.46% | rsi=49.3 | macd_hist=0.0815 | atr=0.2989 | vol_ok=True | momentum=0.13%
+Portfolio snapshot: cash=$1870.78, portfolio=$97170.08
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.50% | rsi=47.2 | macd_hist=81.8951 | atr=393.6463 | vol_ok=True | momentum=0.24%
+ETH/USD: BUY | trend=-0.88% | rsi=42.4 | macd_hist=2.6209 | atr=14.9193 | vol_ok=True | momentum=0.08%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.81, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.73% | rsi=45.2 | macd_hist=0.0779 | atr=0.6302 | vol_ok=True | momentum=-0.04%
+AVAX/USD: HOLD | trend=-0.76% | rsi=46.8 | macd_hist=0.0124 | atr=0.0672 | vol_ok=True | momentum=0.22%
+DOGE/USD: HOLD | trend=-0.40% | rsi=47.4 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.39%
+XRP/USD: HOLD | trend=-0.56% | rsi=48.1 | macd_hist=0.0017 | atr=0.0091 | vol_ok=True | momentum=0.35%
+LINK/USD: HOLD | trend=-0.35% | rsi=51.3 | macd_hist=0.0121 | atr=0.0644 | vol_ok=True | momentum=0.25%
+LTC/USD: HOLD | trend=-0.45% | rsi=49.8 | macd_hist=0.0832 | atr=0.2989 | vol_ok=True | momentum=0.16%
+Portfolio snapshot: cash=$1870.78, portfolio=$97166.30
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.50% | rsi=46.7 | macd_hist=78.8434 | atr=397.1192 | vol_ok=True | momentum=0.20%
+ETH/USD: BUY | trend=-0.89% | rsi=42.1 | macd_hist=2.5325 | atr=15.1313 | vol_ok=True | momentum=0.03%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.96, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.73% | rsi=44.8 | macd_hist=0.0744 | atr=0.6302 | vol_ok=True | momentum=-0.08%
+AVAX/USD: HOLD | trend=-0.77% | rsi=45.8 | macd_hist=0.0115 | atr=0.0672 | vol_ok=True | momentum=0.11%
+DOGE/USD: HOLD | trend=-0.39% | rsi=48.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.32%
+XRP/USD: HOLD | trend=-0.57% | rsi=47.8 | macd_hist=0.0017 | atr=0.0093 | vol_ok=True | momentum=0.33%
+LINK/USD: HOLD | trend=-0.34% | rsi=52.0 | macd_hist=0.0128 | atr=0.0652 | vol_ok=True | momentum=0.33%
+LTC/USD: HOLD | trend=-0.46% | rsi=49.5 | macd_hist=0.0823 | atr=0.2989 | vol_ok=True | momentum=0.15%
+Portfolio snapshot: cash=$1870.78, portfolio=$97154.91
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=47.9 | macd_hist=85.7497 | atr=398.9213 | vol_ok=True | momentum=0.30%
+ETH/USD: BUY | trend=-0.87% | rsi=43.2 | macd_hist=2.7653 | atr=15.1779 | vol_ok=True | momentum=0.15%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.83, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.72% | rsi=45.3 | macd_hist=0.0788 | atr=0.6315 | vol_ok=True | momentum=-0.02%
+AVAX/USD: HOLD | trend=-0.74% | rsi=47.8 | macd_hist=0.0133 | atr=0.0685 | vol_ok=True | momentum=0.33%
+DOGE/USD: HOLD | trend=-0.39% | rsi=48.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.31%
+XRP/USD: HOLD | trend=-0.57% | rsi=47.8 | macd_hist=0.0017 | atr=0.0093 | vol_ok=True | momentum=0.33%
+LINK/USD: HOLD | trend=-0.34% | rsi=52.2 | macd_hist=0.0129 | atr=0.0656 | vol_ok=True | momentum=0.35%
+LTC/USD: HOLD | trend=-0.46% | rsi=49.5 | macd_hist=0.0823 | atr=0.2989 | vol_ok=True | momentum=0.15%
+Portfolio snapshot: cash=$1870.78, portfolio=$97150.14
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=48.3 | macd_hist=88.3944 | atr=398.9213 | vol_ok=True | momentum=0.34%
+ETH/USD: BUY | trend=-0.87% | rsi=43.9 | macd_hist=2.8975 | atr=15.1779 | vol_ok=True | momentum=0.22%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.9, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.70% | rsi=47.2 | macd_hist=0.0936 | atr=0.6461 | vol_ok=True | momentum=0.18%
+AVAX/USD: HOLD | trend=-0.73% | rsi=48.7 | macd_hist=0.0142 | atr=0.0698 | vol_ok=True | momentum=0.44%
+DOGE/USD: HOLD | trend=-0.39% | rsi=48.7 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.26%
+XRP/USD: HOLD | trend=-0.55% | rsi=49.6 | macd_hist=0.0019 | atr=0.0093 | vol_ok=True | momentum=0.50%
+LINK/USD: HOLD | trend=-0.32% | rsi=53.4 | macd_hist=0.0141 | atr=0.0667 | vol_ok=True | momentum=0.49%
+LTC/USD: HOLD | trend=-0.45% | rsi=50.5 | macd_hist=0.0858 | atr=0.2989 | vol_ok=True | momentum=0.22%
+Portfolio snapshot: cash=$1870.78, portfolio=$97199.12
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=47.8 | macd_hist=85.4549 | atr=398.9213 | vol_ok=True | momentum=0.30%
+ETH/USD: BUY | trend=-0.88% | rsi=42.8 | macd_hist=2.6997 | atr=15.1806 | vol_ok=True | momentum=0.12%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.81, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.71% | rsi=46.5 | macd_hist=0.0875 | atr=0.6475 | vol_ok=True | momentum=0.09%
+AVAX/USD: HOLD | trend=-0.73% | rsi=48.7 | macd_hist=0.0142 | atr=0.0698 | vol_ok=True | momentum=0.44%
+DOGE/USD: HOLD | trend=-0.39% | rsi=48.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.32%
+XRP/USD: HOLD | trend=-0.55% | rsi=48.9 | macd_hist=0.0018 | atr=0.0093 | vol_ok=True | momentum=0.43%
+LINK/USD: HOLD | trend=-0.34% | rsi=52.3 | macd_hist=0.0131 | atr=0.0667 | vol_ok=True | momentum=0.37%
+LTC/USD: HOLD | trend=-0.45% | rsi=49.8 | macd_hist=0.0832 | atr=0.2989 | vol_ok=True | momentum=0.16%
+Portfolio snapshot: cash=$1870.78, portfolio=$97261.94
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=47.8 | macd_hist=85.6348 | atr=398.9213 | vol_ok=True | momentum=0.30%
+ETH/USD: BUY | trend=-0.87% | rsi=43.7 | macd_hist=2.8669 | atr=15.1806 | vol_ok=True | momentum=0.20%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.85, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.70% | rsi=47.0 | macd_hist=0.0919 | atr=0.6475 | vol_ok=True | momentum=0.15%
+AVAX/USD: HOLD | trend=-0.74% | rsi=47.8 | macd_hist=0.0133 | atr=0.0698 | vol_ok=True | momentum=0.33%
+DOGE/USD: HOLD | trend=-0.39% | rsi=48.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.32%
+XRP/USD: HOLD | trend=-0.56% | rsi=48.4 | macd_hist=0.0017 | atr=0.0093 | vol_ok=True | momentum=0.39%
+LINK/USD: HOLD | trend=-0.33% | rsi=52.7 | macd_hist=0.0135 | atr=0.0667 | vol_ok=True | momentum=0.41%
+LTC/USD: HOLD | trend=-0.46% | rsi=49.1 | macd_hist=0.0806 | atr=0.3016 | vol_ok=True | momentum=0.11%
+Portfolio snapshot: cash=$1870.78, portfolio=$97314.60
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=48.0 | macd_hist=86.6128 | atr=398.9213 | vol_ok=True | momentum=0.31%
+ETH/USD: BUY | trend=-0.87% | rsi=43.7 | macd_hist=2.8555 | atr=15.1913 | vol_ok=True | momentum=0.20%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.94, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.71% | rsi=46.7 | macd_hist=0.0893 | atr=0.6501 | vol_ok=True | momentum=0.12%
+AVAX/USD: HOLD | trend=-0.74% | rsi=47.8 | macd_hist=0.0133 | atr=0.0698 | vol_ok=True | momentum=0.33%
+DOGE/USD: HOLD | trend=-0.39% | rsi=48.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=-0.32%
+XRP/USD: HOLD | trend=-0.54% | rsi=49.7 | macd_hist=0.0019 | atr=0.0094 | vol_ok=True | momentum=0.52%
+LINK/USD: HOLD | trend=-0.33% | rsi=52.9 | macd_hist=0.0136 | atr=0.0667 | vol_ok=True | momentum=0.44%
+LTC/USD: HOLD | trend=-0.46% | rsi=49.5 | macd_hist=0.0823 | atr=0.3016 | vol_ok=True | momentum=0.15%
+Portfolio snapshot: cash=$1870.78, portfolio=$97417.59
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=54.2 | macd_hist=125.0876 | atr=448.9692 | vol_ok=True | momentum=0.90%
+ETH/USD: HOLD | trend=-0.77% | rsi=51.5 | macd_hist=4.4672 | atr=17.5006 | vol_ok=True | momentum=1.00%
+SOL/USD: HOLD | trend=-0.61% | rsi=53.6 | macd_hist=0.1532 | atr=0.7368 | vol_ok=True | momentum=0.98%
+AVAX/USD: HOLD | trend=-0.63% | rsi=55.2 | macd_hist=0.0212 | atr=0.0805 | vol_ok=True | momentum=1.31%
+DOGE/USD: HOLD | trend=-0.31% | rsi=54.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.41%
+XRP/USD: HOLD | trend=-0.47% | rsi=55.2 | macd_hist=0.0027 | atr=0.0106 | vol_ok=True | momentum=1.16%
+LINK/USD: HOLD | trend=-0.24% | rsi=58.5 | macd_hist=0.0196 | atr=0.0751 | vol_ok=True | momentum=1.18%
+LTC/USD: HOLD | trend=-0.40% | rsi=54.7 | macd_hist=0.1042 | atr=0.3296 | vol_ok=True | momentum=0.60%
+Portfolio snapshot: cash=$1870.78, portfolio=$97979.86
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.38% | rsi=56.9 | macd_hist=145.5594 | atr=489.8536 | vol_ok=True | momentum=1.22%
+ETH/USD: HOLD | trend=-0.69% | rsi=56.8 | macd_hist=5.8766 | atr=19.8620 | vol_ok=True | momentum=1.71%
+SOL/USD: HOLD | trend=-0.58% | rsi=55.3 | macd_hist=0.1716 | atr=0.7755 | vol_ok=True | momentum=1.23%
+AVAX/USD: HOLD | trend=-0.58% | rsi=57.8 | macd_hist=0.0247 | atr=0.0858 | vol_ok=True | momentum=1.75%
+DOGE/USD: HOLD | trend=-0.27% | rsi=57.4 | macd_hist=0.0002 | atr=0.0008 | vol_ok=True | momentum=0.73%
+XRP/USD: HOLD | trend=-0.43% | rsi=57.7 | macd_hist=0.0031 | atr=0.0114 | vol_ok=True | momentum=1.50%
+LINK/USD: HOLD | trend=-0.18% | rsi=62.0 | macd_hist=0.0241 | atr=0.0836 | vol_ok=True | momentum=1.74%
+LTC/USD: HOLD | trend=-0.35% | rsi=58.6 | macd_hist=0.1243 | atr=0.3616 | vol_ok=True | momentum=1.02%
+Portfolio snapshot: cash=$1870.78, portfolio=$98433.68
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=54.2 | macd_hist=125.1847 | atr=490.9223 | vol_ok=True | momentum=0.90%
+ETH/USD: HOLD | trend=-0.72% | rsi=55.3 | macd_hist=5.4476 | atr=20.8486 | vol_ok=True | momentum=1.49%
+SOL/USD: HOLD | trend=-0.60% | rsi=53.7 | macd_hist=0.1541 | atr=0.7821 | vol_ok=True | momentum=0.99%
+AVAX/USD: HOLD | trend=-0.60% | rsi=56.5 | macd_hist=0.0229 | atr=0.0885 | vol_ok=True | momentum=1.53%
+DOGE/USD: HOLD | trend=-0.28% | rsi=57.0 | macd_hist=0.0002 | atr=0.0008 | vol_ok=True | momentum=0.68%
+XRP/USD: HOLD | trend=-0.46% | rsi=56.1 | macd_hist=0.0028 | atr=0.0115 | vol_ok=True | momentum=1.28%
+LINK/USD: HOLD | trend=-0.23% | rsi=59.0 | macd_hist=0.0202 | atr=0.0838 | vol_ok=True | momentum=1.25%
+LTC/USD: HOLD | trend=-0.38% | rsi=56.9 | macd_hist=0.1147 | atr=0.3709 | vol_ok=True | momentum=0.82%
+Portfolio snapshot: cash=$1870.78, portfolio=$98451.94
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.43% | rsi=53.7 | macd_hist=121.5544 | atr=490.9223 | vol_ok=True | momentum=0.85%
+ETH/USD: HOLD | trend=-0.73% | rsi=54.7 | macd_hist=5.2866 | atr=20.8486 | vol_ok=True | momentum=1.41%
+SOL/USD: HOLD | trend=-0.61% | rsi=53.5 | macd_hist=0.1514 | atr=0.7821 | vol_ok=True | momentum=0.96%
+AVAX/USD: HOLD | trend=-0.59% | rsi=57.2 | macd_hist=0.0238 | atr=0.0885 | vol_ok=True | momentum=1.64%
+DOGE/USD: HOLD | trend=-0.28% | rsi=56.7 | macd_hist=0.0002 | atr=0.0008 | vol_ok=True | momentum=0.63%
+XRP/USD: HOLD | trend=-0.47% | rsi=55.2 | macd_hist=0.0027 | atr=0.0115 | vol_ok=True | momentum=1.15%
+LINK/USD: HOLD | trend=-0.23% | rsi=59.3 | macd_hist=0.0205 | atr=0.0838 | vol_ok=True | momentum=1.30%
+LTC/USD: HOLD | trend=-0.39% | rsi=56.0 | macd_hist=0.1103 | atr=0.3709 | vol_ok=True | momentum=0.73%
+Portfolio snapshot: cash=$1870.78, portfolio=$98451.94
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.44% | rsi=52.7 | macd_hist=115.1974 | atr=490.9223 | vol_ok=True | momentum=0.75%
+ETH/USD: HOLD | trend=-0.75% | rsi=53.3 | macd_hist=4.8979 | atr=20.8486 | vol_ok=True | momentum=1.22%
+SOL/USD: HOLD | trend=-0.62% | rsi=52.7 | macd_hist=0.1435 | atr=0.7821 | vol_ok=True | momentum=0.85%
+AVAX/USD: HOLD | trend=-0.60% | rsi=56.5 | macd_hist=0.0229 | atr=0.0885 | vol_ok=True | momentum=1.53%
+DOGE/USD: HOLD | trend=-0.32% | rsi=54.2 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.33%
+XRP/USD: HOLD | trend=-0.48% | rsi=54.2 | macd_hist=0.0025 | atr=0.0115 | vol_ok=True | momentum=1.02%
+LINK/USD: HOLD | trend=-0.25% | rsi=57.9 | macd_hist=0.0189 | atr=0.0838 | vol_ok=True | momentum=1.09%
+LTC/USD: HOLD | trend=-0.41% | rsi=54.0 | macd_hist=0.1007 | atr=0.3709 | vol_ok=True | momentum=0.53%
+Portfolio snapshot: cash=$1870.78, portfolio=$98307.00
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.44% | rsi=52.8 | macd_hist=115.4422 | atr=490.9223 | vol_ok=True | momentum=0.76%
+ETH/USD: HOLD | trend=-0.76% | rsi=52.5 | macd_hist=4.7123 | atr=20.8486 | vol_ok=True | momentum=1.12%
+SOL/USD: HOLD | trend=-0.64% | rsi=51.5 | macd_hist=0.1313 | atr=0.7821 | vol_ok=True | momentum=0.69%
+AVAX/USD: HOLD | trend=-0.63% | rsi=55.2 | macd_hist=0.0212 | atr=0.0885 | vol_ok=True | momentum=1.31%
+DOGE/USD: HOLD | trend=-0.32% | rsi=54.0 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.30%
+XRP/USD: HOLD | trend=-0.49% | rsi=53.6 | macd_hist=0.0024 | atr=0.0115 | vol_ok=True | momentum=0.95%
+LINK/USD: HOLD | trend=-0.25% | rsi=57.8 | macd_hist=0.0188 | atr=0.0838 | vol_ok=True | momentum=1.08%
+LTC/USD: HOLD | trend=-0.40% | rsi=54.5 | macd_hist=0.1033 | atr=0.3709 | vol_ok=True | momentum=0.58%
+Portfolio snapshot: cash=$1870.78, portfolio=$98173.34
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.45% | rsi=52.1 | macd_hist=110.8585 | atr=490.9223 | vol_ok=True | momentum=0.69%
+ETH/USD: HOLD | trend=-0.77% | rsi=51.7 | macd_hist=4.5144 | atr=20.8486 | vol_ok=True | momentum=1.03%
+SOL/USD: HOLD | trend=-0.65% | rsi=50.6 | macd_hist=0.1234 | atr=0.7821 | vol_ok=True | momentum=0.58%
+AVAX/USD: HOLD | trend=-0.63% | rsi=55.2 | macd_hist=0.0212 | atr=0.0885 | vol_ok=True | momentum=1.31%
+DOGE/USD: HOLD | trend=-0.33% | rsi=53.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.23%
+XRP/USD: HOLD | trend=-0.51% | rsi=52.7 | macd_hist=0.0023 | atr=0.0115 | vol_ok=True | momentum=0.84%
+LINK/USD: HOLD | trend=-0.27% | rsi=57.0 | macd_hist=0.0178 | atr=0.0838 | vol_ok=True | momentum=0.96%
+LTC/USD: HOLD | trend=-0.42% | rsi=53.6 | macd_hist=0.0990 | atr=0.3709 | vol_ok=True | momentum=0.49%
+Portfolio snapshot: cash=$1870.78, portfolio=$98134.33
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.47% | rsi=49.9 | macd_hist=97.4769 | atr=490.9223 | vol_ok=True | momentum=0.48%
+ETH/USD: HOLD | trend=-0.81% | rsi=48.4 | macd_hist=3.7756 | atr=20.8486 | vol_ok=True | momentum=0.66%
+SOL/USD: HOLD | trend=-0.68% | rsi=48.6 | macd_hist=0.1050 | atr=0.7821 | vol_ok=True | momentum=0.33%
+AVAX/USD: HOLD | trend=-0.68% | rsi=52.1 | macd_hist=0.0177 | atr=0.0885 | vol_ok=True | momentum=0.88%
+DOGE/USD: HOLD | trend=-0.36% | rsi=51.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.00%
+XRP/USD: HOLD | trend=-0.53% | rsi=50.5 | macd_hist=0.0020 | atr=0.0115 | vol_ok=True | momentum=0.60%
+LINK/USD: HOLD | trend=-0.31% | rsi=54.5 | macd_hist=0.0152 | atr=0.0838 | vol_ok=True | momentum=0.63%
+LTC/USD: HOLD | trend=-0.44% | rsi=51.5 | macd_hist=0.0902 | atr=0.3709 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$98096.19
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.47% | rsi=50.2 | macd_hist=99.2968 | atr=490.9223 | vol_ok=True | momentum=0.51%
+ETH/USD: HOLD | trend=-0.81% | rsi=48.7 | macd_hist=3.8202 | atr=20.8486 | vol_ok=True | momentum=0.68%
+SOL/USD: HOLD | trend=-0.68% | rsi=48.6 | macd_hist=0.1050 | atr=0.7821 | vol_ok=True | momentum=0.33%
+AVAX/USD: HOLD | trend=-0.67% | rsi=52.9 | macd_hist=0.0185 | atr=0.0885 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.36% | rsi=51.0 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.03%
+XRP/USD: HOLD | trend=-0.54% | rsi=50.2 | macd_hist=0.0020 | atr=0.0115 | vol_ok=True | momentum=0.57%
+LINK/USD: HOLD | trend=-0.30% | rsi=54.8 | macd_hist=0.0155 | atr=0.0838 | vol_ok=True | momentum=0.66%
+LTC/USD: HOLD | trend=-0.43% | rsi=51.8 | macd_hist=0.0911 | atr=0.3709 | vol_ok=True | momentum=0.33%
+Portfolio snapshot: cash=$1870.78, portfolio=$97798.55
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.47% | rsi=49.9 | macd_hist=97.2198 | atr=490.9223 | vol_ok=True | momentum=0.48%
+ETH/USD: HOLD | trend=-0.81% | rsi=48.4 | macd_hist=3.7660 | atr=20.8486 | vol_ok=True | momentum=0.65%
+SOL/USD: HOLD | trend=-0.68% | rsi=48.7 | macd_hist=0.1059 | atr=0.7821 | vol_ok=True | momentum=0.34%
+AVAX/USD: HOLD | trend=-0.67% | rsi=52.9 | macd_hist=0.0185 | atr=0.0885 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.36% | rsi=50.8 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.05%
+XRP/USD: HOLD | trend=-0.54% | rsi=49.7 | macd_hist=0.0019 | atr=0.0115 | vol_ok=True | momentum=0.52%
+LINK/USD: HOLD | trend=-0.31% | rsi=54.4 | macd_hist=0.0151 | atr=0.0838 | vol_ok=True | momentum=0.62%
+LTC/USD: HOLD | trend=-0.43% | rsi=51.8 | macd_hist=0.0911 | atr=0.3709 | vol_ok=True | momentum=0.33%
+Portfolio snapshot: cash=$1870.78, portfolio=$97787.87
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.46% | rsi=50.5 | macd_hist=101.2734 | atr=490.9223 | vol_ok=True | momentum=0.54%
+ETH/USD: HOLD | trend=-0.81% | rsi=48.7 | macd_hist=3.8368 | atr=20.8486 | vol_ok=True | momentum=0.69%
+SOL/USD: HOLD | trend=-0.68% | rsi=48.7 | macd_hist=0.1059 | atr=0.7821 | vol_ok=True | momentum=0.34%
+AVAX/USD: HOLD | trend=-0.67% | rsi=52.9 | macd_hist=0.0185 | atr=0.0885 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.36% | rsi=51.0 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.03%
+XRP/USD: HOLD | trend=-0.54% | rsi=49.9 | macd_hist=0.0019 | atr=0.0115 | vol_ok=True | momentum=0.53%
+LINK/USD: HOLD | trend=-0.31% | rsi=54.2 | macd_hist=0.0149 | atr=0.0838 | vol_ok=True | momentum=0.59%
+LTC/USD: HOLD | trend=-0.44% | rsi=51.5 | macd_hist=0.0902 | atr=0.3709 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$97794.61
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.47% | rsi=50.3 | macd_hist=99.5253 | atr=490.9223 | vol_ok=True | momentum=0.51%
+ETH/USD: HOLD | trend=-0.81% | rsi=48.6 | macd_hist=3.8193 | atr=20.8486 | vol_ok=True | momentum=0.68%
+SOL/USD: HOLD | trend=-0.68% | rsi=49.1 | macd_hist=0.1094 | atr=0.7821 | vol_ok=True | momentum=0.39%
+AVAX/USD: HOLD | trend=-0.67% | rsi=52.9 | macd_hist=0.0185 | atr=0.0885 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.36% | rsi=50.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.04%
+XRP/USD: HOLD | trend=-0.54% | rsi=50.3 | macd_hist=0.0020 | atr=0.0115 | vol_ok=True | momentum=0.58%
+LINK/USD: HOLD | trend=-0.31% | rsi=54.2 | macd_hist=0.0149 | atr=0.0838 | vol_ok=True | momentum=0.59%
+LTC/USD: HOLD | trend=-0.44% | rsi=51.5 | macd_hist=0.0902 | atr=0.3709 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$97780.84
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.46% | rsi=51.1 | macd_hist=104.7238 | atr=490.9223 | vol_ok=True | momentum=0.59%
+ETH/USD: HOLD | trend=-0.80% | rsi=49.5 | macd_hist=3.9944 | atr=20.8486 | vol_ok=True | momentum=0.77%
+SOL/USD: HOLD | trend=-0.67% | rsi=49.4 | macd_hist=0.1120 | atr=0.7821 | vol_ok=True | momentum=0.43%
+AVAX/USD: HOLD | trend=-0.67% | rsi=52.9 | macd_hist=0.0185 | atr=0.0885 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.35% | rsi=51.7 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.04%
+XRP/USD: HOLD | trend=-0.53% | rsi=50.7 | macd_hist=0.0020 | atr=0.0115 | vol_ok=True | momentum=0.62%
+LINK/USD: HOLD | trend=-0.30% | rsi=55.1 | macd_hist=0.0158 | atr=0.0838 | vol_ok=True | momentum=0.71%
+LTC/USD: HOLD | trend=-0.43% | rsi=52.2 | macd_hist=0.0928 | atr=0.3709 | vol_ok=True | momentum=0.36%
+Portfolio snapshot: cash=$1870.78, portfolio=$97878.77
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.50% | rsi=46.9 | macd_hist=80.1436 | atr=490.9223 | vol_ok=True | momentum=0.21%
+ETH/USD: BUY | trend=-0.86% | rsi=44.3 | macd_hist=2.9606 | atr=20.8486 | vol_ok=True | momentum=0.25%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 380.78, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.72% | rsi=45.6 | macd_hist=0.0805 | atr=0.7821 | vol_ok=True | momentum=0.00%
+AVAX/USD: HOLD | trend=-0.69% | rsi=51.3 | macd_hist=0.0168 | atr=0.0885 | vol_ok=True | momentum=0.77%
+DOGE/USD: HOLD | trend=-0.40% | rsi=47.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.34%
+XRP/USD: HOLD | trend=-0.58% | rsi=47.1 | macd_hist=0.0016 | atr=0.0115 | vol_ok=True | momentum=0.25%
+LINK/USD: HOLD | trend=-0.35% | rsi=51.8 | macd_hist=0.0126 | atr=0.0838 | vol_ok=True | momentum=0.30%
+LTC/USD: HOLD | trend=-0.46% | rsi=48.9 | macd_hist=0.0797 | atr=0.3709 | vol_ok=True | momentum=0.09%
+Portfolio snapshot: cash=$1870.78, portfolio=$97702.27
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=48.2 | macd_hist=87.8357 | atr=491.2744 | vol_ok=True | momentum=0.33%
+ETH/USD: HOLD | trend=-0.85% | rsi=45.4 | macd_hist=3.1628 | atr=20.8486 | vol_ok=True | momentum=0.35%
+SOL/USD: HOLD | trend=-0.71% | rsi=46.5 | macd_hist=0.0875 | atr=0.7821 | vol_ok=True | momentum=0.09%
+AVAX/USD: HOLD | trend=-0.68% | rsi=52.1 | macd_hist=0.0177 | atr=0.0885 | vol_ok=True | momentum=0.88%
+DOGE/USD: HOLD | trend=-0.38% | rsi=49.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.19%
+XRP/USD: HOLD | trend=-0.56% | rsi=47.9 | macd_hist=0.0017 | atr=0.0115 | vol_ok=True | momentum=0.34%
+LINK/USD: HOLD | trend=-0.33% | rsi=52.6 | macd_hist=0.0134 | atr=0.0838 | vol_ok=True | momentum=0.40%
+LTC/USD: HOLD | trend=-0.46% | rsi=49.5 | macd_hist=0.0823 | atr=0.3709 | vol_ok=True | momentum=0.15%
+Portfolio snapshot: cash=$1870.78, portfolio=$97557.27
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.50% | rsi=47.0 | macd_hist=80.3905 | atr=491.2744 | vol_ok=True | momentum=0.22%
+ETH/USD: BUY | trend=-0.86% | rsi=44.3 | macd_hist=2.9737 | atr=20.8486 | vol_ok=True | momentum=0.25%
+Error executing trade for ETH/USD: {"available":"1.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 381.66, available: 1.98)","symbol":"USD"}
+SOL/USD: HOLD | trend=-0.72% | rsi=45.9 | macd_hist=0.0831 | atr=0.7821 | vol_ok=True | momentum=0.04%
+AVAX/USD: HOLD | trend=-0.70% | rsi=50.5 | macd_hist=0.0159 | atr=0.0885 | vol_ok=True | momentum=0.66%
+DOGE/USD: HOLD | trend=-0.39% | rsi=48.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.29%
+XRP/USD: HOLD | trend=-0.58% | rsi=47.0 | macd_hist=0.0015 | atr=0.0115 | vol_ok=True | momentum=0.24%
+LINK/USD: HOLD | trend=-0.36% | rsi=50.9 | macd_hist=0.0119 | atr=0.0838 | vol_ok=True | momentum=0.22%
+LTC/USD: HOLD | trend=-0.46% | rsi=49.3 | macd_hist=0.0815 | atr=0.3709 | vol_ok=True | momentum=0.13%
+Portfolio snapshot: cash=$1870.78, portfolio=$97554.82
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=47.8 | macd_hist=85.0671 | atr=494.9317 | vol_ok=True | momentum=0.29%
+ETH/USD: HOLD | trend=-0.84% | rsi=46.4 | macd_hist=3.3659 | atr=20.8486 | vol_ok=True | momentum=0.45%
+SOL/USD: HOLD | trend=-0.71% | rsi=46.7 | macd_hist=0.0893 | atr=0.7821 | vol_ok=True | momentum=0.12%
+AVAX/USD: HOLD | trend=-0.70% | rsi=50.5 | macd_hist=0.0159 | atr=0.0885 | vol_ok=True | momentum=0.66%
+DOGE/USD: HOLD | trend=-0.38% | rsi=49.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.20%
+XRP/USD: HOLD | trend=-0.57% | rsi=47.7 | macd_hist=0.0016 | atr=0.0116 | vol_ok=True | momentum=0.32%
+LINK/USD: HOLD | trend=-0.33% | rsi=52.8 | macd_hist=0.0135 | atr=0.0838 | vol_ok=True | momentum=0.42%
+LTC/USD: HOLD | trend=-0.45% | rsi=50.0 | macd_hist=0.0841 | atr=0.3709 | vol_ok=True | momentum=0.18%
+Portfolio snapshot: cash=$1870.78, portfolio=$97530.66
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.49% | rsi=48.0 | macd_hist=86.5396 | atr=494.9317 | vol_ok=True | momentum=0.31%
+ETH/USD: HOLD | trend=-0.82% | rsi=47.7 | macd_hist=3.6241 | atr=20.8486 | vol_ok=True | momentum=0.58%
+SOL/USD: HOLD | trend=-0.71% | rsi=46.8 | macd_hist=0.0901 | atr=0.7821 | vol_ok=True | momentum=0.13%
+AVAX/USD: HOLD | trend=-0.68% | rsi=52.1 | macd_hist=0.0177 | atr=0.0885 | vol_ok=True | momentum=0.88%
+DOGE/USD: HOLD | trend=-0.37% | rsi=50.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=-0.10%
+XRP/USD: HOLD | trend=-0.56% | rsi=48.2 | macd_hist=0.0017 | atr=0.0116 | vol_ok=True | momentum=0.37%
+LINK/USD: HOLD | trend=-0.31% | rsi=54.6 | macd_hist=0.0153 | atr=0.0838 | vol_ok=True | momentum=0.64%
+LTC/USD: HOLD | trend=-0.45% | rsi=50.7 | macd_hist=0.0867 | atr=0.3709 | vol_ok=True | momentum=0.24%
+Portfolio snapshot: cash=$1870.78, portfolio=$97581.22
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.43% | rsi=47.9 | macd_hist=87.8911 | atr=434.2877 | vol_ok=True | momentum=0.70%
+ETH/USD: HOLD | trend=-0.71% | rsi=47.6 | macd_hist=4.0741 | atr=18.3328 | vol_ok=True | momentum=1.16%
+SOL/USD: HOLD | trend=-0.63% | rsi=46.7 | macd_hist=0.1038 | atr=0.6872 | vol_ok=True | momentum=0.97%
+AVAX/USD: HOLD | trend=-0.54% | rsi=52.1 | macd_hist=0.0198 | atr=0.0780 | vol_ok=True | momentum=1.54%
+DOGE/USD: HOLD | trend=-0.30% | rsi=50.7 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.64%
+XRP/USD: HOLD | trend=-0.49% | rsi=47.7 | macd_hist=0.0018 | atr=0.0103 | vol_ok=True | momentum=1.04%
+LINK/USD: HOLD | trend=-0.20% | rsi=53.9 | macd_hist=0.0154 | atr=0.0741 | vol_ok=True | momentum=1.23%
+LTC/USD: HOLD | trend=-0.36% | rsi=50.6 | macd_hist=0.0837 | atr=0.3268 | vol_ok=True | momentum=0.59%
+Portfolio snapshot: cash=$1870.78, portfolio=$97585.99
+Waiting 120 seconds before next cycle...
+Crypto bot started in paper-trading mode. Press Ctrl+C to stop.
+Watching: BTC/USD, ETH/USD, SOL/USD, AVAX/USD, DOGE/USD, XRP/USD, LINK/USD, LTC/USD
+Starting account snapshot: cash=$1870.78, portfolio=$97644.74
+BTC/USD: HOLD | trend=-0.42% | rsi=48.8 | macd_hist=93.0055 | atr=454.1387 | vol_ok=True | momentum=0.78%
+ETH/USD: HOLD | trend=-0.69% | rsi=49.3 | macd_hist=4.4120 | atr=19.2981 | vol_ok=True | momentum=1.33%
+SOL/USD: HOLD | trend=-0.62% | rsi=47.5 | macd_hist=0.1099 | atr=0.7032 | vol_ok=True | momentum=1.05%
+AVAX/USD: HOLD | trend=-0.55% | rsi=51.2 | macd_hist=0.0189 | atr=0.0807 | vol_ok=True | momentum=1.43%
+DOGE/USD: HOLD | trend=-0.30% | rsi=50.2 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.59%
+XRP/USD: HOLD | trend=-0.49% | rsi=47.7 | macd_hist=0.0018 | atr=0.0105 | vol_ok=True | momentum=1.04%
+LINK/USD: HOLD | trend=-0.22% | rsi=52.3 | macd_hist=0.0140 | atr=0.0785 | vol_ok=True | momentum=1.05%
+LTC/USD: HOLD | trend=-0.36% | rsi=51.1 | macd_hist=0.0854 | atr=0.3361 | vol_ok=True | momentum=0.62%
+Portfolio snapshot: cash=$1870.78, portfolio=$97644.74
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.41% | rsi=49.1 | macd_hist=94.2010 | atr=458.8825 | vol_ok=True | momentum=0.80%
+ETH/USD: HOLD | trend=-0.69% | rsi=49.6 | macd_hist=4.4855 | atr=19.5168 | vol_ok=True | momentum=1.37%
+SOL/USD: HOLD | trend=-0.61% | rsi=48.0 | macd_hist=0.1143 | atr=0.7099 | vol_ok=True | momentum=1.11%
+AVAX/USD: HOLD | trend=-0.55% | rsi=51.2 | macd_hist=0.0189 | atr=0.0807 | vol_ok=True | momentum=1.43%
+DOGE/USD: HOLD | trend=-0.31% | rsi=49.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.50%
+XRP/USD: HOLD | trend=-0.48% | rsi=48.4 | macd_hist=0.0019 | atr=0.0105 | vol_ok=True | momentum=1.11%
+LINK/USD: HOLD | trend=-0.22% | rsi=52.7 | macd_hist=0.0144 | atr=0.0785 | vol_ok=True | momentum=1.10%
+LTC/USD: HOLD | trend=-0.36% | rsi=51.1 | macd_hist=0.0854 | atr=0.3361 | vol_ok=True | momentum=0.62%
+Portfolio snapshot: cash=$1870.78, portfolio=$97659.07
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.40% | rsi=50.0 | macd_hist=99.4460 | atr=463.9481 | vol_ok=True | momentum=0.88%
+ETH/USD: HOLD | trend=-0.67% | rsi=50.7 | macd_hist=4.7044 | atr=19.7434 | vol_ok=True | momentum=1.48%
+SOL/USD: HOLD | trend=-0.60% | rsi=49.2 | macd_hist=0.1239 | atr=0.7232 | vol_ok=True | momentum=1.24%
+AVAX/USD: HOLD | trend=-0.54% | rsi=52.1 | macd_hist=0.0198 | atr=0.0807 | vol_ok=True | momentum=1.54%
+DOGE/USD: HOLD | trend=-0.31% | rsi=49.8 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.55%
+XRP/USD: HOLD | trend=-0.47% | rsi=49.1 | macd_hist=0.0019 | atr=0.0105 | vol_ok=True | momentum=1.17%
+LINK/USD: HOLD | trend=-0.21% | rsi=53.6 | macd_hist=0.0152 | atr=0.0785 | vol_ok=True | momentum=1.19%
+LTC/USD: HOLD | trend=-0.35% | rsi=52.0 | macd_hist=0.0890 | atr=0.3388 | vol_ok=True | momentum=0.70%
+Portfolio snapshot: cash=$1870.78, portfolio=$97659.07
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.40% | rsi=50.3 | macd_hist=101.1982 | atr=473.9054 | vol_ok=True | momentum=0.91%
+ETH/USD: HOLD | trend=-0.67% | rsi=51.1 | macd_hist=4.7919 | atr=20.3421 | vol_ok=True | momentum=1.52%
+SOL/USD: HOLD | trend=-0.58% | rsi=50.7 | macd_hist=0.1361 | atr=0.7459 | vol_ok=True | momentum=1.41%
+AVAX/USD: HOLD | trend=-0.53% | rsi=53.0 | macd_hist=0.0207 | atr=0.0807 | vol_ok=True | momentum=1.65%
+DOGE/USD: HOLD | trend=-0.30% | rsi=50.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.62%
+XRP/USD: HOLD | trend=-0.46% | rsi=49.9 | macd_hist=0.0020 | atr=0.0108 | vol_ok=True | momentum=1.25%
+LINK/USD: HOLD | trend=-0.20% | rsi=53.9 | macd_hist=0.0154 | atr=0.0785 | vol_ok=True | momentum=1.23%
+LTC/USD: HOLD | trend=-0.35% | rsi=52.5 | macd_hist=0.0907 | atr=0.3468 | vol_ok=True | momentum=0.73%
+Portfolio snapshot: cash=$1870.78, portfolio=$97755.96
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.41% | rsi=49.7 | macd_hist=97.8456 | atr=473.9054 | vol_ok=True | momentum=0.86%
+ETH/USD: HOLD | trend=-0.67% | rsi=50.7 | macd_hist=4.7114 | atr=20.3421 | vol_ok=True | momentum=1.48%
+SOL/USD: HOLD | trend=-0.58% | rsi=50.7 | macd_hist=0.1361 | atr=0.7459 | vol_ok=True | momentum=1.41%
+AVAX/USD: HOLD | trend=-0.54% | rsi=52.1 | macd_hist=0.0198 | atr=0.0807 | vol_ok=True | momentum=1.54%
+DOGE/USD: HOLD | trend=-0.30% | rsi=50.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.61%
+XRP/USD: HOLD | trend=-0.47% | rsi=49.5 | macd_hist=0.0020 | atr=0.0108 | vol_ok=True | momentum=1.21%
+LINK/USD: HOLD | trend=-0.21% | rsi=53.1 | macd_hist=0.0147 | atr=0.0785 | vol_ok=True | momentum=1.14%
+LTC/USD: HOLD | trend=-0.35% | rsi=52.7 | macd_hist=0.0916 | atr=0.3468 | vol_ok=True | momentum=0.75%
+Portfolio snapshot: cash=$1870.78, portfolio=$97894.13
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=48.2 | macd_hist=89.7110 | atr=473.9054 | vol_ok=True | momentum=0.73%
+ETH/USD: HOLD | trend=-0.69% | rsi=49.5 | macd_hist=4.4671 | atr=20.3421 | vol_ok=True | momentum=1.36%
+SOL/USD: HOLD | trend=-0.59% | rsi=49.5 | macd_hist=0.1265 | atr=0.7459 | vol_ok=True | momentum=1.28%
+AVAX/USD: HOLD | trend=-0.57% | rsi=50.3 | macd_hist=0.0181 | atr=0.0807 | vol_ok=True | momentum=1.32%
+DOGE/USD: HOLD | trend=-0.31% | rsi=49.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.52%
+XRP/USD: HOLD | trend=-0.48% | rsi=48.5 | macd_hist=0.0019 | atr=0.0108 | vol_ok=True | momentum=1.11%
+LINK/USD: HOLD | trend=-0.22% | rsi=52.3 | macd_hist=0.0140 | atr=0.0785 | vol_ok=True | momentum=1.05%
+LTC/USD: HOLD | trend=-0.35% | rsi=52.5 | macd_hist=0.0907 | atr=0.3468 | vol_ok=True | momentum=0.73%
+Portfolio snapshot: cash=$1870.78, portfolio=$97748.46
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.43% | rsi=47.9 | macd_hist=87.9643 | atr=473.9054 | vol_ok=True | momentum=0.70%
+ETH/USD: HOLD | trend=-0.70% | rsi=48.1 | macd_hist=4.1739 | atr=20.3421 | vol_ok=True | momentum=1.21%
+SOL/USD: HOLD | trend=-0.61% | rsi=48.3 | macd_hist=0.1169 | atr=0.7459 | vol_ok=True | momentum=1.14%
+AVAX/USD: HOLD | trend=-0.59% | rsi=48.6 | macd_hist=0.0163 | atr=0.0847 | vol_ok=True | momentum=1.10%
+DOGE/USD: HOLD | trend=-0.32% | rsi=48.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.40%
+XRP/USD: HOLD | trend=-0.49% | rsi=47.3 | macd_hist=0.0017 | atr=0.0108 | vol_ok=True | momentum=0.99%
+LINK/USD: HOLD | trend=-0.25% | rsi=50.6 | macd_hist=0.0125 | atr=0.0794 | vol_ok=True | momentum=0.87%
+LTC/USD: HOLD | trend=-0.36% | rsi=51.6 | macd_hist=0.0872 | atr=0.3468 | vol_ok=True | momentum=0.66%
+Portfolio snapshot: cash=$1870.78, portfolio=$97630.04
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=48.1 | macd_hist=89.1270 | atr=473.9054 | vol_ok=True | momentum=0.72%
+ETH/USD: HOLD | trend=-0.70% | rsi=48.6 | macd_hist=4.2737 | atr=20.3421 | vol_ok=True | momentum=1.26%
+SOL/USD: HOLD | trend=-0.60% | rsi=49.1 | macd_hist=0.1230 | atr=0.7459 | vol_ok=True | momentum=1.23%
+AVAX/USD: HOLD | trend=-0.58% | rsi=49.5 | macd_hist=0.0172 | atr=0.0847 | vol_ok=True | momentum=1.21%
+DOGE/USD: HOLD | trend=-0.32% | rsi=48.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.42%
+XRP/USD: HOLD | trend=-0.49% | rsi=47.9 | macd_hist=0.0018 | atr=0.0108 | vol_ok=True | momentum=1.05%
+LINK/USD: HOLD | trend=-0.24% | rsi=51.0 | macd_hist=0.0129 | atr=0.0794 | vol_ok=True | momentum=0.91%
+LTC/USD: HOLD | trend=-0.35% | rsi=51.8 | macd_hist=0.0881 | atr=0.3468 | vol_ok=True | momentum=0.68%
+Portfolio snapshot: cash=$1870.78, portfolio=$97666.69
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=48.1 | macd_hist=89.2665 | atr=473.9054 | vol_ok=True | momentum=0.72%
+ETH/USD: HOLD | trend=-0.71% | rsi=47.9 | macd_hist=4.1441 | atr=20.3421 | vol_ok=True | momentum=1.20%
+SOL/USD: HOLD | trend=-0.59% | rsi=49.3 | macd_hist=0.1248 | atr=0.7459 | vol_ok=True | momentum=1.25%
+AVAX/USD: HOLD | trend=-0.59% | rsi=48.6 | macd_hist=0.0163 | atr=0.0847 | vol_ok=True | momentum=1.10%
+DOGE/USD: HOLD | trend=-0.33% | rsi=48.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.39%
+XRP/USD: HOLD | trend=-0.50% | rsi=46.9 | macd_hist=0.0017 | atr=0.0108 | vol_ok=True | momentum=0.95%
+LINK/USD: HOLD | trend=-0.24% | rsi=50.7 | macd_hist=0.0126 | atr=0.0794 | vol_ok=True | momentum=0.88%
+LTC/USD: HOLD | trend=-0.36% | rsi=51.1 | macd_hist=0.0854 | atr=0.3468 | vol_ok=True | momentum=0.62%
+Portfolio snapshot: cash=$1870.78, portfolio=$97718.39
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.41% | rsi=49.4 | macd_hist=95.9210 | atr=473.9054 | vol_ok=True | momentum=0.83%
+ETH/USD: HOLD | trend=-0.70% | rsi=48.3 | macd_hist=4.2150 | atr=20.3421 | vol_ok=True | momentum=1.23%
+SOL/USD: HOLD | trend=-0.59% | rsi=50.0 | macd_hist=0.1300 | atr=0.7472 | vol_ok=True | momentum=1.32%
+AVAX/USD: HOLD | trend=-0.57% | rsi=50.3 | macd_hist=0.0181 | atr=0.0847 | vol_ok=True | momentum=1.32%
+DOGE/USD: HOLD | trend=-0.32% | rsi=49.1 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.48%
+XRP/USD: HOLD | trend=-0.49% | rsi=47.9 | macd_hist=0.0018 | atr=0.0108 | vol_ok=True | momentum=1.05%
+LINK/USD: HOLD | trend=-0.24% | rsi=51.3 | macd_hist=0.0132 | atr=0.0794 | vol_ok=True | momentum=0.94%
+LTC/USD: HOLD | trend=-0.36% | rsi=51.3 | macd_hist=0.0863 | atr=0.3468 | vol_ok=True | momentum=0.64%
+Portfolio snapshot: cash=$1870.78, portfolio=$97712.56
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.41% | rsi=49.6 | macd_hist=96.9531 | atr=473.9054 | vol_ok=True | momentum=0.84%
+ETH/USD: HOLD | trend=-0.71% | rsi=47.9 | macd_hist=4.1432 | atr=20.3421 | vol_ok=True | momentum=1.20%
+SOL/USD: HOLD | trend=-0.59% | rsi=49.6 | macd_hist=0.1274 | atr=0.7472 | vol_ok=True | momentum=1.29%
+AVAX/USD: HOLD | trend=-0.58% | rsi=49.5 | macd_hist=0.0172 | atr=0.0847 | vol_ok=True | momentum=1.21%
+DOGE/USD: HOLD | trend=-0.32% | rsi=49.1 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.48%
+XRP/USD: HOLD | trend=-0.49% | rsi=47.6 | macd_hist=0.0018 | atr=0.0108 | vol_ok=True | momentum=1.02%
+LINK/USD: HOLD | trend=-0.24% | rsi=50.7 | macd_hist=0.0126 | atr=0.0794 | vol_ok=True | momentum=0.88%
+LTC/USD: HOLD | trend=-0.36% | rsi=51.3 | macd_hist=0.0863 | atr=0.3468 | vol_ok=True | momentum=0.64%
+Portfolio snapshot: cash=$1870.78, portfolio=$97752.82
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=48.7 | macd_hist=92.3694 | atr=473.9054 | vol_ok=True | momentum=0.77%
+ETH/USD: HOLD | trend=-0.71% | rsi=47.7 | macd_hist=4.0951 | atr=20.3421 | vol_ok=True | momentum=1.17%
+SOL/USD: HOLD | trend=-0.61% | rsi=48.3 | macd_hist=0.1169 | atr=0.7472 | vol_ok=True | momentum=1.14%
+AVAX/USD: HOLD | trend=-0.58% | rsi=49.5 | macd_hist=0.0172 | atr=0.0847 | vol_ok=True | momentum=1.21%
+DOGE/USD: HOLD | trend=-0.33% | rsi=48.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.39%
+XRP/USD: HOLD | trend=-0.50% | rsi=47.1 | macd_hist=0.0017 | atr=0.0108 | vol_ok=True | momentum=0.97%
+LINK/USD: HOLD | trend=-0.26% | rsi=49.9 | macd_hist=0.0118 | atr=0.0795 | vol_ok=True | momentum=0.78%
+LTC/USD: HOLD | trend=-0.36% | rsi=51.3 | macd_hist=0.0863 | atr=0.3468 | vol_ok=True | momentum=0.64%
+Portfolio snapshot: cash=$1870.78, portfolio=$97752.82
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.43% | rsi=47.4 | macd_hist=85.2307 | atr=473.9054 | vol_ok=True | momentum=0.66%
+ETH/USD: HOLD | trend=-0.72% | rsi=46.6 | macd_hist=3.8552 | atr=20.3421 | vol_ok=True | momentum=1.05%
+SOL/USD: HOLD | trend=-0.62% | rsi=47.5 | macd_hist=0.1099 | atr=0.7472 | vol_ok=True | momentum=1.05%
+AVAX/USD: HOLD | trend=-0.60% | rsi=47.8 | macd_hist=0.0154 | atr=0.0847 | vol_ok=True | momentum=0.99%
+DOGE/USD: HOLD | trend=-0.34% | rsi=47.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.29%
+XRP/USD: HOLD | trend=-0.51% | rsi=45.9 | macd_hist=0.0015 | atr=0.0109 | vol_ok=True | momentum=0.84%
+LINK/USD: HOLD | trend=-0.28% | rsi=48.5 | macd_hist=0.0105 | atr=0.0815 | vol_ok=True | momentum=0.61%
+LTC/USD: HOLD | trend=-0.37% | rsi=49.7 | macd_hist=0.0802 | atr=0.3468 | vol_ok=True | momentum=0.51%
+Portfolio snapshot: cash=$1870.78, portfolio=$97744.50
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=48.5 | macd_hist=91.0187 | atr=473.9054 | vol_ok=True | momentum=0.75%
+ETH/USD: HOLD | trend=-0.72% | rsi=47.2 | macd_hist=3.9891 | atr=20.3421 | vol_ok=True | momentum=1.12%
+SOL/USD: HOLD | trend=-0.60% | rsi=48.5 | macd_hist=0.1178 | atr=0.7472 | vol_ok=True | momentum=1.16%
+AVAX/USD: HOLD | trend=-0.59% | rsi=48.6 | macd_hist=0.0163 | atr=0.0847 | vol_ok=True | momentum=1.10%
+DOGE/USD: HOLD | trend=-0.32% | rsi=48.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.42%
+XRP/USD: HOLD | trend=-0.50% | rsi=46.5 | macd_hist=0.0016 | atr=0.0109 | vol_ok=True | momentum=0.90%
+LINK/USD: HOLD | trend=-0.26% | rsi=49.6 | macd_hist=0.0116 | atr=0.0815 | vol_ok=True | momentum=0.74%
+LTC/USD: HOLD | trend=-0.37% | rsi=50.4 | macd_hist=0.0828 | atr=0.3468 | vol_ok=True | momentum=0.57%
+Portfolio snapshot: cash=$1870.78, portfolio=$97743.80
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=48.7 | macd_hist=92.0500 | atr=473.9054 | vol_ok=True | momentum=0.77%
+ETH/USD: HOLD | trend=-0.72% | rsi=47.2 | macd_hist=3.9865 | atr=20.3421 | vol_ok=True | momentum=1.12%
+SOL/USD: HOLD | trend=-0.61% | rsi=47.9 | macd_hist=0.1134 | atr=0.7472 | vol_ok=True | momentum=1.10%
+AVAX/USD: HOLD | trend=-0.59% | rsi=48.6 | macd_hist=0.0163 | atr=0.0847 | vol_ok=True | momentum=1.10%
+DOGE/USD: HOLD | trend=-0.33% | rsi=48.3 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.39%
+XRP/USD: HOLD | trend=-0.50% | rsi=46.5 | macd_hist=0.0016 | atr=0.0109 | vol_ok=True | momentum=0.91%
+LINK/USD: HOLD | trend=-0.25% | rsi=50.0 | macd_hist=0.0119 | atr=0.0815 | vol_ok=True | momentum=0.79%
+LTC/USD: HOLD | trend=-0.36% | rsi=50.6 | macd_hist=0.0837 | atr=0.3468 | vol_ok=True | momentum=0.59%
+Portfolio snapshot: cash=$1870.78, portfolio=$97645.18
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.43% | rsi=47.9 | macd_hist=88.0190 | atr=473.9054 | vol_ok=True | momentum=0.71%
+ETH/USD: HOLD | trend=-0.72% | rsi=46.8 | macd_hist=3.8998 | atr=20.3421 | vol_ok=True | momentum=1.07%
+SOL/USD: HOLD | trend=-0.62% | rsi=47.2 | macd_hist=0.1081 | atr=0.7472 | vol_ok=True | momentum=1.03%
+AVAX/USD: HOLD | trend=-0.59% | rsi=48.6 | macd_hist=0.0163 | atr=0.0847 | vol_ok=True | momentum=1.10%
+DOGE/USD: HOLD | trend=-0.34% | rsi=47.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.30%
+XRP/USD: BUY | trend=-0.52% | rsi=44.9 | macd_hist=0.0014 | atr=0.0111 | vol_ok=True | momentum=0.73%
+Error executing trade for XRP/USD: {"available":"25.53","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.11, available: 25.53)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.27% | rsi=49.1 | macd_hist=0.0111 | atr=0.0815 | vol_ok=True | momentum=0.69%
+LTC/USD: HOLD | trend=-0.38% | rsi=49.5 | macd_hist=0.0793 | atr=0.3481 | vol_ok=True | momentum=0.49%
+Portfolio snapshot: cash=$1870.78, portfolio=$97526.16
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.42% | rsi=48.1 | macd_hist=89.0066 | atr=473.9054 | vol_ok=True | momentum=0.72%
+ETH/USD: HOLD | trend=-0.73% | rsi=46.4 | macd_hist=3.8114 | atr=20.3421 | vol_ok=True | momentum=1.03%
+SOL/USD: HOLD | trend=-0.62% | rsi=47.6 | macd_hist=0.1108 | atr=0.7472 | vol_ok=True | momentum=1.06%
+AVAX/USD: HOLD | trend=-0.57% | rsi=50.3 | macd_hist=0.0181 | atr=0.0847 | vol_ok=True | momentum=1.32%
+DOGE/USD: HOLD | trend=-0.32% | rsi=49.1 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.48%
+XRP/USD: HOLD | trend=-0.52% | rsi=45.3 | macd_hist=0.0015 | atr=0.0112 | vol_ok=True | momentum=0.77%
+LINK/USD: HOLD | trend=-0.26% | rsi=49.8 | macd_hist=0.0118 | atr=0.0815 | vol_ok=True | momentum=0.77%
+LTC/USD: HOLD | trend=-0.37% | rsi=49.9 | macd_hist=0.0811 | atr=0.3481 | vol_ok=True | momentum=0.53%
+Portfolio snapshot: cash=$1870.78, portfolio=$97519.20
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.44% | rsi=46.2 | macd_hist=77.7458 | atr=473.9054 | vol_ok=True | momentum=0.55%
+ETH/USD: HOLD | trend=-0.73% | rsi=46.1 | macd_hist=3.7414 | atr=20.3421 | vol_ok=True | momentum=0.99%
+SOL/USD: HOLD | trend=-0.63% | rsi=46.6 | macd_hist=0.1029 | atr=0.7472 | vol_ok=True | momentum=0.95%
+AVAX/USD: HOLD | trend=-0.59% | rsi=48.6 | macd_hist=0.0163 | atr=0.0847 | vol_ok=True | momentum=1.10%
+DOGE/USD: HOLD | trend=-0.33% | rsi=48.0 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.36%
+XRP/USD: BUY | trend=-0.53% | rsi=44.6 | macd_hist=0.0013 | atr=0.0112 | vol_ok=True | momentum=0.69%
+Error executing trade for XRP/USD: {"available":"31.08","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.13, available: 31.08)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.28% | rsi=47.9 | macd_hist=0.0099 | atr=0.0825 | vol_ok=True | momentum=0.54%
+LTC/USD: HOLD | trend=-0.39% | rsi=48.1 | macd_hist=0.0741 | atr=0.3521 | vol_ok=True | momentum=0.38%
+Portfolio snapshot: cash=$1870.78, portfolio=$97503.65
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.44% | rsi=46.6 | macd_hist=80.0335 | atr=479.1637 | vol_ok=True | momentum=0.58%
+ETH/USD: HOLD | trend=-0.73% | rsi=46.2 | macd_hist=3.7642 | atr=20.4848 | vol_ok=True | momentum=1.01%
+SOL/USD: HOLD | trend=-0.63% | rsi=46.3 | macd_hist=0.1003 | atr=0.7472 | vol_ok=True | momentum=0.92%
+AVAX/USD: HOLD | trend=-0.60% | rsi=47.8 | macd_hist=0.0154 | atr=0.0847 | vol_ok=True | momentum=0.99%
+DOGE/USD: HOLD | trend=-0.34% | rsi=47.4 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.30%
+XRP/USD: BUY | trend=-0.53% | rsi=44.4 | macd_hist=0.0013 | atr=0.0113 | vol_ok=True | momentum=0.66%
+Error executing trade for XRP/USD: {"available":"32.98","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.41, available: 32.98)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.29% | rsi=47.8 | macd_hist=0.0098 | atr=0.0837 | vol_ok=True | momentum=0.53%
+LTC/USD: HOLD | trend=-0.40% | rsi=47.3 | macd_hist=0.0706 | atr=0.3575 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$97466.71
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.44% | rsi=46.9 | macd_hist=82.0053 | atr=479.1637 | vol_ok=True | momentum=0.61%
+ETH/USD: HOLD | trend=-0.72% | rsi=46.7 | macd_hist=3.8631 | atr=20.4848 | vol_ok=True | momentum=1.06%
+SOL/USD: HOLD | trend=-0.63% | rsi=46.5 | macd_hist=0.1020 | atr=0.7472 | vol_ok=True | momentum=0.94%
+AVAX/USD: HOLD | trend=-0.60% | rsi=47.8 | macd_hist=0.0154 | atr=0.0847 | vol_ok=True | momentum=0.99%
+DOGE/USD: HOLD | trend=-0.34% | rsi=47.2 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.28%
+XRP/USD: BUY | trend=-0.53% | rsi=44.6 | macd_hist=0.0014 | atr=0.0113 | vol_ok=True | momentum=0.69%
+Error executing trade for XRP/USD: {"available":"35.13","balance":"1870.78","code":40310000,"message":"insufficient balance for USD (requested: 382.35, available: 35.13)","symbol":"USD"}
+LINK/USD: HOLD | trend=-0.28% | rsi=47.9 | macd_hist=0.0099 | atr=0.0837 | vol_ok=True | momentum=0.54%
+LTC/USD: HOLD | trend=-0.39% | rsi=47.5 | macd_hist=0.0714 | atr=0.3588 | vol_ok=True | momentum=0.33%
+Portfolio snapshot: cash=$1870.78, portfolio=$97446.93
+Waiting 120 seconds before next cycle...
+Crypto bot started in paper-trading mode. Press Ctrl+C to stop.
+Watching: BTC/USD, ETH/USD, SOL/USD, AVAX/USD, DOGE/USD, XRP/USD, LINK/USD, LTC/USD
+Starting account snapshot: cash=$1870.78, portfolio=$97477.83
+BTC/USD: HOLD | trend=-0.39% | rsi=47.6 | macd_hist=76.3518 | atr=421.6148 | vol_ok=True | momentum=-0.04%
+ETH/USD: HOLD | trend=-0.64% | rsi=47.2 | macd_hist=3.7540 | atr=17.9241 | vol_ok=True | momentum=0.40%
+SOL/USD: HOLD | trend=-0.55% | rsi=47.7 | macd_hist=0.1091 | atr=0.6582 | vol_ok=True | momentum=0.34%
+AVAX/USD: HOLD | trend=-0.54% | rsi=47.8 | macd_hist=0.0132 | atr=0.0734 | vol_ok=True | momentum=0.22%
+DOGE/USD: HOLD | trend=-0.32% | rsi=47.0 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.06%
+XRP/USD: HOLD | trend=-0.49% | rsi=44.7 | macd_hist=0.0011 | atr=0.0100 | vol_ok=True | momentum=-0.35%
+LINK/USD: HOLD | trend=-0.28% | rsi=47.3 | macd_hist=0.0055 | atr=0.0741 | vol_ok=True | momentum=-0.46%
+LTC/USD: HOLD | trend=-0.35% | rsi=47.9 | macd_hist=0.0602 | atr=0.3163 | vol_ok=True | momentum=-0.09%
+Portfolio snapshot: cash=$1870.78, portfolio=$97470.58
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.39% | rsi=46.8 | macd_hist=72.2476 | atr=421.6148 | vol_ok=True | momentum=-0.10%
+ETH/USD: HOLD | trend=-0.65% | rsi=46.5 | macd_hist=3.6236 | atr=17.9988 | vol_ok=True | momentum=0.34%
+SOL/USD: HOLD | trend=-0.57% | rsi=46.5 | macd_hist=0.1003 | atr=0.6609 | vol_ok=True | momentum=0.22%
+AVAX/USD: HOLD | trend=-0.55% | rsi=47.0 | macd_hist=0.0123 | atr=0.0747 | vol_ok=True | momentum=0.11%
+DOGE/USD: HOLD | trend=-0.32% | rsi=46.3 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.14%
+XRP/USD: HOLD | trend=-0.50% | rsi=44.5 | macd_hist=0.0011 | atr=0.0101 | vol_ok=True | momentum=-0.37%
+LINK/USD: HOLD | trend=-0.29% | rsi=46.6 | macd_hist=0.0048 | atr=0.0741 | vol_ok=True | momentum=-0.54%
+LTC/USD: HOLD | trend=-0.34% | rsi=48.6 | macd_hist=0.0628 | atr=0.3190 | vol_ok=True | momentum=-0.04%
+Portfolio snapshot: cash=$1870.78, portfolio=$97430.95
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.39% | rsi=46.7 | macd_hist=71.9809 | atr=424.1815 | vol_ok=True | momentum=-0.10%
+ETH/USD: HOLD | trend=-0.64% | rsi=47.0 | macd_hist=3.7111 | atr=18.0721 | vol_ok=True | momentum=0.38%
+SOL/USD: HOLD | trend=-0.56% | rsi=47.2 | macd_hist=0.1056 | atr=0.6609 | vol_ok=True | momentum=0.30%
+AVAX/USD: HOLD | trend=-0.55% | rsi=47.0 | macd_hist=0.0123 | atr=0.0747 | vol_ok=True | momentum=0.11%
+DOGE/USD: HOLD | trend=-0.32% | rsi=47.0 | macd_hist=0.0000 | atr=0.0007 | vol_ok=True | momentum=-0.06%
+XRP/USD: HOLD | trend=-0.49% | rsi=44.9 | macd_hist=0.0011 | atr=0.0101 | vol_ok=True | momentum=-0.33%
+LINK/USD: HOLD | trend=-0.28% | rsi=47.1 | macd_hist=0.0054 | atr=0.0741 | vol_ok=True | momentum=-0.48%
+LTC/USD: HOLD | trend=-0.33% | rsi=49.3 | macd_hist=0.0654 | atr=0.3256 | vol_ok=True | momentum=0.02%
+Portfolio snapshot: cash=$1870.78, portfolio=$97447.54
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.36% | rsi=50.9 | macd_hist=93.9560 | atr=458.9002 | vol_ok=True | momentum=0.23%
+ETH/USD: HOLD | trend=-0.60% | rsi=50.5 | macd_hist=4.4106 | atr=19.4988 | vol_ok=True | momentum=0.73%
+SOL/USD: HOLD | trend=-0.52% | rsi=50.2 | macd_hist=0.1283 | atr=0.7036 | vol_ok=True | momentum=0.60%
+AVAX/USD: HOLD | trend=-0.50% | rsi=50.5 | macd_hist=0.0158 | atr=0.0787 | vol_ok=True | momentum=0.55%
+DOGE/USD: HOLD | trend=-0.29% | rsi=49.6 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.18%
+XRP/USD: HOLD | trend=-0.47% | rsi=47.3 | macd_hist=0.0014 | atr=0.0106 | vol_ok=True | momentum=-0.11%
+LINK/USD: HOLD | trend=-0.25% | rsi=50.0 | macd_hist=0.0080 | atr=0.0788 | vol_ok=True | momentum=-0.15%
+LTC/USD: HOLD | trend=-0.31% | rsi=51.9 | macd_hist=0.0751 | atr=0.3416 | vol_ok=True | momentum=0.22%
+Portfolio snapshot: cash=$1870.78, portfolio=$97522.13
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.36% | rsi=50.5 | macd_hist=91.9295 | atr=459.6711 | vol_ok=True | momentum=0.20%
+ETH/USD: HOLD | trend=-0.60% | rsi=50.2 | macd_hist=4.3414 | atr=19.4988 | vol_ok=True | momentum=0.70%
+SOL/USD: HOLD | trend=-0.54% | rsi=48.7 | macd_hist=0.1170 | atr=0.7049 | vol_ok=True | momentum=0.45%
+AVAX/USD: HOLD | trend=-0.50% | rsi=50.5 | macd_hist=0.0158 | atr=0.0787 | vol_ok=True | momentum=0.55%
+DOGE/USD: HOLD | trend=-0.30% | rsi=48.7 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.10%
+XRP/USD: HOLD | trend=-0.46% | rsi=47.9 | macd_hist=0.0015 | atr=0.0106 | vol_ok=True | momentum=-0.06%
+LINK/USD: HOLD | trend=-0.27% | rsi=48.4 | macd_hist=0.0065 | atr=0.0788 | vol_ok=True | momentum=-0.34%
+LTC/USD: HOLD | trend=-0.31% | rsi=51.9 | macd_hist=0.0751 | atr=0.3416 | vol_ok=True | momentum=0.22%
+Portfolio snapshot: cash=$1870.78, portfolio=$97530.96
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.36% | rsi=50.4 | macd_hist=91.0267 | atr=459.6711 | vol_ok=True | momentum=0.19%
+ETH/USD: HOLD | trend=-0.61% | rsi=49.5 | macd_hist=4.1900 | atr=19.4988 | vol_ok=True | momentum=0.62%
+SOL/USD: HOLD | trend=-0.55% | rsi=48.3 | macd_hist=0.1135 | atr=0.7049 | vol_ok=True | momentum=0.40%
+AVAX/USD: HOLD | trend=-0.52% | rsi=49.6 | macd_hist=0.0149 | atr=0.0787 | vol_ok=True | momentum=0.44%
+DOGE/USD: HOLD | trend=-0.30% | rsi=48.5 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.07%
+XRP/USD: HOLD | trend=-0.46% | rsi=48.2 | macd_hist=0.0015 | atr=0.0106 | vol_ok=True | momentum=-0.02%
+LINK/USD: HOLD | trend=-0.29% | rsi=47.0 | macd_hist=0.0052 | atr=0.0794 | vol_ok=True | momentum=-0.50%
+LTC/USD: HOLD | trend=-0.31% | rsi=51.4 | macd_hist=0.0733 | atr=0.3416 | vol_ok=True | momentum=0.18%
+Portfolio snapshot: cash=$1870.78, portfolio=$97558.96
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.2 | macd_hist=101.7452 | atr=465.1273 | vol_ok=True | momentum=0.35%
+ETH/USD: HOLD | trend=-0.60% | rsi=50.7 | macd_hist=4.4412 | atr=19.4988 | vol_ok=True | momentum=0.75%
+SOL/USD: HOLD | trend=-0.52% | rsi=50.1 | macd_hist=0.1275 | atr=0.7049 | vol_ok=True | momentum=0.59%
+AVAX/USD: HOLD | trend=-0.49% | rsi=51.3 | macd_hist=0.0167 | atr=0.0801 | vol_ok=True | momentum=0.66%
+DOGE/USD: HOLD | trend=-0.28% | rsi=50.2 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.24%
+XRP/USD: HOLD | trend=-0.45% | rsi=49.0 | macd_hist=0.0016 | atr=0.0109 | vol_ok=True | momentum=0.06%
+LINK/USD: HOLD | trend=-0.23% | rsi=50.8 | macd_hist=0.0089 | atr=0.0805 | vol_ok=True | momentum=-0.04%
+LTC/USD: HOLD | trend=-0.31% | rsi=51.9 | macd_hist=0.0751 | atr=0.3416 | vol_ok=True | momentum=0.22%
+Portfolio snapshot: cash=$1870.78, portfolio=$97607.53
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.1 | macd_hist=100.7713 | atr=466.5471 | vol_ok=True | momentum=0.34%
+ETH/USD: HOLD | trend=-0.59% | rsi=51.5 | macd_hist=4.6067 | atr=19.4988 | vol_ok=True | momentum=0.83%
+SOL/USD: HOLD | trend=-0.52% | rsi=50.3 | macd_hist=0.1292 | atr=0.7049 | vol_ok=True | momentum=0.62%
+AVAX/USD: HOLD | trend=-0.49% | rsi=51.3 | macd_hist=0.0167 | atr=0.0801 | vol_ok=True | momentum=0.66%
+DOGE/USD: HOLD | trend=-0.28% | rsi=50.1 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.23%
+XRP/USD: HOLD | trend=-0.44% | rsi=49.4 | macd_hist=0.0017 | atr=0.0109 | vol_ok=True | momentum=0.10%
+LINK/USD: HOLD | trend=-0.22% | rsi=51.9 | macd_hist=0.0099 | atr=0.0809 | vol_ok=True | momentum=0.09%
+LTC/USD: HOLD | trend=-0.31% | rsi=51.9 | macd_hist=0.0751 | atr=0.3416 | vol_ok=True | momentum=0.22%
+Portfolio snapshot: cash=$1870.78, portfolio=$97606.46
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.7 | macd_hist=104.3427 | atr=466.8138 | vol_ok=True | momentum=0.39%
+ETH/USD: HOLD | trend=-0.58% | rsi=51.9 | macd_hist=4.6995 | atr=19.4988 | vol_ok=True | momentum=0.88%
+SOL/USD: HOLD | trend=-0.51% | rsi=50.9 | macd_hist=0.1345 | atr=0.7049 | vol_ok=True | momentum=0.69%
+AVAX/USD: HOLD | trend=-0.48% | rsi=52.1 | macd_hist=0.0176 | atr=0.0814 | vol_ok=True | momentum=0.77%
+DOGE/USD: HOLD | trend=-0.27% | rsi=51.3 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.36%
+XRP/USD: HOLD | trend=-0.42% | rsi=50.9 | macd_hist=0.0019 | atr=0.0111 | vol_ok=True | momentum=0.25%
+LINK/USD: HOLD | trend=-0.21% | rsi=52.6 | macd_hist=0.0107 | atr=0.0821 | vol_ok=True | momentum=0.18%
+LTC/USD: HOLD | trend=-0.30% | rsi=52.9 | macd_hist=0.0795 | atr=0.3443 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$97669.11
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.6 | macd_hist=104.1676 | atr=471.2658 | vol_ok=True | momentum=0.39%
+ETH/USD: HOLD | trend=-0.59% | rsi=51.6 | macd_hist=4.6295 | atr=19.5388 | vol_ok=True | momentum=0.84%
+SOL/USD: HOLD | trend=-0.51% | rsi=50.8 | macd_hist=0.1336 | atr=0.7049 | vol_ok=True | momentum=0.67%
+AVAX/USD: HOLD | trend=-0.46% | rsi=52.9 | macd_hist=0.0184 | atr=0.0827 | vol_ok=True | momentum=0.87%
+DOGE/USD: HOLD | trend=-0.28% | rsi=50.4 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.27%
+XRP/USD: HOLD | trend=-0.43% | rsi=50.7 | macd_hist=0.0018 | atr=0.0111 | vol_ok=True | momentum=0.23%
+LINK/USD: HOLD | trend=-0.20% | rsi=52.9 | macd_hist=0.0110 | atr=0.0825 | vol_ok=True | momentum=0.22%
+LTC/USD: HOLD | trend=-0.30% | rsi=52.9 | macd_hist=0.0795 | atr=0.3456 | vol_ok=True | momentum=0.31%
+Portfolio snapshot: cash=$1870.78, portfolio=$97620.39
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.0 | macd_hist=100.4341 | atr=475.2638 | vol_ok=True | momentum=0.33%
+ETH/USD: HOLD | trend=-0.60% | rsi=50.8 | macd_hist=4.4596 | atr=19.6002 | vol_ok=True | momentum=0.76%
+SOL/USD: HOLD | trend=-0.53% | rsi=49.9 | macd_hist=0.1257 | atr=0.7076 | vol_ok=True | momentum=0.57%
+AVAX/USD: HOLD | trend=-0.46% | rsi=52.9 | macd_hist=0.0184 | atr=0.0827 | vol_ok=True | momentum=0.87%
+DOGE/USD: HOLD | trend=-0.28% | rsi=50.0 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.22%
+XRP/USD: HOLD | trend=-0.43% | rsi=50.5 | macd_hist=0.0018 | atr=0.0113 | vol_ok=True | momentum=0.21%
+LINK/USD: HOLD | trend=-0.21% | rsi=52.2 | macd_hist=0.0103 | atr=0.0840 | vol_ok=True | momentum=0.13%
+LTC/USD: HOLD | trend=-0.30% | rsi=52.7 | macd_hist=0.0786 | atr=0.3523 | vol_ok=True | momentum=0.29%
+Portfolio snapshot: cash=$1870.78, portfolio=$97753.45
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.7 | macd_hist=104.5479 | atr=475.2638 | vol_ok=True | momentum=0.39%
+ETH/USD: HOLD | trend=-0.58% | rsi=51.7 | macd_hist=4.6645 | atr=19.6002 | vol_ok=True | momentum=0.86%
+SOL/USD: HOLD | trend=-0.51% | rsi=50.9 | macd_hist=0.1345 | atr=0.7076 | vol_ok=True | momentum=0.69%
+AVAX/USD: HOLD | trend=-0.45% | rsi=53.6 | macd_hist=0.0193 | atr=0.0841 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.27% | rsi=51.0 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.33%
+XRP/USD: HOLD | trend=-0.43% | rsi=50.2 | macd_hist=0.0018 | atr=0.0113 | vol_ok=True | momentum=0.18%
+LINK/USD: HOLD | trend=-0.19% | rsi=53.4 | macd_hist=0.0116 | atr=0.0840 | vol_ok=True | momentum=0.29%
+LTC/USD: HOLD | trend=-0.29% | rsi=53.5 | macd_hist=0.0821 | atr=0.3523 | vol_ok=True | momentum=0.36%
+Portfolio snapshot: cash=$1870.78, portfolio=$97713.45
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.1 | macd_hist=100.7720 | atr=475.2638 | vol_ok=True | momentum=0.34%
+ETH/USD: HOLD | trend=-0.59% | rsi=51.4 | macd_hist=4.5901 | atr=19.6002 | vol_ok=True | momentum=0.82%
+SOL/USD: HOLD | trend=-0.52% | rsi=50.4 | macd_hist=0.1301 | atr=0.7076 | vol_ok=True | momentum=0.63%
+AVAX/USD: HOLD | trend=-0.45% | rsi=53.6 | macd_hist=0.0193 | atr=0.0841 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.28% | rsi=50.0 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.22%
+XRP/USD: HOLD | trend=-0.44% | rsi=49.2 | macd_hist=0.0017 | atr=0.0113 | vol_ok=True | momentum=0.08%
+LINK/USD: HOLD | trend=-0.20% | rsi=53.2 | macd_hist=0.0113 | atr=0.0841 | vol_ok=True | momentum=0.26%
+LTC/USD: HOLD | trend=-0.29% | rsi=53.5 | macd_hist=0.0821 | atr=0.3523 | vol_ok=True | momentum=0.36%
+Portfolio snapshot: cash=$1870.78, portfolio=$97775.33
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.35% | rsi=51.5 | macd_hist=97.3947 | atr=475.2638 | vol_ok=True | momentum=0.28%
+ETH/USD: HOLD | trend=-0.59% | rsi=51.2 | macd_hist=4.5507 | atr=19.6002 | vol_ok=True | momentum=0.80%
+SOL/USD: HOLD | trend=-0.53% | rsi=49.5 | macd_hist=0.1231 | atr=0.7076 | vol_ok=True | momentum=0.53%
+AVAX/USD: HOLD | trend=-0.46% | rsi=52.9 | macd_hist=0.0184 | atr=0.0841 | vol_ok=True | momentum=0.87%
+DOGE/USD: HOLD | trend=-0.29% | rsi=49.5 | macd_hist=0.0001 | atr=0.0007 | vol_ok=True | momentum=0.17%
+XRP/USD: HOLD | trend=-0.45% | rsi=48.9 | macd_hist=0.0016 | atr=0.0113 | vol_ok=True | momentum=0.05%
+LINK/USD: HOLD | trend=-0.21% | rsi=52.4 | macd_hist=0.0104 | atr=0.0841 | vol_ok=True | momentum=0.15%
+LTC/USD: HOLD | trend=-0.30% | rsi=53.1 | macd_hist=0.0803 | atr=0.3523 | vol_ok=True | momentum=0.33%
+Portfolio snapshot: cash=$1870.78, portfolio=$97768.74
+Waiting 120 seconds before next cycle...
+Crypto bot started in paper-trading mode. Press Ctrl+C to stop.
+Watching: BTC/USD, ETH/USD, SOL/USD, AVAX/USD, DOGE/USD, XRP/USD, LINK/USD, LTC/USD
+Starting account snapshot: cash=$1870.78, portfolio=$97759.99
+BTC/USD: HOLD | trend=-0.32% | rsi=54.0 | macd_hist=113.0319 | atr=481.6523 | vol_ok=True | momentum=0.52%
+ETH/USD: HOLD | trend=-0.55% | rsi=53.9 | macd_hist=5.1775 | atr=20.4841 | vol_ok=True | momentum=1.11%
+SOL/USD: HOLD | trend=-0.49% | rsi=52.4 | macd_hist=0.1467 | atr=0.7236 | vol_ok=True | momentum=0.85%
+AVAX/USD: HOLD | trend=-0.46% | rsi=52.9 | macd_hist=0.0184 | atr=0.0841 | vol_ok=True | momentum=0.87%
+DOGE/USD: HOLD | trend=-0.26% | rsi=51.7 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.40%
+XRP/USD: HOLD | trend=-0.40% | rsi=52.4 | macd_hist=0.0021 | atr=0.0114 | vol_ok=True | momentum=0.42%
+LINK/USD: HOLD | trend=-0.15% | rsi=55.8 | macd_hist=0.0144 | atr=0.0877 | vol_ok=True | momentum=0.64%
+LTC/USD: HOLD | trend=-0.28% | rsi=54.5 | macd_hist=0.0865 | atr=0.3576 | vol_ok=True | momentum=0.46%
+Portfolio snapshot: cash=$1870.78, portfolio=$97752.18
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.33% | rsi=53.6 | macd_hist=110.5151 | atr=487.7304 | vol_ok=True | momentum=0.49%
+ETH/USD: HOLD | trend=-0.55% | rsi=54.2 | macd_hist=5.2510 | atr=20.4841 | vol_ok=True | momentum=1.15%
+SOL/USD: HOLD | trend=-0.50% | rsi=52.1 | macd_hist=0.1441 | atr=0.7289 | vol_ok=True | momentum=0.82%
+AVAX/USD: HOLD | trend=-0.45% | rsi=53.6 | macd_hist=0.0193 | atr=0.0841 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.26% | rsi=51.8 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.41%
+XRP/USD: HOLD | trend=-0.40% | rsi=52.6 | macd_hist=0.0021 | atr=0.0115 | vol_ok=True | momentum=0.44%
+LINK/USD: HOLD | trend=-0.16% | rsi=55.2 | macd_hist=0.0137 | atr=0.0886 | vol_ok=True | momentum=0.55%
+LTC/USD: HOLD | trend=-0.28% | rsi=54.9 | macd_hist=0.0882 | atr=0.3576 | vol_ok=True | momentum=0.49%
+Portfolio snapshot: cash=$1870.78, portfolio=$97751.23
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.6 | macd_hist=104.2853 | atr=487.7304 | vol_ok=True | momentum=0.39%
+ETH/USD: HOLD | trend=-0.56% | rsi=53.4 | macd_hist=5.0558 | atr=20.4841 | vol_ok=True | momentum=1.05%
+SOL/USD: HOLD | trend=-0.51% | rsi=51.4 | macd_hist=0.1388 | atr=0.7289 | vol_ok=True | momentum=0.75%
+AVAX/USD: HOLD | trend=-0.45% | rsi=53.6 | macd_hist=0.0193 | atr=0.0841 | vol_ok=True | momentum=0.98%
+DOGE/USD: HOLD | trend=-0.26% | rsi=51.6 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.39%
+XRP/USD: HOLD | trend=-0.42% | rsi=51.5 | macd_hist=0.0020 | atr=0.0115 | vol_ok=True | momentum=0.32%
+LINK/USD: HOLD | trend=-0.17% | rsi=55.0 | macd_hist=0.0134 | atr=0.0886 | vol_ok=True | momentum=0.52%
+LTC/USD: HOLD | trend=-0.29% | rsi=53.9 | macd_hist=0.0838 | atr=0.3576 | vol_ok=True | momentum=0.40%
+Portfolio snapshot: cash=$1870.78, portfolio=$97795.85
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.2 | macd_hist=101.6686 | atr=487.7304 | vol_ok=True | momentum=0.35%
+ETH/USD: HOLD | trend=-0.56% | rsi=53.3 | macd_hist=5.0322 | atr=20.4841 | vol_ok=True | momentum=1.04%
+SOL/USD: HOLD | trend=-0.50% | rsi=51.5 | macd_hist=0.1397 | atr=0.7289 | vol_ok=True | momentum=0.76%
+AVAX/USD: HOLD | trend=-0.48% | rsi=52.1 | macd_hist=0.0176 | atr=0.0841 | vol_ok=True | momentum=0.77%
+DOGE/USD: HOLD | trend=-0.27% | rsi=50.9 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.32%
+XRP/USD: HOLD | trend=-0.42% | rsi=51.1 | macd_hist=0.0019 | atr=0.0115 | vol_ok=True | momentum=0.27%
+LINK/USD: HOLD | trend=-0.17% | rsi=55.1 | macd_hist=0.0135 | atr=0.0886 | vol_ok=True | momentum=0.53%
+LTC/USD: HOLD | trend=-0.29% | rsi=54.1 | macd_hist=0.0847 | atr=0.3576 | vol_ok=True | momentum=0.42%
+Portfolio snapshot: cash=$1870.78, portfolio=$97775.63
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.5 | macd_hist=103.6725 | atr=487.7304 | vol_ok=True | momentum=0.38%
+ETH/USD: HOLD | trend=-0.56% | rsi=53.8 | macd_hist=5.1407 | atr=20.4841 | vol_ok=True | momentum=1.10%
+SOL/USD: HOLD | trend=-0.50% | rsi=52.2 | macd_hist=0.1450 | atr=0.7289 | vol_ok=True | momentum=0.83%
+AVAX/USD: HOLD | trend=-0.48% | rsi=52.1 | macd_hist=0.0176 | atr=0.0841 | vol_ok=True | momentum=0.77%
+DOGE/USD: HOLD | trend=-0.26% | rsi=51.5 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.38%
+XRP/USD: HOLD | trend=-0.42% | rsi=51.1 | macd_hist=0.0019 | atr=0.0115 | vol_ok=True | momentum=0.27%
+LINK/USD: HOLD | trend=-0.15% | rsi=56.1 | macd_hist=0.0147 | atr=0.0886 | vol_ok=True | momentum=0.68%
+LTC/USD: HOLD | trend=-0.28% | rsi=54.3 | macd_hist=0.0856 | atr=0.3576 | vol_ok=True | momentum=0.44%
+Portfolio snapshot: cash=$1870.78, portfolio=$97775.63
+Waiting 120 seconds before next cycle...
+BTC/USD: HOLD | trend=-0.34% | rsi=52.5 | macd_hist=103.4522 | atr=487.7304 | vol_ok=True | momentum=0.38%
+ETH/USD: HOLD | trend=-0.56% | rsi=53.9 | macd_hist=5.1678 | atr=20.4841 | vol_ok=True | momentum=1.11%
+SOL/USD: HOLD | trend=-0.50% | rsi=51.9 | macd_hist=0.1423 | atr=0.7289 | vol_ok=True | momentum=0.79%
+AVAX/USD: HOLD | trend=-0.48% | rsi=52.1 | macd_hist=0.0176 | atr=0.0841 | vol_ok=True | momentum=0.77%
+DOGE/USD: HOLD | trend=-0.27% | rsi=51.1 | macd_hist=0.0001 | atr=0.0008 | vol_ok=True | momentum=0.34%
+XRP/USD: HOLD | trend=-0.42% | rsi=51.4 | macd_hist=0.0019 | atr=0.0115 | vol_ok=True | momentum=0.31%
+LINK/USD: HOLD | trend=-0.14% | rsi=56.4 | macd_hist=0.0151 | atr=0.0890 | vol_ok=True | momentum=0.73%
+LTC/USD: HOLD | trend=-0.28% | rsi=54.7 | macd_hist=0.0873 | atr=0.3576 | vol_ok=True | momentum=0.47%
+Portfolio snapshot: cash=$1870.78, portfolio=$97874.14
+Waiting 120 seconds before next cycle...

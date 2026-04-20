@@ -15,7 +15,7 @@ def to_yfinance_symbol(symbol):
 
 
 def to_alpaca_symbol(symbol):
-    return symbol.replace("/", "").upper()
+    return symbol.upper()
 
 
 def fetch_crypto_data(symbol, period=None, interval=None):

@@ -1,0 +1,711 @@
+Mining Dashboard → http://localhost:5051
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5051
+ * Running on http://10.0.0.197:5051
+Press CTRL+C to quit
+127.0.0.1 - - [19/Apr/2026 08:58:32] "POST /api/import-excel HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:58:40] "POST /api/import-excel HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:58:45] "POST /api/import-excel HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:22] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:22] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:25] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:27] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:27] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:28] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:29] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:30] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:40] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 08:59:51] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:01:21] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:01:29] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:01:34] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:01:44] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:01:59] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:02:02] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:02:36] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:04:57] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:04:59] "GET /api/shifts?machine=CM02&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:01] "GET /api/shifts?machine=CM03&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:03] "GET /api/shifts?machine=CM05&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:04] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:06] "GET /api/shifts?machine=CM08&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:07] "GET /api/shifts?machine=CM09&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:09] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:13] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:05:16] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:09:00] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+Mining Dashboard → http://localhost:5051
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5051
+ * Running on http://10.0.0.197:5051
+Press CTRL+C to quit
+127.0.0.1 - - [19/Apr/2026 09:14:39] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:14:39] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:14:43] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:14:43] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:04] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:04] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:06] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:06] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:14] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:14] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:16] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:16] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:19] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:32] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:38] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:15:38] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:52] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:52] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:53] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:55] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:55] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:56] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:56] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:58] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:58] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:59] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:17:59] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:01] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:01] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:02] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:02] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:04] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:04] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:14] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:14] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:17] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:17] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:20] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:20] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:30] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:18:30] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:21:14] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:21:14] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:21:17] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:22:08] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:22:42] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [19/Apr/2026 09:22:42] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:25:06] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:25:06] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:30:37] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:30:37] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:30:53] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:30:58] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:32:56] "GET /api/shifts?machine=CM02&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:34:31] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:34:32] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:34:35] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:35:07] "HEAD /.aws/ HTTP/1.1" 404 -
+127.0.0.1 - - [19/Apr/2026 09:35:07] "HEAD /.ada/ HTTP/1.1" 404 -
+127.0.0.1 - - [19/Apr/2026 09:35:07] "HEAD /.ssh/ HTTP/1.1" 404 -
+127.0.0.1 - - [19/Apr/2026 09:35:07] "HEAD /.midway/ HTTP/1.1" 404 -
+127.0.0.1 - - [19/Apr/2026 09:35:23] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [19/Apr/2026 09:35:23] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:35:26] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:35:28] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:35:56] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:37:55] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:37:56] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:39:23] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:39:44] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:05] "GET /api/shifts?machine=CM03&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:12] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:12] "GET /api/shifts?machine=CM03&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:13] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:16] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:17] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:19] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:20] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:34] "DELETE /api/shift/287 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:34] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:44] "DELETE /api/shift/289 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:44] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:47] "DELETE /api/shift/291 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:47] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:51] "DELETE /api/shift/293 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:51] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:54] "DELETE /api/shift/295 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:54] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:56] "DELETE /api/shift/297 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:40:57] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:00] "DELETE /api/shift/299 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:00] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:06] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:12] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:15] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:19] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:28] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:28] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:41:31] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:43:51] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:03] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:03] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:13] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:22] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:23] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:26] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:39] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:39] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:44:42] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:01] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:01] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:03] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:21] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:21] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:23] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:31] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:31] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:40] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:43] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:48] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:49] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:50] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:51] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:45:53] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:47:57] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:47:57] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:48:00] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:48:47] "GET /api/shifts?machine=CM02&crew=C HTTP/1.1" 200 -
+Mining Dashboard → http://localhost:5051
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5051
+ * Running on http://10.0.0.197:5051
+Press CTRL+C to quit
+127.0.0.1 - - [19/Apr/2026 09:53:52] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:54:09] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:54:09] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:54:12] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:54:21] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:54:24] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:54:29] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:00] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:01] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:04] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:15] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:18] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:21] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:27] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:32] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:42] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:54] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:54] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:55:58] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:56:59] "GET /api/shifts?machine=CM09&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 09:57:25] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:03:56] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:03:56] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:04:22] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:04:22] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:04:57] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:04:57] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:05:17] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:05:17] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:05:28] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:05:43] "GET /api/shifts?machine=CM07&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:05:57] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:05:57] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:05:59] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:06:02] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:06:05] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:09:07] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:09:07] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:09:31] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:09:31] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:09:50] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:09:50] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:09:56] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:10:09] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:10:36] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:10:44] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:12:57] "GET / HTTP/1.1" 304 -
+127.0.0.1 - - [19/Apr/2026 10:12:57] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:13:00] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:13:04] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:13:49] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:13:49] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:14:17] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:14:18] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:15:14] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:15:14] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:15:24] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:15:24] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:15:53] "POST /api/shift HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:15:53] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:16:02] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:19:57] "POST /api/import-faults HTTP/1.1" 400 -
+127.0.0.1 - - [19/Apr/2026 10:23:37] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:23:37] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:23:47] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:24:07] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:24:17] "GET /api/shifts?machine=CM07&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:24:26] "GET /api/shifts?machine=CM08&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:25:04] "POST /api/import-faults HTTP/1.1" 200 -
+127.0.0.1 - - [19/Apr/2026 10:25:05] "GET /api/shifts?machine=CM08&crew=D HTTP/1.1" 200 -
+  Read-only share URL path: /view/IVEwt2IK0kDsdW1ZGIbquNA9hhxcWIdc
+Mining Dashboard → http://localhost:5051
+ * Serving Flask app 'app'
+ * Debug mode: off
+Address already in use
+Port 5051 is in use by another program. Either identify and stop that program, or start the server with a different port.
+  Read-only share URL path: /view/1GKQW_DKIxYqaKCdDwUVFf2OYn8hFElu
+Mining Dashboard → http://localhost:5051
+ * Serving Flask app 'app'
+ * Debug mode: off
+Address already in use
+Port 5051 is in use by another program. Either identify and stop that program, or start the server with a different port.
+  Read-only share URL path: /view/mining-share-2026
+Mining Dashboard → http://localhost:5051
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5051
+ * Running on http://10.0.0.215:5051
+Press CTRL+C to quit
+[2026-04-20 04:50:37,858] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/Capitol_Trades_API/dashboard/app.py", line 62, in index
+    with open(os.path.join('static', 'index.html'), 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'static/index.html'
+127.0.0.1 - - [20/Apr/2026 04:50:37] "GET / HTTP/1.1" 500 -
+[2026-04-20 04:50:43,906] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/Capitol_Trades_API/dashboard/app.py", line 62, in index
+    with open(os.path.join('static', 'index.html'), 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'static/index.html'
+127.0.0.1 - - [20/Apr/2026 04:50:43] "GET / HTTP/1.1" 500 -
+[2026-04-20 04:50:50,055] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspaces/Capitol_Trades_API/dashboard/app.py", line 62, in index
+    with open(os.path.join('static', 'index.html'), 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'static/index.html'
+127.0.0.1 - - [20/Apr/2026 04:50:50] "GET / HTTP/1.1" 500 -
+  Read-only share URL path: /view/mining-share-2026
+Mining Dashboard → http://localhost:5051
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5051
+ * Running on http://10.0.0.215:5051
+Press CTRL+C to quit
+127.0.0.1 - - [20/Apr/2026 04:51:10] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 04:51:44] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 04:51:44] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 04:51:46] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:04:21] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:04:21] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:04:39] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:04:43] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:04:44] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:05:06] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:07:53] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:09:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:09:54] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:09:57] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:10:01] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:10:20] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:12:04] "HEAD / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:12:05] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:12:05] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:12:34] "HEAD /view/mining-share-2026.com HTTP/1.1" 403 -
+127.0.0.1 - - [20/Apr/2026 05:12:34] "GET /view/mining-share-2026.com HTTP/1.1" 403 -
+127.0.0.1 - - [20/Apr/2026 05:12:41] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:13:50] "GET /view/mining-share-2026.com HTTP/1.1" 403 -
+127.0.0.1 - - [20/Apr/2026 05:13:53] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:14:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:15:05] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:16:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:16:36] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:16:57] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:16:57] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:17:26] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:18:37] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:18:55] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:18:59] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:18:59] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:19:15] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:19:16] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:19:17] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:19:18] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:19:19] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:19:56] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:22:35] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:15] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:15] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:39] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:39] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:42] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:43] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:46] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:46] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:23:49] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:06] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:06] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:18] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:18] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:35] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:36] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:36] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:37] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:38] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:39] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:40] "GET /api/shifts?machine=CM02&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:41] "GET /api/shifts?machine=CM09&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:24:41] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:25:03] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:26:27] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:27:15] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:27:16] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:27:18] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:27:19] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:29:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:29:35] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:29:44] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:29:44] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:39:21] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:39:21] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:39:55] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:40:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:40:53] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:40:56] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:40:59] "GET /api/shifts?machine=CM02&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:41:03] "GET /api/shifts?machine=CM02&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:41:05] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:41:22] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:41:31] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:43:46] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:43:53] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:43:58] "HEAD /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:44:00] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:44:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:44:29] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:44:29] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:44:31] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:44:41] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:45:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:45:33] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:45:37] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:45:38] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:45:39] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:45:42] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:45:45] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:46:01] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:46:47] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:47:03] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:47:12] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:50:03] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:50:07] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:50:42] "HEAD /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:50:43] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:50:43] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:50:43] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:51:24] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:53:45] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:53:45] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:53:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:53:49] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:53:55] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:01] "HEAD /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:01] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:02] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:02] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:55:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:24] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:24] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:55:26] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:41] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:43] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:55:49] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:58:05] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:58:05] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:58:05] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:58:07] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:59:31] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:59:31] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 05:59:31] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 05:59:34] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:02:44] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:02:45] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:02:45] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 06:02:46] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:07:41] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:07:41] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 06:07:41] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:07:42] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:13:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:13:20] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:13:20] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 06:13:21] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:15:50] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:17:25] "GET /api/shifts?machine=CM07&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:18:01] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:23:31] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:23:32] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 06:23:32] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:23:36] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:23:53] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:23:54] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:24:09] "GET /api/shifts?machine=CM07&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:24:14] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:24:28] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:27:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:27:35] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:27:36] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:08] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:10] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:21] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:21] "GET /api/shifts?machine=CM03&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:24] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:29] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:29] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:39] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:43] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:44] "GET /api/shifts?machine=CM05&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:48] "GET /api/shifts?machine=CM08&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:53] "GET /api/shifts?machine=CM08&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:29:56] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:31:05] "GET /api/shifts?machine=CM02&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:31:08] "GET /api/shifts?machine=CM03&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:31:09] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:31:27] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:31:30] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:31:50] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:33:13] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:33:14] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:33:16] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:33:37] "GET /api/machine-summary?machine=CM05 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:33:55] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:33:56] "GET /api/machine-summary?machine=CM09 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:34:27] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:34:29] "GET /api/machine-summary?machine=CM03 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:34:30] "GET /api/machine-summary?machine=CM02 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:34:30] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:35:48] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:35:48] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:35:51] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:35:51] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:35:52] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:35:55] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:36:00] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:36:00] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:36:08] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:36:08] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:36:15] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:36:30] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:45:07] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:45:08] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:45:13] "GET /api/share-link HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:45:51] "GET /api/share-link HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:46:08] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:46:10] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:46:11] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:51:31] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:52:11] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:31] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:31] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 06:53:34] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM02&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM02&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM03&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM03&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM05&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM05&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM05&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM03&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM07&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:37] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM08&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM08&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM08&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM09&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM09&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:53:38] "GET /api/shifts?machine=CM09&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:54:15] "GET /view/mining-share-2026 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:54:15] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:54:18] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:54:19] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:54:20] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:54:21] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:56:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:56:57] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:56:57] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 06:57:41] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:41] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:44] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:45] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:47] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:48] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM02&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM02&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM03&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM03&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM03&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:50] "GET /api/shifts?machine=CM05&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM05&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM05&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM07&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM08&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM08&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM08&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM09&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM09&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:57:51] "GET /api/shifts?machine=CM09&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:58:15] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:58:20] "GET /api/machine-summary?machine=CM07 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 06:58:47] "GET /api/machine-summary?machine=CM08 HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:16] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:16] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:22] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM02&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM02&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/combined HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM02&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM02&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM03&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM03&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM05&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM03&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM03&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM05&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM05&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM05&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM07&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM07&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM07&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM07&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM08&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM08&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM08&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM09&crew=D HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM09&crew=B HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM08&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:25] "GET /api/shifts?machine=CM09&crew=C HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:06:26] "GET /api/shifts?machine=CM09&crew=A HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 07:49:42] "HEAD /.aws/ HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 07:49:43] "HEAD /.ada/ HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 07:49:43] "HEAD /.ssh/ HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 07:49:43] "HEAD /.midway/ HTTP/1.1" 404 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ("Ä\x00\x00\x84\x003\x009\x005\x00/À,À0\x00£\x00\x9fÌ©Ì¨ÌªÀ¯À\xadÀ£À\x9fÀ+À/\x00¢\x00\x9eÀ®À¬À¢À\x9eÀ$À(\x00k\x00jÀsÀw\x00Ä\x00ÃÀ#À'\x00g\x00@ÀrÀv\x00¾\x00½À")
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x01\x00÷\x01\x00\x00ó\x03\x03\x0bÐ^ÎS4:&\x00\x8eõu!ãzÙá¿G\x96@±M.w\x09\x8fx\x0b\x83\x1dÄ\x00\x00\x84\x003\x009\x005\x00/À,À0\x00£\x00\x9fÌ©Ì¨ÌªÀ¯À­À£À\x9fÀ+À/\x00¢\x00\x9eÀ®À¬À¢À\x9eÀ$À(\x00k\x00jÀsÀw\x00Ä\x00ÃÀ#À'\x00g\x00@ÀrÀv\x00¾\x00½À" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00W\x01\x00\x00S\x03\x03iåÝr´hhò©\x94ÛQñÐxwÄõ\x08ê.l\x02')
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x01\x00W\x01\x00\x00S\x03\x03iåÝr´hhò©\x94ÛQñÐxwÄõ\x08ê.l\x02\x0c\x8a\x8bJw#\x91C\x8b\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x01\x00Ã\x01\x00\x00¿\x03\x01iåÝrÙÛêåh\x90\x1cYTr«b»õêê\x137\x8esR¾\x18\x13¤±\x9c*\x00\x00\x80\x00\x1d\x00\x1cþÿþþ\x00c\x00e\x00\x11\x00r\x00\x13\x00s\x002\x00@\x00¢\x00t\x008\x00j\x00£ÀBÀVÀCÀW\x00D\x00½À\x80\x00\x87\x00ÃÀ\x81\x00\x12\x00f\x00\x99\x00\x8f\x00\x90\x00²À¦\x00ª\x00\x91\x00³À§\x00«ÀfÀlÀgÀmÀ\x96À\x90À\x97À\x91Ì­\x00-\x00´\x00µ\x00\x8e\x00\x14\x00w\x00\x16\x00x\x003\x00gÀ\x9eÀ¢\x00\x9e\x00y\x009\x00k\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x03\x00\x8c\x01\x00\x00\x88\x03\x03iåÝr¼\x9by´Z\x09\x15\x0d\x8cë\\0*\x01\x18\x8eFk`\x85\x0bp7\x00Æ¹/Ü\x00\x00\x1a\x13\x05\x13\x04\x13\x01\x13\x02\x13\x03À´Àµ\x00Ç\x00ÆÀ²À°À³À±\x01\x00\x00E\x00+\x00\x03\x02\x03\x04\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x02\x00Ã\x01\x00\x00¿\x03\x02iåÝr\x97\x80©hbAí\x91¯ç\x08OÑ\x92ìCÚÞ\x02\x8ato\x0fµ\x82\x9e\x95Q\x00\x00\x80\x00\x1d\x00\x1cþÿþþ\x00c\x00e\x00\x11\x00r\x00\x13\x00s\x002\x00@\x00¢\x00t\x008\x00j\x00£ÀBÀVÀCÀW\x00D\x00½À\x80\x00\x87\x00ÃÀ\x81\x00\x12\x00f\x00\x99\x00\x8f\x00\x90\x00²À¦\x00ª\x00\x91\x00³À§\x00«ÀfÀlÀgÀmÀ\x96À\x90À\x97À\x91Ì­\x00-\x00´\x00µ\x00\x8e\x00\x14\x00w\x00\x16\x00x\x003\x00gÀ\x9eÀ¢\x00\x9e\x00y\x009\x00k\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x03\x00ã\x01\x00\x00ß\x03\x03iåÝrv¡°â¤\x8a·\x8fMìAä\x12gÜ¶>\x91¡áÇëã¾eòÝ<\x00\x00\x80\x00\x1d\x00\x1cþÿþþ\x00c\x00e\x00\x11\x00r\x00\x13\x00s\x002\x00@\x00¢\x00t\x008\x00j\x00£ÀBÀVÀCÀW\x00D\x00½À\x80\x00\x87\x00ÃÀ\x81\x00\x12\x00f\x00\x99\x00\x8f\x00\x90\x00²À¦\x00ª\x00\x91\x00³À§\x00«ÀfÀlÀgÀmÀ\x96À\x90À\x97À\x91Ì­\x00-\x00´\x00µ\x00\x8e\x00\x14\x00w\x00\x16\x00x\x003\x00gÀ\x9eÀ¢\x00\x9e\x00y\x009\x00k\x01\x00\x006\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "HEAD / HTTP/1.1" 200 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00/\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x03\x00ã\x01\x00\x00ß\x03\x03iåÝrÉß\x8c')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x00\x00i\x01\x00\x00e\x03\x03U\x1c§ärandom1random2random3random4\x00\x00\x0c\x00/\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x03\x00ã\x01\x00\x00ß\x03\x03iåÝrÉß\x8c\x1cÀu£Ê1á\x97ª\x14^@m=ö" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x02\x00Ã\x01\x00\x00¿\x03\x02iåÝrT¥æbX\x81\x89¹\x1a\x0b8ÆXS¯\x87Ú;\x800hOõ\x0d8H\x1bà\x00\x00\x80À\x9fÀ£\x00\x9fÀDÀRÀEÀS\x00E\x00¾À|\x00\x88\x00ÄÀ}ÌªÌ\x15\x00\x15\x00\x9a\x00\x0b\x00\x0d\x000\x00>\x00¤\x006\x00h\x00¥À>ÀXÀ?ÀY\x00B\x00»À\x82\x00\x85\x00ÁÀ\x83\x00\x0c\x00\x97\x00\x0e\x00\x10\x001\x00?\x00 \x007\x00i\x00¡À@ÀTÀAÀU\x00C\x00¼À~\x00\x86\x00ÂÀ\x7f\x00\x0f\x00\x98\x00\x19\x00\x17\x00\x1b\x004\x00l\x00¦\x00:\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x01\x00Ã\x01\x00\x00¿\x03\x01iåÝrH\x83ª+-É&tÑ\x80º\x17²V»Û\x88°\x8d}Ë/:o7/lT\x00\x00\x80À\x9fÀ£\x00\x9fÀDÀRÀEÀS\x00E\x00¾À|\x00\x88\x00ÄÀ}ÌªÌ\x15\x00\x15\x00\x9a\x00\x0b\x00\x0d\x000\x00>\x00¤\x006\x00h\x00¥À>ÀXÀ?ÀY\x00B\x00»À\x82\x00\x85\x00ÁÀ\x83\x00\x0c\x00\x97\x00\x0e\x00\x10\x001\x00?\x00 \x007\x00i\x00¡À@ÀTÀAÀU\x00C\x00¼À~\x00\x86\x00ÂÀ\x7f\x00\x0f\x00\x98\x00\x19\x00\x17\x00\x1b\x004\x00l\x00¦\x00:\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('À#À¬À®À+À')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('À#À¬À®À+À')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('À#À¬À®À+À')
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x03\x00ã\x01\x00\x00ß\x03\x03iåÝrkÛL:ú¦i¬£AjD\x8aáØqÙV¹\x7f¥á»\x02®Ñ\x9f¥\x00\x00\x80\x00m\x00§ÀFÀZÀGÀ[\x00F\x00¿À\x84\x00\x89\x00ÅÀ\x85\x00\x1a\x00\x18\x00\x9bÀ²À°À³À±À\x08À\x09À#À¬À®À+À" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x02\x00Ã\x01\x00\x00¿\x03\x02iåÝrãH¯\x88Ô\x18ÜÁó°Ûjç}l\x8e\x08\x07MP\x16±%\x14\x09\x96on\x00\x00\x80\x00m\x00§ÀFÀZÀGÀ[\x00F\x00¿À\x84\x00\x89\x00ÅÀ\x85\x00\x1a\x00\x18\x00\x9bÀ²À°À³À±À\x08À\x09À#À¬À®À+À" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x01\x00Ã\x01\x00\x00¿\x03\x01iåÝrªµÔ\x06S21b´{y\x8bø\x9e*¤ûI\x18u´o\x89\x9d¡\x8aÜÝ\x00\x00\x80\x00m\x00§ÀFÀZÀGÀ[\x00F\x00¿À\x84\x00\x89\x00ÅÀ\x85\x00\x1a\x00\x18\x00\x9bÀ²À°À³À±À\x08À\x09À#À¬À®À+À" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x03\x00ã\x01\x00\x00ß\x03\x03iåÝr£^¹¸=\x95\x0bã\x81¬6V^\x89vT,ý2½o|7ÆÌÎ·#\x00\x00\x80À\x14À(À0ÀLÀ`ÀMÀaÀvÀ\x8aÀwÀ\x8bÌ¨Ì\x13À\x10À\x11À\x03\x00JÀ\x04\x00KÀ%À-À\x05\x00LÀ&À.ÀJÀ^ÀKÀ_ÀtÀ\x88ÀuÀ\x89\x00IÀ\x01\x00GÀ\x02\x00H\x00N\x00MÀ\x0dÀ\x0eÀ)À1À\x0fÀ*À2ÀNÀbÀOÀcÀxÀ\x8cÀyÀ\x8dÀ\x0bÀ\x0c\x00[\x00\\\x00WÀ\x17\x00ZÀ\x18À\x19\x01\x00\x006\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x02\x00Ã\x01\x00\x00¿\x03\x02iåÝr¸\x1f\x14×¥ ñ\x89m[\x0fãHI\x86Û\x8c\x13iIL1Í\x920k¡î\x00\x00\x80À\x14À(À0ÀLÀ`ÀMÀaÀvÀ\x8aÀwÀ\x8bÌ¨Ì\x13À\x10À\x11À\x03\x00JÀ\x04\x00KÀ%À-À\x05\x00LÀ&À.ÀJÀ^ÀKÀ_ÀtÀ\x88ÀuÀ\x89\x00IÀ\x01\x00GÀ\x02\x00H\x00N\x00MÀ\x0dÀ\x0eÀ)À1À\x0fÀ*À2ÀNÀbÀOÀcÀxÀ\x8cÀyÀ\x8dÀ\x0bÀ\x0c\x00[\x00\\\x00WÀ\x17\x00ZÀ\x18À\x19\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:54] "\x16\x03\x01\x00Ã\x01\x00\x00¿\x03\x01iåÝr\x99#ì\x81,¢\x80\x9f\x94Ä\x9fNJ\x028\x19ÅæSîQ]\x83|I\x8f­\x97\x00\x00\x80À\x14À(À0ÀLÀ`ÀMÀaÀvÀ\x8aÀwÀ\x8bÌ¨Ì\x13À\x10À\x11À\x03\x00JÀ\x04\x00KÀ%À-À\x05\x00LÀ&À.ÀJÀ^ÀKÀ_ÀtÀ\x88ÀuÀ\x89\x00IÀ\x01\x00GÀ\x02\x00H\x00N\x00MÀ\x0dÀ\x0eÀ)À1À\x0fÀ*À2ÀNÀbÀOÀcÀxÀ\x8cÀyÀ\x8dÀ\x0bÀ\x0c\x00[\x00\\\x00WÀ\x17\x00ZÀ\x18À\x19\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:55] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x03\x00ã\x01\x00\x00ß\x03\x03iåÝsÿ')
+127.0.0.1 - - [20/Apr/2026 08:01:55] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:55] code 400, message Bad request version ('\x00\x02\x01\x00\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:55] "\x16\x03\x01\x00Ã\x01\x00\x00¿\x03\x01iåÝséÔ A\x900Ê´\x8fr\x00gÎ©\x11\x08k\x7f'\x83ûÍÏ\x09¹VÀù\x00\x00\x80\x00YÀ\x15À\x16\x00X\x00O\x00R\x00Q\x00P\x00S\x00V\x00U\x00T\x00\x81\x00\x83\x00\x80\x00\x82\x00)\x00&\x00*\x00'\x00+\x00(\x00#\x00\x1f\x00"\x00\x1e\x00%\x00!\x00$\x00 \x00\x00ÀªÀ«\x00\x8b\x00\x8c\x00®À¤À¨\x00¨\x00\x8d\x00¯À¥À©\x00©ÀdÀjÀeÀkÀ\x94À\x8eÀ\x95À\x8fÌ«\x00,\x00°\x00±\x00\x8a\x00b\x00a\x00`\x00d\x00\x08\x00\x06\x00\x03\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:55] "\x16\x03\x02\x00Ã\x01\x00\x00¿\x03\x02iåÝsl³÷á\x8aä©¶äQ\x92ËZ\x98§\x04\x94Á±*Dv/ê"Ö\x10·\x00\x00\x80\x00YÀ\x15À\x16\x00X\x00O\x00R\x00Q\x00P\x00S\x00V\x00U\x00T\x00\x81\x00\x83\x00\x80\x00\x82\x00)\x00&\x00*\x00'\x00+\x00(\x00#\x00\x1f\x00"\x00\x1e\x00%\x00!\x00$\x00 \x00\x00ÀªÀ«\x00\x8b\x00\x8c\x00®À¤À¨\x00¨\x00\x8d\x00¯À¥À©\x00©ÀdÀjÀeÀkÀ\x94À\x8eÀ\x95À\x8fÌ«\x00,\x00°\x00±\x00\x8a\x00b\x00a\x00`\x00d\x00\x08\x00\x06\x00\x03\x01\x00\x00\x16\x00\x0b\x00\x02\x01\x00\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:55] "\x16\x03\x03\x00ã\x01\x00\x00ß\x03\x03iåÝsÿ\x0d4\x07qúgº~U,~å" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:55] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x03\x00Ý\x01\x00\x00Ù\x03\x03iåÝsD@T¶\x84t´öJ\x08OÁ¡')
+127.0.0.1 - - [20/Apr/2026 08:01:55] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x02\x00½\x01\x00\x00¹\x03\x02iåÝsÎ·\x84!\x11_')
+127.0.0.1 - - [20/Apr/2026 08:01:55] code 400, message Bad request version ('\x12Qû·ØÎ\x10\x84%g\x12(ê\x00\x00z\x00\x93\x00\x94\x00¶\x00¬\x00\x95\x00·\x00\xadÀhÀnÀiÀoÀ\x98À\x92À\x99À\x93Ì®\x00.\x00¸\x00¹\x00\x92\x00|\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:55] "\x16\x03\x03\x00Ý\x01\x00\x00Ù\x03\x03iåÝsD@T¶\x84t´öJ\x08OÁ¡\x85^JÞ\x84÷èXãXMÊÃGù\x00\x00z\x00\x93\x00\x94\x00¶\x00¬\x00\x95\x00·\x00­ÀhÀnÀiÀoÀ\x98À\x92À\x99À\x93Ì®\x00.\x00¸\x00¹\x00\x92\x00|\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:55] "\x16\x03\x02\x00½\x01\x00\x00¹\x03\x02iåÝsÎ·\x84!\x11_\x1d©"\x84XWþ×`\x98%\x06K\x91¯E\x0eàÁPLM\x00\x00z\x00\x93\x00\x94\x00¶\x00¬\x00\x95\x00·\x00­ÀhÀnÀiÀoÀ\x98À\x92À\x99À\x93Ì®\x00.\x00¸\x00¹\x00\x92\x00|\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:55] "\x16\x03\x01\x00½\x01\x00\x00¹\x03\x01iåÝs÷8Ä\x0bô¨ñu\x91\x13j\x91P\x15\x0d\x12Qû·ØÎ\x10\x84%g\x12(ê\x00\x00z\x00\x93\x00\x94\x00¶\x00¬\x00\x95\x00·\x00­ÀhÀnÀiÀoÀ\x98À\x92À\x99À\x93Ì®\x00.\x00¸\x00¹\x00\x92\x00|\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:01:59] code 400, message Bad request version ('þÿþþ\x00c\x00e\x00\x11\x00r\x00\x13\x00s\x002\x00@\x00¢\x00t\x008\x00j\x00£ÀBÀVÀCÀW\x00D\x00½À\x80\x00\x87\x00ÃÀ\x81\x00\x12\x00f\x00\x99\x00\x8f\x00\x90\x00²À¦\x00ª\x00\x91\x00³À§\x00«ÀfÀlÀgÀmÀ\x96À\x90À\x97À\x91Ì\xad\x00-\x00´\x00µ\x00\x8e\x00\x14\x00w\x00\x16\x00x\x003\x00gÀ\x9eÀ¢\x00\x9e\x00y\x009\x00k\x01\x00')
+127.0.0.1 - - [20/Apr/2026 08:01:59] "\x16\x03\x00\x00«\x01\x00\x00§\x03\x00iåÝrû\x95ÃIØ\x97\x90ß·23*6ñ3\x18£Y.EFæ2\x07Q\x0ccý\x00\x00\x80\x00\x1d\x00\x1cþÿþþ\x00c\x00e\x00\x11\x00r\x00\x13\x00s\x002\x00@\x00¢\x00t\x008\x00j\x00£ÀBÀVÀCÀW\x00D\x00½À\x80\x00\x87\x00ÃÀ\x81\x00\x12\x00f\x00\x99\x00\x8f\x00\x90\x00²À¦\x00ª\x00\x91\x00³À§\x00«ÀfÀlÀgÀmÀ\x96À\x90À\x97À\x91Ì­\x00-\x00´\x00µ\x00\x8e\x00\x14\x00w\x00\x16\x00x\x003\x00gÀ\x9eÀ¢\x00\x9e\x00y\x009\x00k\x01\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:02:04] code 400, message Bad request version ('\x007\x00i\x00¡À@ÀTÀAÀU\x00C\x00¼À~\x00\x86\x00ÂÀ\x7f\x00\x0f\x00\x98\x00\x19\x00\x17\x00\x1b\x004\x00l\x00¦\x00:\x01\x00')
+127.0.0.1 - - [20/Apr/2026 08:02:04] code 400, message Bad request version ('À#À¬À®À+À')
+127.0.0.1 - - [20/Apr/2026 08:02:04] "\x16\x03\x00\x00«\x01\x00\x00§\x03\x00iåÝ|GUÞ#>\x943nÏ\x1e0\x0cMC\x06¼NX\x84«\x93eÂj\x9c\x1c\x9dw\x00\x00\x80\x00m\x00§ÀFÀZÀGÀ[\x00F\x00¿À\x84\x00\x89\x00ÅÀ\x85\x00\x1a\x00\x18\x00\x9bÀ²À°À³À±À\x08À\x09À#À¬À®À+À" 400 -
+127.0.0.1 - - [20/Apr/2026 08:02:04] "\x16\x03\x00\x00«\x01\x00\x00§\x03\x00iåÝw¬\x16¨B±È¢©ý5Ã\x98\x85\x8bp%U))·\x84§ì\\\x08¶sv\x00\x00\x80À\x9fÀ£\x00\x9fÀDÀRÀEÀS\x00E\x00¾À|\x00\x88\x00ÄÀ}ÌªÌ\x15\x00\x15\x00\x9a\x00\x0b\x00\x0d\x000\x00>\x00¤\x006\x00h\x00¥À>ÀXÀ?ÀY\x00B\x00»À\x82\x00\x85\x00ÁÀ\x83\x00\x0c\x00\x97\x00\x0e\x00\x10\x001\x00?\x00 \x007\x00i\x00¡À@ÀTÀAÀU\x00C\x00¼À~\x00\x86\x00ÂÀ\x7f\x00\x0f\x00\x98\x00\x19\x00\x17\x00\x1b\x004\x00l\x00¦\x00:\x01\x00" 400 -
+127.0.0.1 - - [20/Apr/2026 08:02:09] code 400, message Bad request version ('\x00[\x00\\\x00WÀ\x17\x00ZÀ\x18À\x19\x01\x00')
+127.0.0.1 - - [20/Apr/2026 08:02:09] "\x16\x03\x00\x00«\x01\x00\x00§\x03\x00iåÝ|ÇHØ\x8e\x1d\x1d0ª±À\x17\x9e= \x9f^\x1e\x8c±ý\x14àa^5\x84°?\x00\x00\x80À\x14À(À0ÀLÀ`ÀMÀaÀvÀ\x8aÀwÀ\x8bÌ¨Ì\x13À\x10À\x11À\x03\x00JÀ\x04\x00KÀ%À-À\x05\x00LÀ&À.ÀJÀ^ÀKÀ_ÀtÀ\x88ÀuÀ\x89\x00IÀ\x01\x00GÀ\x02\x00H\x00N\x00MÀ\x0dÀ\x0eÀ)À1À\x0fÀ*À2ÀNÀbÀOÀcÀxÀ\x8cÀyÀ\x8dÀ\x0bÀ\x0c\x00[\x00\\\x00WÀ\x17\x00ZÀ\x18À\x19\x01\x00" 400 -

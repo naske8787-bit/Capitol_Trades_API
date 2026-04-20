@@ -3,6 +3,7 @@ from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.requests import MarketOrderRequest
 
 from config import ALPACA_API_KEY, ALPACA_API_SECRET, ALPACA_BASE_URL
+from data_fetcher import fetch_realtime_price
 
 
 class Broker:
@@ -23,19 +24,11 @@ class Broker:
             return self.get_account_balance()
 
     def get_current_price(self, symbol):
-        try:
-            import yfinance as yf
-
-            data = yf.download(symbol, period="5d", progress=False, auto_adjust=False)
-            if hasattr(data, "columns") and getattr(data.columns, "nlevels", 1) > 1:
-                data.columns = data.columns.get_level_values(0)
-            price = data["Close"].iloc[-1]
-            if hasattr(price, "item"):
-                price = price.item()
-            return float(price)
-        except Exception as e:
-            print(f"Price fetch failed for {symbol}: {e}")
-            return 100.0  # Default fallback price
+        price = fetch_realtime_price(symbol)
+        if price is not None:
+            return price
+        print(f"All price sources failed for {symbol}, using fallback price.")
+        return 100.0  # Last-resort fallback
 
     def buy(self, symbol, qty):
         order_data = MarketOrderRequest(

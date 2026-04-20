@@ -55,3 +55,15 @@ CRYPTO_LOOP_INTERVAL_SECONDS = int(os.getenv("CRYPTO_LOOP_INTERVAL_SECONDS", "30
 CRYPTO_MIN_NOTIONAL_PER_TRADE = float(os.getenv("CRYPTO_MIN_NOTIONAL_PER_TRADE", "25"))
 CRYPTO_MIN_TREND_STRENGTH_PCT = float(os.getenv("CRYPTO_MIN_TREND_STRENGTH_PCT", "0.002"))
 CRYPTO_PAPER_ONLY = _parse_bool(os.getenv("CRYPTO_PAPER_ONLY"), True)
+
+# MACD parameters
+CRYPTO_MACD_FAST = int(os.getenv("CRYPTO_MACD_FAST", "12"))
+CRYPTO_MACD_SLOW = int(os.getenv("CRYPTO_MACD_SLOW", "26"))
+CRYPTO_MACD_SIGNAL = int(os.getenv("CRYPTO_MACD_SIGNAL", "9"))
+
+# ATR-based trailing stop
+CRYPTO_ATR_PERIOD = int(os.getenv("CRYPTO_ATR_PERIOD", "14"))
+CRYPTO_ATR_STOP_MULTIPLIER = float(os.getenv("CRYPTO_ATR_STOP_MULTIPLIER", "2.0"))
+
+# Volume filter: require volume >= this percentile of recent history (0 = disabled)
+CRYPTO_MIN_VOLUME_PERCENTILE = float(os.getenv("CRYPTO_MIN_VOLUME_PERCENTILE", "40"))

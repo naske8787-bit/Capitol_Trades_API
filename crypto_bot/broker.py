@@ -1,3 +1,5 @@
+from alpaca.data.historical import CryptoHistoricalDataClient
+from alpaca.data.requests import CryptoLatestBarRequest
 from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.requests import MarketOrderRequest
@@ -11,6 +13,7 @@ class Broker:
         if not ALPACA_API_KEY or not ALPACA_API_SECRET:
             raise RuntimeError("Missing ALPACA_API_KEY or ALPACA_API_SECRET in the environment.")
         self.api = TradingClient(ALPACA_API_KEY, ALPACA_API_SECRET, paper=CRYPTO_PAPER_ONLY)
+        self._data_client = CryptoHistoricalDataClient(ALPACA_API_KEY, ALPACA_API_SECRET)
 
     def get_account_balance(self):
         account = self.api.get_account()
@@ -22,6 +25,16 @@ class Broker:
         return float(portfolio_value)
 
     def get_current_price(self, symbol):
+        alpaca_symbol = to_alpaca_symbol(symbol)
+        try:
+            bars = self._data_client.get_crypto_latest_bar(
+                CryptoLatestBarRequest(symbol_or_symbols=alpaca_symbol)
+            )
+            bar = bars.get(alpaca_symbol)
+            if bar is not None:
+                return float(bar.close)
+        except Exception as e:
+            print(f"Alpaca crypto price fetch failed for {symbol}, falling back to yfinance: {e}")
         data = fetch_crypto_data(symbol, period="5d", interval="1h")
         if data.empty:
             raise RuntimeError(f"No price data returned for {symbol}")

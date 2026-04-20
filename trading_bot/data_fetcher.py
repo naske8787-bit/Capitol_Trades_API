@@ -1,12 +1,33 @@
 import re
 import time
+import os
 
 import pandas as pd
 import requests
 import yfinance as yf
 from bs4 import BeautifulSoup
+from alpaca.data.historical import StockHistoricalDataClient
+from alpaca.data.requests import StockLatestBarRequest, StockBarsRequest
+from alpaca.data.timeframe import TimeFrame
+from alpaca.data.enums import Adjustment
 
-from config import CAPITOL_TRADES_API_URL, CAPITOL_TRADES_MAX_PAGES, STOCK_DATA_CACHE_TTL_SECONDS
+from config import (
+    CAPITOL_TRADES_API_URL,
+    CAPITOL_TRADES_MAX_PAGES,
+    STOCK_DATA_CACHE_TTL_SECONDS,
+    ALPACA_API_KEY,
+    ALPACA_API_SECRET,
+    ALPACA_DATA_FEED,
+)
+
+_alpaca_data_client = None
+
+
+def _get_alpaca_data_client():
+    global _alpaca_data_client
+    if _alpaca_data_client is None and ALPACA_API_KEY and ALPACA_API_SECRET:
+        _alpaca_data_client = StockHistoricalDataClient(ALPACA_API_KEY, ALPACA_API_SECRET)
+    return _alpaca_data_client
 
 _CAPITOL_TRADES_CACHE = []
 _STOCK_DATA_CACHE = {}
@@ -46,7 +67,7 @@ def _normalize_json_payload(payload):
             or ""
         )
         symbol = trade.get("symbol") or _extract_symbol(asset_text)
-        action = str(trade.get("action") or trade.get("type") or "").lower()
+        action = str(trade.get("action") or trade.get("trade_type") or trade.get("type") or "").lower()
 
         normalized.append(
             {
@@ -181,6 +202,34 @@ def fetch_capitol_trades():
             _LAST_WARNING_TS = now
         _LAST_FETCH_TS = now
         return _CAPITOL_TRADES_CACHE
+
+def fetch_realtime_price(symbol):
+    """Fetch the latest real-time price for a symbol using Alpaca's market data API.
+
+    Falls back to yfinance if Alpaca credentials are not configured or the request fails.
+    """
+    client = _get_alpaca_data_client()
+    if client is not None:
+        try:
+            request = StockLatestBarRequest(symbol_or_symbols=symbol, feed=ALPACA_DATA_FEED)
+            bars = client.get_stock_latest_bar(request)
+            bar = bars.get(symbol)
+            if bar is not None:
+                return float(bar.close)
+        except Exception as e:
+            print(f"Alpaca real-time price fetch failed for {symbol}, falling back to yfinance: {e}")
+
+    # yfinance fallback
+    try:
+        data = yf.download(symbol, period="5d", progress=False, auto_adjust=False)
+        if isinstance(data.columns, pd.MultiIndex):
+            data.columns = data.columns.get_level_values(0)
+        price = data["Close"].iloc[-1]
+        return float(price.item() if hasattr(price, "item") else price)
+    except Exception as e:
+        print(f"yfinance price fetch also failed for {symbol}: {e}")
+        return None
+
 
 def fetch_stock_data(symbol, period="1y", start=None, end=None, use_cache=True):
     """Fetch historical stock data using yfinance.
