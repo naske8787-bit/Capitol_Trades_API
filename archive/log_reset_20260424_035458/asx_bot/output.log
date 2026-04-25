@@ -1,0 +1,70 @@
+============================================================
+  ASX Day-Trading Bot
+  Watchlist : BHP.AX, CBA.AX, NAB.AX, WBC.AX, ANZ.AX, RIO.AX, WES.AX, WOW.AX, MQG.AX, CSL.AX
+  Interval  : 300s
+  Market hrs: 10:00 – 16:00 Australia/Sydney
+  Broker cfg: paper
+============================================================
+[Broker] Paper broker ready  |  Cash: $100,000.00  |  Positions: none
+[Main] Active broker: paper
+[Main] Cash: $100,000.00  |  Portfolio: $100,000.00
+
+── Cycle 1  2026-04-24 03:41:41 UTC ──
+  Autonomy profile: mode=normal score=46 allow_entries=True risk_mult=1.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  Auto-improvement: Auto-improvement: not enough closed-trade history yet.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1777002109.170529  365580 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+I0000 00:00:1777002110.719269  365580 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1777002114.844838  365580 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+E0000 00:00:1777002117.255853  365580 cuda_platform.cc:52] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+  BHP.AX     | HOLD | pred=-0.008%  learned=-0.000%  eff=-0.108%  RSI=46.9  EMA=bearish  VWAP=below  BB=lower  Vol×0.16  EXT=-2.00  AUTO=normal
+  CBA.AX     | HOLD | pred=+0.304%  learned=-0.003%  eff=+0.201%  RSI=49.7  EMA=bullish  VWAP=above  BB=lower  Vol×0.06  EXT=-2.00  AUTO=normal
+  NAB.AX     | HOLD | pred=-0.479%  learned=-0.016%  eff=-0.595%  RSI=32.1  EMA=bearish  VWAP=below  BB=lower  Vol×0.08  EXT=-2.00  AUTO=normal
+  WBC.AX     | HOLD | pred=+0.582%  learned=-0.005%  eff=+0.477%  RSI=45.9  EMA=bearish  VWAP=above  BB=lower  Vol×0.24  EXT=-2.00  AUTO=normal
+WARNING:tensorflow:5 out of the last 5 calls to <function TensorFlowTrainer._make_function.<locals>.multi_step_on_iterator at 0x79c44dd71760> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+WARNING:tensorflow:5 out of the last 5 calls to <function TensorFlowTrainer.make_predict_function.<locals>.one_step_on_data_distributed at 0x79c44ec21f80> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+  ANZ.AX     | HOLD | pred=+0.006%  learned=-0.005%  eff=-0.100%  RSI=42.9  EMA=bearish  VWAP=below  BB=lower  Vol×0.02  EXT=-2.00  AUTO=normal
+WARNING:tensorflow:6 out of the last 6 calls to <function TensorFlowTrainer._make_function.<locals>.multi_step_on_iterator at 0x79c44ebb7a60> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+WARNING:tensorflow:6 out of the last 6 calls to <function TensorFlowTrainer.make_predict_function.<locals>.one_step_on_data_distributed at 0x79c44e1904a0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+  RIO.AX     | HOLD | pred=+0.327%  learned=-0.000%  eff=+0.227%  RSI=54.0  EMA=bullish  VWAP=above  BB=upper  Vol×0.23  EXT=-2.00  AUTO=normal
+  WES.AX     | HOLD | pred=+0.328%  learned=-0.007%  eff=+0.221%  RSI=30.1  EMA=bearish  VWAP=below  BB=lower  Vol×0.51  EXT=-2.00  AUTO=normal
+  WOW.AX     | HOLD | pred=+0.292%  learned=-0.000%  eff=+0.191%  RSI=60.5  EMA=bullish  VWAP=above  BB=lower  Vol×0.19  EXT=-2.00  AUTO=normal
+  MQG.AX     | HOLD | pred=-0.028%  learned=+0.002%  eff=-0.125%  RSI=63.9  EMA=bullish  VWAP=above  BB=upper  Vol×0.24  EXT=-2.00  AUTO=normal
+  CSL.AX     | HOLD | pred=+0.394%  learned=+0.001%  eff=+0.295%  RSI=58.9  EMA=bullish  VWAP=above  BB=upper  Vol×0.32  EXT=-2.00  AUTO=normal
+
+  Portfolio: $100,000.00  |  Cash: $100,000.00
+  Sleeping 300s…
+
+── Cycle 2  2026-04-24 03:47:26 UTC ──
+  Autonomy profile: mode=normal score=46 allow_entries=True risk_mult=1.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  BHP.AX     | HOLD | pred=-0.018%  learned=+0.000%  eff=-0.118%  RSI=48.0  EMA=bearish  VWAP=below  BB=lower  Vol×0.29  EXT=-2.00  AUTO=normal
+  CBA.AX     | HOLD | pred=-0.685%  learned=+0.000%  eff=-0.785%  RSI=51.7  EMA=bullish  VWAP=above  BB=lower  Vol×0.30  EXT=-2.00  AUTO=normal
+  NAB.AX     | HOLD | pred=+0.195%  learned=-0.010%  eff=+0.084%  RSI=33.8  EMA=bearish  VWAP=below  BB=lower  Vol×0.34  EXT=-2.00  AUTO=normal
+  WBC.AX     | HOLD | pred=-1.091%  learned=+0.003%  eff=-1.188%  RSI=51.0  EMA=bearish  VWAP=above  BB=lower  Vol×0.40  EXT=-2.00  AUTO=normal
+  ANZ.AX     | HOLD | pred=+0.298%  learned=+0.001%  eff=+0.199%  RSI=45.9  EMA=bearish  VWAP=below  BB=lower  Vol×0.28  EXT=-2.00  AUTO=normal
+  RIO.AX     | HOLD | pred=-0.044%  learned=+0.002%  eff=-0.142%  RSI=54.9  EMA=bullish  VWAP=above  BB=lower  Vol×0.91  EXT=-2.00  AUTO=normal
+  WES.AX     | HOLD | pred=+0.071%  learned=-0.006%  eff=-0.035%  RSI=30.0  EMA=bearish  VWAP=below  BB=lower  Vol×0.75  EXT=-2.00  AUTO=normal
+  WOW.AX     | HOLD | pred=+0.341%  learned=+0.000%  eff=+0.242%  RSI=62.5  EMA=bullish  VWAP=above  BB=lower  Vol×0.27  EXT=-2.00  AUTO=normal
+  MQG.AX     | HOLD | pred=-0.049%  learned=+0.001%  eff=-0.148%  RSI=62.7  EMA=bullish  VWAP=above  BB=upper  Vol×0.38  EXT=-2.00  AUTO=normal
+  CSL.AX     | HOLD | pred=+0.085%  learned=+0.011%  eff=-0.005%  RSI=64.0  EMA=bullish  VWAP=above  BB=upper  Vol×0.95  EXT=-2.00  AUTO=normal
+
+  Portfolio: $100,000.00  |  Cash: $100,000.00
+  Sleeping 300s…
+
+── Cycle 3  2026-04-24 03:52:29 UTC ──
+  Autonomy profile: mode=normal score=46 allow_entries=True risk_mult=1.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  BHP.AX     | HOLD | pred=+0.000%  learned=+0.000%  eff=-0.099%  RSI=44.2  EMA=bearish  VWAP=below  BB=lower  Vol×0.48  EXT=-2.00  AUTO=normal
+  CBA.AX     | HOLD | pred=-0.289%  learned=+0.001%  eff=-0.388%  RSI=50.6  EMA=bullish  VWAP=above  BB=lower  Vol×0.13  EXT=-2.00  AUTO=normal
+  NAB.AX     | HOLD | pred=+0.924%  learned=-0.012%  eff=+0.812%  RSI=33.1  EMA=bearish  VWAP=below  BB=lower  Vol×0.22  EXT=-2.00  AUTO=normal
+  WBC.AX     | HOLD | pred=-0.591%  learned=-0.002%  eff=-0.693%  RSI=47.6  EMA=bearish  VWAP=above  BB=lower  Vol×0.45  EXT=-2.00  AUTO=normal
+  ANZ.AX     | HOLD | pred=+1.225%  learned=-0.006%  eff=+1.120%  RSI=41.7  EMA=bearish  VWAP=below  BB=lower  Vol×0.34  EXT=-2.00  AUTO=normal
+  RIO.AX     | HOLD | pred=-0.318%  learned=-0.003%  eff=-0.421%  RSI=51.3  EMA=bullish  VWAP=above  BB=lower  Vol×0.90  EXT=-2.00  AUTO=normal
+  WES.AX     | HOLD | pred=-0.221%  learned=-0.006%  eff=-0.327%  RSI=34.9  EMA=bearish  VWAP=below  BB=lower  Vol×0.21  EXT=-2.00  AUTO=normal
+  WOW.AX     | HOLD | pred=+0.185%  learned=-0.001%  eff=+0.084%  RSI=54.9  EMA=bullish  VWAP=above  BB=lower  Vol×0.45  EXT=-2.00  AUTO=normal
+  MQG.AX     | HOLD | pred=-0.134%  learned=-0.000%  eff=-0.234%  RSI=59.8  EMA=bullish  VWAP=above  BB=lower  Vol×0.36  EXT=-2.00  AUTO=normal
+  CSL.AX     | HOLD | pred=+0.027%  learned=+0.012%  eff=-0.061%  RSI=66.1  EMA=bullish  VWAP=above  BB=upper  Vol×0.58  EXT=-2.00  AUTO=normal
+
+  Portfolio: $100,000.00  |  Cash: $100,000.00
+  Sleeping 300s…

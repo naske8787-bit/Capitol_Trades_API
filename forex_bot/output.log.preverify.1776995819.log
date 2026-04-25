@@ -1,0 +1,2175 @@
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-1,723.60
+
+── Cycle 1  2026-04-22 12:25:40 ──
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776860744.271425   35670 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776860750.218667   35670 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+[Strategy] Training initial model for EUR/USD...
+/home/codespace/.python/current/lib/python3.12/site-packages/keras/src/layers/rnn/rnn.py:199: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+[ForexModel] EUR/USD trained on 500 bars.
+  EUR/USD    | HOLD | pred_chg=-0.0100%  RSI=54.4  EMA=bearish
+[Strategy] Training initial model for GBP/USD...
+/home/codespace/.python/current/lib/python3.12/site-packages/keras/src/layers/rnn/rnn.py:199: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+[ForexModel] GBP/USD trained on 500 bars.
+  GBP/USD    | HOLD | pred_chg=-0.0167%  RSI=57.5  EMA=bullish
+[Strategy] Training initial model for AUD/USD...
+/home/codespace/.python/current/lib/python3.12/site-packages/keras/src/layers/rnn/rnn.py:199: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+[ForexModel] AUD/USD trained on 402 bars.
+  AUD/USD    | HOLD | pred_chg=-0.0218%  RSI=50.6  EMA=bearish
+[Strategy] Training initial model for USD/JPY...
+/home/codespace/.python/current/lib/python3.12/site-packages/keras/src/layers/rnn/rnn.py:199: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+[ForexModel] USD/JPY trained on 500 bars.
+  USD/JPY    | HOLD | pred_chg=+0.0111%  RSI=36.5  EMA=bearish
+[Strategy] Training initial model for USD/CAD...
+/home/codespace/.python/current/lib/python3.12/site-packages/keras/src/layers/rnn/rnn.py:199: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+[ForexModel] USD/CAD trained on 500 bars.
+  USD/CAD    | HOLD | pred_chg=-0.0002%  RSI=46.6  EMA=bullish
+  Portfolio value: $101,424.25
+  Sleeping 60s...
+
+── Cycle 2  2026-04-22 12:28:50 ──
+  EUR/USD    | HOLD | pred_chg=+0.0071%  RSI=46.8  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0080%  RSI=53.0  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0178%  RSI=50.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0012%  RSI=41.1  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=-0.0076%  RSI=42.8  EMA=bearish
+  Portfolio value: $101,412.28
+  Sleeping 60s...
+
+── Cycle 3  2026-04-22 12:29:53 ──
+  EUR/USD    | HOLD | pred_chg=+0.0284%  RSI=35.5  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0371%  RSI=42.7  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0228%  RSI=50.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0447%  RSI=58.7  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=-0.0404%  RSI=57.9  EMA=bullish
+  Portfolio value: $101,369.92
+  Sleeping 60s...
+
+── Cycle 4  2026-04-22 12:30:57 ──
+  EUR/USD    | HOLD | pred_chg=+0.0572%  RSI=25.5  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0598%  RSI=35.0  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0521%  RSI=33.3  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0530%  RSI=61.1  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0307%  RSI=59.0  EMA=bullish
+  Portfolio value: $101,328.11
+  Sleeping 60s...
+
+── Cycle 5  2026-04-22 12:32:00 ──
+  EUR/USD    | HOLD | pred_chg=+0.0597%  RSI=23.1  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0525%  RSI=32.9  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0484%  RSI=33.3  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0578%  RSI=66.1  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0158%  RSI=64.8  EMA=bullish
+  Portfolio value: $101,311.74
+  Sleeping 60s...
+
+── Cycle 6  2026-04-22 12:33:04 ──
+  EUR/USD    | HOLD | pred_chg=+0.0394%  RSI=30.0  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0227%  RSI=36.3  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0415%  RSI=32.7  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0268%  RSI=57.6  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0206%  RSI=50.7  EMA=bullish
+  Portfolio value: $101,347.07
+  Sleeping 60s...
+
+── Cycle 7  2026-04-22 12:34:07 ──
+  EUR/USD    | HOLD | pred_chg=+0.0225%  RSI=36.2  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0133%  RSI=43.9  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0386%  RSI=32.7  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0094%  RSI=56.7  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0082%  RSI=54.8  EMA=bullish
+  Portfolio value: $101,377.95
+  Sleeping 60s...
+
+── Cycle 8  2026-04-22 12:35:11 ──
+  EUR/USD    | HOLD | pred_chg=+0.0190%  RSI=36.2  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0151%  RSI=42.0  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0152%  RSI=37.3  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0063%  RSI=62.0  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0176%  RSI=53.4  EMA=bullish
+  Portfolio value: $101,399.95
+  Sleeping 60s...
+
+── Cycle 9  2026-04-22 12:36:15 ──
+  EUR/USD    | HOLD | pred_chg=+0.0305%  RSI=30.1  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0061%  RSI=35.7  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0158%  RSI=37.3  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0224%  RSI=60.0  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0050%  RSI=51.2  EMA=bullish
+  Portfolio value: $101,365.44
+  Sleeping 60s...
+
+── Cycle 10  2026-04-22 12:37:18 ──
+  EUR/USD    | HOLD | pred_chg=+0.0144%  RSI=30.1  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0116%  RSI=34.4  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0290%  RSI=33.9  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0360%  RSI=60.3  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0148%  RSI=45.9  EMA=bearish
+  Portfolio value: $101,412.55
+  Sleeping 60s...
+
+── Cycle 11  2026-04-22 12:38:23 ──
+  EUR/USD    | HOLD | pred_chg=-0.0132%  RSI=36.3  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0043%  RSI=36.9  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0285%  RSI=33.9  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0385%  RSI=59.4  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0069%  RSI=50.4  EMA=bearish
+  Portfolio value: $101,399.73
+  Sleeping 60s...
+
+── Cycle 12  2026-04-22 12:39:27 ──
+  EUR/USD    | HOLD | pred_chg=-0.0167%  RSI=36.3  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0051%  RSI=35.9  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0143%  RSI=36.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0253%  RSI=61.7  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0062%  RSI=53.2  EMA=bearish
+  Portfolio value: $101,401.59
+  Sleeping 60s...
+
+── Cycle 13  2026-04-22 12:40:31 ──
+  EUR/USD    | HOLD | pred_chg=-0.0017%  RSI=36.3  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0001%  RSI=36.1  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0144%  RSI=36.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0119%  RSI=63.0  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0309%  RSI=55.7  EMA=bullish
+  Portfolio value: $101,353.13
+  Sleeping 60s...
+
+── Cycle 14  2026-04-22 12:41:35 ──
+  EUR/USD    | HOLD | pred_chg=+0.0096%  RSI=36.3  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0068%  RSI=36.9  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0145%  RSI=35.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0035%  RSI=64.4  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0401%  RSI=55.9  EMA=bullish
+  Portfolio value: $101,369.37
+  Sleeping 60s...
+
+── Cycle 15  2026-04-22 12:42:40 ──
+  EUR/USD    | HOLD | pred_chg=+0.0219%  RSI=32.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0148%  RSI=38.2  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0262%  RSI=32.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0087%  RSI=64.6  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0404%  RSI=55.1  EMA=bullish
+  Portfolio value: $101,318.48
+  Sleeping 60s...
+
+── Cycle 16  2026-04-22 12:43:45 ──
+  EUR/USD    | HOLD | pred_chg=+0.0075%  RSI=39.9  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0155%  RSI=40.4  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0234%  RSI=32.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0068%  RSI=64.6  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0224%  RSI=52.8  EMA=bullish
+  Portfolio value: $101,323.80
+  Sleeping 60s...
+
+── Cycle 17  2026-04-22 12:44:49 ──
+  EUR/USD    | HOLD | pred_chg=-0.0005%  RSI=39.9  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0041%  RSI=37.8  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0107%  RSI=33.4  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0044%  RSI=65.4  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0085%  RSI=53.2  EMA=bullish
+  Portfolio value: $101,324.72
+  Sleeping 60s...
+
+── Cycle 18  2026-04-22 12:45:52 ──
+  EUR/USD    | HOLD | pred_chg=+0.0013%  RSI=35.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0012%  RSI=36.8  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0046%  RSI=33.4  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0041%  RSI=63.7  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0015%  RSI=55.0  EMA=bullish
+  Portfolio value: $101,371.43
+  Sleeping 60s...
+
+── Cycle 19  2026-04-22 12:46:55 ──
+  EUR/USD    | HOLD | pred_chg=-0.0269%  RSI=48.1  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0083%  RSI=43.3  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0246%  RSI=39.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0191%  RSI=59.5  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0128%  RSI=53.2  EMA=bullish
+  Portfolio value: $101,377.06
+  Sleeping 60s...
+
+── Cycle 20  2026-04-22 12:48:00 ──
+  EUR/USD    | HOLD | pred_chg=-0.0271%  RSI=48.1  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0143%  RSI=47.8  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0321%  RSI=39.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0263%  RSI=55.9  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0138%  RSI=52.1  EMA=bullish
+  Portfolio value: $101,370.82
+  Sleeping 60s...
+
+── Cycle 21  2026-04-22 12:49:03 ──
+  EUR/USD    | HOLD | pred_chg=-0.0087%  RSI=43.2  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0022%  RSI=41.4  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0340%  RSI=37.7  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0053%  RSI=62.4  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0066%  RSI=53.9  EMA=bullish
+  Portfolio value: $101,485.07
+  Sleeping 60s...
+
+── Cycle 22  2026-04-22 12:50:07 ──
+  EUR/USD    | HOLD | pred_chg=+0.0092%  RSI=38.9  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0157%  RSI=36.8  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0393%  RSI=37.7  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0032%  RSI=62.7  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0046%  RSI=48.5  EMA=bullish
+  Portfolio value: $101,507.12
+  Sleeping 60s...
+
+── Cycle 23  2026-04-22 12:51:11 ──
+  EUR/USD    | HOLD | pred_chg=+0.0020%  RSI=44.8  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0094%  RSI=39.8  EMA=bearish
+  AUD/USD    | SELL | pred_chg=-0.0504%  RSI=41.3  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0098%  RSI=62.1  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0271%  RSI=59.1  EMA=bullish
+  Portfolio value: $101,466.00
+  Sleeping 60s...
+
+── Cycle 24  2026-04-22 12:52:14 ──
+  EUR/USD    | HOLD | pred_chg=-0.0069%  RSI=50.0  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0024%  RSI=42.1  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0454%  RSI=41.3  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0126%  RSI=62.6  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0071%  RSI=47.4  EMA=bullish
+  Portfolio value: $101,485.60
+  Sleeping 60s...
+
+── Cycle 25  2026-04-22 12:53:18 ──
+  EUR/USD    | HOLD | pred_chg=-0.0050%  RSI=50.0  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0044%  RSI=44.5  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0206%  RSI=37.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0182%  RSI=65.2  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0029%  RSI=55.5  EMA=bullish
+  Portfolio value: $101,514.68
+  Sleeping 60s...
+
+── Cycle 26  2026-04-22 12:54:20 ──
+  EUR/USD    | HOLD | pred_chg=+0.0079%  RSI=45.1  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0072%  RSI=45.2  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0109%  RSI=37.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0161%  RSI=66.0  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0097%  RSI=66.4  EMA=bullish
+  Portfolio value: $101,513.78
+  Sleeping 60s...
+
+── Cycle 27  2026-04-22 12:55:24 ──
+  EUR/USD    | HOLD | pred_chg=-0.0038%  RSI=50.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0145%  RSI=49.1  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0142%  RSI=41.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0043%  RSI=59.2  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0007%  RSI=65.8  EMA=bullish
+  Portfolio value: $101,376.45
+  Sleeping 60s...
+
+── Cycle 28  2026-04-22 12:56:27 ──
+  EUR/USD    | HOLD | pred_chg=-0.0034%  RSI=50.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0159%  RSI=51.1  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0085%  RSI=41.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0127%  RSI=57.0  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0173%  RSI=51.7  EMA=bullish
+  Portfolio value: $101,432.91
+  Sleeping 60s...
+
+── Cycle 29  2026-04-22 12:57:30 ──
+  EUR/USD    | HOLD | pred_chg=-0.0140%  RSI=55.3  EMA=bullish
+  GBP/USD    | HOLD | pred_chg=-0.0201%  RSI=55.0  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0211%  RSI=46.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0128%  RSI=59.5  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0097%  RSI=49.2  EMA=bullish
+  Portfolio value: $101,452.09
+  Sleeping 60s...
+
+── Cycle 30  2026-04-22 12:58:33 ──
+  EUR/USD    | HOLD | pred_chg=-0.0132%  RSI=55.3  EMA=bullish
+  GBP/USD    | HOLD | pred_chg=-0.0108%  RSI=52.0  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0184%  RSI=46.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0118%  RSI=61.2  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0119%  RSI=45.3  EMA=bullish
+  Portfolio value: $101,514.03
+  Sleeping 60s...
+
+── Cycle 31  2026-04-22 12:59:35 ──
+  EUR/USD    | HOLD | pred_chg=-0.0127%  RSI=55.3  EMA=bullish
+  GBP/USD    | HOLD | pred_chg=-0.0031%  RSI=49.3  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0061%  RSI=43.6  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0068%  RSI=62.3  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0075%  RSI=51.4  EMA=bullish
+  Portfolio value: $101,560.00
+  Sleeping 60s...
+
+── Cycle 32  2026-04-22 13:00:39 ──
+  EUR/USD    | HOLD | pred_chg=+0.0004%  RSI=49.2  EMA=bullish
+  GBP/USD    | HOLD | pred_chg=+0.0044%  RSI=46.3  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0063%  RSI=43.6  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0029%  RSI=65.3  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0076%  RSI=42.5  EMA=bearish
+  Portfolio value: $101,610.39
+  Sleeping 60s...
+
+── Cycle 33  2026-04-22 13:01:42 ──
+  EUR/USD    | HOLD | pred_chg=+0.0128%  RSI=43.9  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0173%  RSI=40.5  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0057%  RSI=40.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0021%  RSI=62.5  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0226%  RSI=54.2  EMA=bullish
+  Portfolio value: $101,501.69
+  Sleeping 60s...
+
+── Cycle 34  2026-04-22 13:02:45 ──
+  EUR/USD    | HOLD | pred_chg=+0.0125%  RSI=43.9  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0175%  RSI=40.5  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0165%  RSI=38.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0023%  RSI=58.0  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0189%  RSI=54.2  EMA=bullish
+  Portfolio value: $101,498.92
+  Sleeping 60s...
+
+── Cycle 35  2026-04-22 13:03:48 ──
+  EUR/USD    | HOLD | pred_chg=+0.0110%  RSI=43.9  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0032%  RSI=49.3  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=+0.0148%  RSI=38.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0010%  RSI=59.6  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0125%  RSI=45.5  EMA=bearish
+  Portfolio value: $101,489.28
+  Sleeping 60s...
+
+── Cycle 36  2026-04-22 13:04:51 ──
+  EUR/USD    | HOLD | pred_chg=+0.0091%  RSI=43.9  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0057%  RSI=53.5  EMA=bearish
+  AUD/USD    | HOLD | pred_chg=-0.0125%  RSI=45.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0011%  RSI=57.8  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0222%  RSI=41.2  EMA=bearish
+  Portfolio value: $101,518.18
+  Sleeping 60s...
+
+── Cycle 37  2026-04-22 13:05:54 ──
+  EUR/USD    | HOLD | pred_chg=-0.0041%  RSI=51.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0138%  RSI=57.2  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0133%  RSI=45.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0041%  RSI=55.5  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0072%  RSI=44.5  EMA=bearish
+  Portfolio value: $101,535.49
+  Sleeping 60s...
+
+── Cycle 38  2026-04-22 13:06:57 ──
+  EUR/USD    | HOLD | pred_chg=-0.0043%  RSI=51.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0168%  RSI=58.5  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0443%  RSI=53.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0079%  RSI=51.8  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0042%  RSI=42.1  EMA=bearish
+  Portfolio value: $101,544.00
+  Sleeping 60s...
+
+── Cycle 39  2026-04-22 13:08:00 ──
+  EUR/USD    | HOLD | pred_chg=+0.0067%  RSI=44.5  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0100%  RSI=54.2  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0431%  RSI=53.2  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0012%  RSI=54.9  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0056%  RSI=42.1  EMA=bearish
+  Portfolio value: $101,426.78
+  Sleeping 60s...
+
+── Cycle 40  2026-04-22 13:09:03 ──
+  EUR/USD    | HOLD | pred_chg=+0.0050%  RSI=44.5  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0043%  RSI=50.7  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0186%  RSI=48.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0095%  RSI=59.2  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0116%  RSI=45.1  EMA=bearish
+  Portfolio value: $101,449.11
+  Sleeping 60s...
+
+── Cycle 41  2026-04-22 13:10:06 ──
+  EUR/USD    | HOLD | pred_chg=-0.0430%  RSI=65.8  EMA=bullish
+  GBP/USD    | HOLD | pred_chg=-0.0573%  RSI=69.9  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0155%  RSI=48.1  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0020%  RSI=48.8  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0062%  RSI=44.1  EMA=bearish
+  Portfolio value: $101,443.17
+  Sleeping 60s...
+
+── Cycle 42  2026-04-22 13:11:10 ──
+  EUR/USD    | HOLD | pred_chg=+0.0153%  RSI=43.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0043%  RSI=50.6  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0111%  RSI=47.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0100%  RSI=50.2  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0130%  RSI=49.9  EMA=bearish
+  Portfolio value: $101,601.81
+  Sleeping 60s...
+
+── Cycle 43  2026-04-22 13:12:13 ──
+  EUR/USD    | HOLD | pred_chg=+0.0026%  RSI=47.3  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0047%  RSI=51.9  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0078%  RSI=47.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0172%  RSI=52.0  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0076%  RSI=50.2  EMA=bearish
+  Portfolio value: $101,609.24
+  Sleeping 60s...
+
+── Cycle 44  2026-04-22 13:13:16 ──
+  EUR/USD    | HOLD | pred_chg=+0.0136%  RSI=44.0  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0055%  RSI=50.2  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0164%  RSI=50.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0275%  RSI=57.6  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0018%  RSI=48.4  EMA=bearish
+  Portfolio value: $101,543.52
+  Sleeping 60s...
+
+── Cycle 45  2026-04-22 13:14:19 ──
+  EUR/USD    | HOLD | pred_chg=+0.0131%  RSI=44.0  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0128%  RSI=49.0  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0138%  RSI=50.8  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0231%  RSI=57.7  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=-0.0010%  RSI=47.7  EMA=bearish
+  Portfolio value: $101,548.20
+  Sleeping 60s...
+
+── Cycle 46  2026-04-22 13:15:23 ──
+  EUR/USD    | HOLD | pred_chg=+0.0126%  RSI=44.0  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0074%  RSI=51.8  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0078%  RSI=49.9  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=-0.0025%  RSI=47.2  EMA=bullish
+  USD/CAD    | HOLD | pred_chg=+0.0146%  RSI=40.5  EMA=bearish
+  Portfolio value: $101,583.17
+  Sleeping 60s...
+
+── Cycle 47  2026-04-22 13:16:26 ──
+  EUR/USD    | HOLD | pred_chg=+0.0004%  RSI=48.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0050%  RSI=56.1  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0066%  RSI=49.9  EMA=bearish
+  USD/JPY    | HOLD | pred_chg=+0.0075%  RSI=43.6  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=+0.0178%  RSI=38.9  EMA=bearish
+  Portfolio value: $101,606.38
+  Sleeping 60s...
+
+── Cycle 48  2026-04-22 13:17:29 ──
+  EUR/USD    | HOLD | pred_chg=-0.0119%  RSI=52.5  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0069%  RSI=57.0  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0372%  RSI=57.3  EMA=bullish
+  USD/JPY    | HOLD | pred_chg=-0.0032%  RSI=50.8  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=-0.0052%  RSI=45.0  EMA=bearish
+  Portfolio value: $101,607.87
+  Sleeping 60s...
+
+── Cycle 49  2026-04-22 13:18:32 ──
+  EUR/USD    | HOLD | pred_chg=-0.0009%  RSI=48.4  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0046%  RSI=52.5  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0363%  RSI=57.3  EMA=bullish
+  USD/JPY    | HOLD | pred_chg=-0.0055%  RSI=51.3  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=-0.0141%  RSI=47.5  EMA=bearish
+  Portfolio value: $101,574.90
+  Sleeping 60s...
+
+── Cycle 50  2026-04-22 13:19:35 ──
+  EUR/USD    | HOLD | pred_chg=+0.0102%  RSI=44.6  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=+0.0001%  RSI=53.4  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0118%  RSI=51.5  EMA=bullish
+  USD/JPY    | HOLD | pred_chg=+0.0180%  RSI=35.6  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=+0.0056%  RSI=38.5  EMA=bearish
+  Portfolio value: $101,629.82
+  Sleeping 60s...
+
+── Cycle 51  2026-04-22 13:20:38 ──
+  EUR/USD    | HOLD | pred_chg=-0.0148%  RSI=52.6  EMA=bearish
+  GBP/USD    | HOLD | pred_chg=-0.0429%  RSI=64.7  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.0111%  RSI=51.5  EMA=bullish
+  USD/JPY    | HOLD | pred_chg=+0.0327%  RSI=28.2  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=+0.0269%  RSI=31.8  EMA=bearish
+  Portfolio value: $101,644.74
+  Sleeping 60s...
+
+── Cycle 52  2026-04-22 13:21:42 ──
+  EUR/USD    | HOLD | pred_chg=-0.0475%  RSI=58.7  EMA=bullish
+  GBP/USD    | HOLD | pred_chg=-0.0672%  RSI=68.3  EMA=bullish
+  AUD/USD    | HOLD | pred_chg=-0.1101%  RSI=67.6  EMA=bullish
+  USD/JPY    | HOLD | pred_chg=+0.0100%  RSI=36.4  EMA=bearish
+  USD/CAD    | HOLD | pred_chg=-0.0019%  RSI=43.6  EMA=bearish
+  Portfolio value: $101,734.36
+  Sleeping 60s...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776949351.795047  231375 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776949360.454180  231375 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $2,094.08
+
+── Cycle 1  2026-04-23 13:02:29 ──
+[ForexModel] EUR/USD loaded from disk.
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+[ForexModel] GBP/USD loaded from disk.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+[ForexModel] AUD/USD loaded from disk.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+[ForexModel] USD/JPY loaded from disk.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+[ForexModel] USD/CAD loaded from disk.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,091.13
+  Sleeping 60s...
+
+── Cycle 2  2026-04-23 13:03:44 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,135.74
+  Sleeping 60s...
+
+── Cycle 3  2026-04-23 13:04:45 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,135.74
+  Sleeping 60s...
+
+── Cycle 4  2026-04-23 13:05:47 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,127.37
+  Sleeping 60s...
+
+── Cycle 5  2026-04-23 13:06:49 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,182.54
+  Sleeping 60s...
+
+── Cycle 6  2026-04-23 13:07:51 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,181.40
+  Sleeping 60s...
+
+── Cycle 7  2026-04-23 13:08:52 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,112.96
+  Sleeping 60s...
+
+── Cycle 8  2026-04-23 13:09:54 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,155.28
+  Sleeping 60s...
+
+── Cycle 9  2026-04-23 13:10:55 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,164.51
+  Sleeping 60s...
+
+── Cycle 10  2026-04-23 13:11:57 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,138.29
+  Sleeping 60s...
+
+── Cycle 11  2026-04-23 13:12:58 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,239.48
+  Sleeping 60s...
+
+── Cycle 12  2026-04-23 13:13:59 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,239.48
+  Sleeping 60s...
+
+── Cycle 13  2026-04-23 13:15:00 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,206.71
+  Sleeping 60s...
+
+── Cycle 14  2026-04-23 13:16:02 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,202.88
+  Sleeping 60s...
+
+── Cycle 15  2026-04-23 13:17:04 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,194.09
+  Sleeping 60s...
+
+── Cycle 16  2026-04-23 13:18:05 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,198.31
+  Sleeping 60s...
+
+── Cycle 17  2026-04-23 13:19:06 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,198.31
+  Sleeping 60s...
+
+── Cycle 18  2026-04-23 13:20:07 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,189.74
+  Sleeping 60s...
+
+── Cycle 19  2026-04-23 13:21:08 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,208.29
+  Sleeping 60s...
+
+── Cycle 20  2026-04-23 13:22:09 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,208.29
+  Sleeping 60s...
+
+── Cycle 21  2026-04-23 13:23:10 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,195.04
+  Sleeping 60s...
+
+── Cycle 22  2026-04-23 13:24:12 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,195.04
+  Sleeping 60s...
+
+── Cycle 23  2026-04-23 13:25:13 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,152.63
+  Sleeping 60s...
+
+── Cycle 24  2026-04-23 13:26:14 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,152.63
+  Sleeping 60s...
+
+── Cycle 25  2026-04-23 13:27:15 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,119.30
+  Sleeping 60s...
+
+── Cycle 26  2026-04-23 13:28:16 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,126.70
+  Sleeping 60s...
+
+── Cycle 27  2026-04-23 13:29:17 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,115.09
+  Sleeping 60s...
+
+── Cycle 28  2026-04-23 13:30:19 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,112.32
+  Sleeping 60s...
+
+── Cycle 29  2026-04-23 13:31:23 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,115.27
+  Sleeping 60s...
+
+── Cycle 30  2026-04-23 13:32:26 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,101.72
+  Sleeping 60s...
+
+── Cycle 31  2026-04-23 13:33:28 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,089.76
+  Sleeping 60s...
+
+── Cycle 32  2026-04-23 13:34:30 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,080.96
+  Sleeping 60s...
+
+── Cycle 33  2026-04-23 13:35:34 ──
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,085.85
+  Sleeping 60s...
+
+── Cycle 34  2026-04-23 13:36:37 ──
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776951686.046572  274825 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776951688.238733  274825 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776951884.950798  276915 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776951886.975275  276915 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952174.952643  279483 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952177.852635  279483 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952406.232430  287922 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952409.841247  287922 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952745.546523  296734 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952747.787203  296734 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952785.374449  298018 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952788.002264  298018 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952931.625411  304030 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776952933.448539  304030 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776953244.052902  312813 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776953246.683677  312813 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776953294.443511  314530 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776953298.327075  314530 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-627.17
+
+── Cycle 1  2026-04-23 14:08:09 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+[ForexModel] EUR/USD loaded from disk.
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+[ForexModel] GBP/USD loaded from disk.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+[ForexModel] AUD/USD loaded from disk.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+[ForexModel] USD/JPY loaded from disk.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+[ForexModel] USD/CAD loaded from disk.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,917.11
+  Sleeping 60s...
+
+── Cycle 2  2026-04-23 14:09:22 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.05%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,865.18
+  Sleeping 60s...
+
+── Cycle 3  2026-04-23 14:10:26 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.06%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,862.00
+  Sleeping 60s...
+
+── Cycle 4  2026-04-23 14:11:30 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,833.90
+  Sleeping 60s...
+
+── Cycle 5  2026-04-23 14:12:34 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,897.12
+  Sleeping 60s...
+
+── Cycle 6  2026-04-23 14:13:37 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,908.19
+  Sleeping 60s...
+
+── Cycle 7  2026-04-23 14:14:40 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,835.24
+  Sleeping 60s...
+
+── Cycle 8  2026-04-23 14:15:45 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,830.81
+  Sleeping 60s...
+
+── Cycle 9  2026-04-23 14:16:49 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,870.70
+  Sleeping 60s...
+
+── Cycle 10  2026-04-23 14:17:52 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,847.26
+  Sleeping 60s...
+
+── Cycle 11  2026-04-23 14:18:57 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,986.97
+  Sleeping 60s...
+
+── Cycle 12  2026-04-23 14:20:02 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $98,988.33
+  Sleeping 60s...
+
+── Cycle 13  2026-04-23 14:21:06 ──
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776954593.295693  331495 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776954595.363297  331495 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776954770.280613  339439 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776954772.700153  339439 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-627.17
+
+── Cycle 1  2026-04-23 14:32:47 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+[ForexModel] EUR/USD loaded from disk.
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+[ForexModel] GBP/USD loaded from disk.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+[ForexModel] AUD/USD loaded from disk.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+[ForexModel] USD/JPY loaded from disk.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+[ForexModel] USD/CAD loaded from disk.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,174.69
+  Sleeping 60s...
+
+── Cycle 2  2026-04-23 14:33:55 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.06%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,112.57
+  Sleeping 60s...
+
+── Cycle 3  2026-04-23 14:34:57 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.06%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,113.36
+  Sleeping 60s...
+
+── Cycle 4  2026-04-23 14:35:58 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,082.32
+  Sleeping 60s...
+
+── Cycle 5  2026-04-23 14:37:00 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,083.51
+  Sleeping 60s...
+
+── Cycle 6  2026-04-23 14:38:01 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,091.67
+  Sleeping 60s...
+
+── Cycle 7  2026-04-23 14:39:02 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,084.49
+  Sleeping 60s...
+
+── Cycle 8  2026-04-23 14:40:04 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,071.01
+  Sleeping 60s...
+
+── Cycle 9  2026-04-23 14:41:05 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,109.10
+  Sleeping 60s...
+
+── Cycle 10  2026-04-23 14:42:06 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,117.02
+  Sleeping 60s...
+
+── Cycle 11  2026-04-23 14:43:08 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,263.35
+  Sleeping 60s...
+
+── Cycle 12  2026-04-23 14:44:10 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,263.61
+  Sleeping 60s...
+
+── Cycle 13  2026-04-23 14:45:11 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,252.85
+  Sleeping 60s...
+
+── Cycle 14  2026-04-23 14:46:12 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,256.11
+  Sleeping 60s...
+
+── Cycle 15  2026-04-23 14:47:14 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,280.30
+  Sleeping 60s...
+
+── Cycle 16  2026-04-23 14:48:15 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,284.13
+  Sleeping 60s...
+
+── Cycle 17  2026-04-23 14:49:16 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,289.82
+  Sleeping 60s...
+
+── Cycle 18  2026-04-23 14:50:18 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,304.88
+  Sleeping 60s...
+
+── Cycle 19  2026-04-23 14:51:19 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,310.64
+  Sleeping 60s...
+
+── Cycle 20  2026-04-23 14:52:21 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,304.50
+  Sleeping 60s...
+
+── Cycle 21  2026-04-23 14:53:22 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,307.57
+  Sleeping 60s...
+
+── Cycle 22  2026-04-23 14:54:23 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,295.18
+  Sleeping 60s...
+
+── Cycle 23  2026-04-23 14:55:25 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,322.02
+  Sleeping 60s...
+
+── Cycle 24  2026-04-23 14:56:26 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,323.37
+  Sleeping 60s...
+
+── Cycle 25  2026-04-23 14:57:27 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.10%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-627.17
+
+── Cycle 1  2026-04-23 23:48:42 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,796.67
+  Sleeping 60s...
+
+── Cycle 2  2026-04-23 23:49:46 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,809.83
+  Sleeping 60s...
+
+── Cycle 3  2026-04-23 23:50:47 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,812.79
+  Sleeping 60s...
+
+── Cycle 4  2026-04-23 23:51:49 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,812.87
+  Sleeping 60s...
+
+── Cycle 5  2026-04-23 23:52:50 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,813.03
+  Sleeping 60s...
+
+── Cycle 6  2026-04-23 23:53:51 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,803.95
+  Sleeping 60s...
+
+── Cycle 7  2026-04-23 23:54:53 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,803.95
+  Sleeping 60s...
+
+── Cycle 8  2026-04-23 23:55:54 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,803.95
+  Sleeping 60s...
+
+── Cycle 9  2026-04-23 23:56:55 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,788.98
+  Sleeping 60s...
+
+── Cycle 10  2026-04-23 23:57:56 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.13%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  Portfolio value: $99,683.20
+  Sleeping 60s...
+
+── Cycle 11  2026-04-23 23:58:57 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.13%
+  EUR/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776988861.049749    2000 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776988863.072853    2000 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989107.372189   19473 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989110.771182   19473 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989538.433344   31091 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989542.813028   31091 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989574.318591   32235 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989577.634832   32235 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989630.308051   34245 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776989634.085613   34245 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-627.17
+
+── Cycle 1  2026-04-24 00:13:47 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+[ForexModel] EUR/USD loaded from disk.
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+[ForexModel] GBP/USD loaded from disk.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+[ForexModel] USD/JPY loaded from disk.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+[ForexModel] USD/CAD loaded from disk.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,792.77
+  Sleeping 60s...
+
+── Cycle 2  2026-04-24 00:15:02 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.06%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,731.63
+  Sleeping 60s...
+
+── Cycle 3  2026-04-24 00:16:08 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,721.17
+  Sleeping 60s...
+
+── Cycle 4  2026-04-24 00:17:10 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,728.36
+  Sleeping 60s...
+
+── Cycle 5  2026-04-24 00:18:16 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,726.48
+  Sleeping 60s...
+
+── Cycle 6  2026-04-24 00:19:17 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,771.98
+  Sleeping 60s...
+
+── Cycle 7  2026-04-24 00:20:19 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,781.35
+  Sleeping 60s...
+
+── Cycle 8  2026-04-24 00:21:25 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,781.35
+  Sleeping 60s...
+
+── Cycle 9  2026-04-24 00:22:26 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,781.35
+  Sleeping 60s...
+
+── Cycle 10  2026-04-24 00:23:27 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,786.64
+  Sleeping 60s...
+
+── Cycle 11  2026-04-24 00:24:29 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,786.64
+  Sleeping 60s...
+
+── Cycle 12  2026-04-24 00:25:30 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,781.55
+  Sleeping 60s...
+
+── Cycle 13  2026-04-24 00:26:31 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,774.64
+  Sleeping 60s...
+
+── Cycle 14  2026-04-24 00:27:32 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,761.58
+  Sleeping 60s...
+
+── Cycle 15  2026-04-24 00:28:34 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,766.66
+  Sleeping 60s...
+
+── Cycle 16  2026-04-24 00:29:35 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,819.94
+  Sleeping 60s...
+
+── Cycle 17  2026-04-24 00:30:36 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,815.70
+  Sleeping 60s...
+
+── Cycle 18  2026-04-24 00:31:37 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,835.57
+  Sleeping 60s...
+
+── Cycle 19  2026-04-24 00:32:38 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,825.34
+  Sleeping 60s...
+
+── Cycle 20  2026-04-24 00:33:40 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,825.34
+  Sleeping 60s...
+
+── Cycle 21  2026-04-24 00:34:41 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,825.34
+  Sleeping 60s...
+
+── Cycle 22  2026-04-24 00:35:42 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,814.92
+  Sleeping 60s...
+
+── Cycle 23  2026-04-24 00:36:43 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,897.17
+  Sleeping 60s...
+
+── Cycle 24  2026-04-24 00:37:44 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,904.08
+  Sleeping 60s...
+
+── Cycle 25  2026-04-24 00:38:46 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,911.61
+  Sleeping 60s...
+
+── Cycle 26  2026-04-24 00:39:47 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,900.41
+  Sleeping 60s...
+
+── Cycle 27  2026-04-24 00:40:48 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,900.41
+  Sleeping 60s...
+
+── Cycle 28  2026-04-24 00:41:49 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,903.11
+  Sleeping 60s...
+
+── Cycle 29  2026-04-24 00:42:51 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,894.14
+  Sleeping 60s...
+
+── Cycle 30  2026-04-24 00:43:52 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,900.36
+  Sleeping 60s...
+
+── Cycle 31  2026-04-24 00:44:55 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,900.36
+  Sleeping 60s...
+
+── Cycle 32  2026-04-24 00:45:57 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,900.36
+  Sleeping 60s...
+
+── Cycle 33  2026-04-24 00:46:58 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,885.73
+  Sleeping 60s...
+
+── Cycle 34  2026-04-24 00:47:59 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,885.09
+  Sleeping 60s...
+
+── Cycle 35  2026-04-24 00:49:00 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,887.84
+  Sleeping 60s...
+
+── Cycle 36  2026-04-24 00:50:02 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,884.33
+  Sleeping 60s...
+
+── Cycle 37  2026-04-24 00:51:03 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,884.33
+  Sleeping 60s...
+
+── Cycle 38  2026-04-24 00:52:04 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,887.84
+  Sleeping 60s...
+
+── Cycle 39  2026-04-24 00:53:06 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,896.49
+  Sleeping 60s...
+
+── Cycle 40  2026-04-24 00:54:07 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,887.74
+  Sleeping 60s...
+
+── Cycle 41  2026-04-24 00:55:08 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.09%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,821.19
+  Sleeping 60s...
+
+── Cycle 42  2026-04-24 00:56:09 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.11%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,806.57
+  Sleeping 60s...
+
+── Cycle 43  2026-04-24 00:57:11 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.16%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,763.09
+  Sleeping 60s...
+
+── Cycle 44  2026-04-24 00:58:12 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.16%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,755.23
+  Sleeping 60s...
+
+── Cycle 45  2026-04-24 00:59:14 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.16%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,766.13
+  Sleeping 60s...
+
+── Cycle 46  2026-04-24 01:00:15 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.16%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.0000%  RSI=0.0  EMA=—  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,836.73
+  Sleeping 60s...
+
+── Cycle 47  2026-04-24 01:01:16 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.16%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+[ForexModel] AUD/USD loaded from disk.
+  AUD/USD    | HOLD | pred_chg=+0.1854%  RSI=53.8  EMA=bearish  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,820.35
+  Sleeping 60s...
+
+── Cycle 48  2026-04-24 01:02:18 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.19%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  AUD/USD    | HOLD | pred_chg=+0.1854%  RSI=53.8  EMA=bearish  EXT=+0.00  AUTO=capital_preservation
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,719.64
+  Sleeping 60s...
+
+── Cycle 49  2026-04-24 01:03:21 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.21%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776992755.217473   84939 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776992764.073679   84939 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-627.17
+
+── Cycle 1  2026-04-24 01:05:46 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+[ForexModel] EUR/USD loaded from disk.
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+[ForexModel] GBP/USD loaded from disk.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+[ForexModel] AUD/USD loaded from disk.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+[ForexModel] USD/JPY loaded from disk.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+[ForexModel] USD/CAD loaded from disk.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,651.57
+  Sleeping 60s...
+
+── Cycle 2  2026-04-24 01:07:09 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,655.70
+  Sleeping 60s...
+
+── Cycle 3  2026-04-24 01:08:11 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,655.70
+  Sleeping 60s...
+
+── Cycle 4  2026-04-24 01:09:13 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,655.70
+  Sleeping 60s...
+
+── Cycle 5  2026-04-24 01:10:14 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,655.70
+  Sleeping 60s...
+
+── Cycle 6  2026-04-24 01:11:15 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,655.70
+  Sleeping 60s...
+
+── Cycle 7  2026-04-24 01:12:17 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,656.47
+  Sleeping 60s...
+
+── Cycle 8  2026-04-24 01:13:18 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,603.12
+  Sleeping 60s...
+
+── Cycle 9  2026-04-24 01:14:20 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,603.12
+  Sleeping 60s...
+
+── Cycle 10  2026-04-24 01:15:21 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,605.59
+  Sleeping 60s...
+
+── Cycle 11  2026-04-24 01:16:22 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,609.52
+  Sleeping 60s...
+
+── Cycle 12  2026-04-24 01:17:24 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.07%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,611.15
+  Sleeping 60s...
+
+── Cycle 13  2026-04-24 01:18:25 ──
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776994084.839917  106561 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776994091.486008  106561 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-627.17
+
+── Cycle 1  2026-04-24 01:27:56 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  Auto-improvement: Auto-improvement: not enough closed-trade history yet.
+[ForexModel] EUR/USD loaded from disk.
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+[ForexModel] GBP/USD loaded from disk.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+[ForexModel] AUD/USD loaded from disk.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+[ForexModel] USD/JPY loaded from disk.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+[ForexModel] USD/CAD loaded from disk.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,577.67
+  Sleeping 60s...
+
+── Cycle 2  2026-04-24 01:29:16 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,578.11
+  Sleeping 60s...
+
+── Cycle 3  2026-04-24 01:30:18 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,581.40
+  Sleeping 60s...
+
+── Cycle 4  2026-04-24 01:31:20 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,580.52
+  Sleeping 60s...
+
+── Cycle 5  2026-04-24 01:32:22 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.03%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,552.23
+  Sleeping 60s...
+
+── Cycle 6  2026-04-24 01:33:23 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.05%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,530.46
+  Sleeping 60s...
+
+── Cycle 7  2026-04-24 01:34:25 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,501.15
+  Sleeping 60s...
+
+── Cycle 8  2026-04-24 01:35:26 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,553.82
+  Sleeping 60s...
+
+── Cycle 9  2026-04-24 01:36:27 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,549.72
+  Sleeping 60s...
+
+── Cycle 10  2026-04-24 01:37:29 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,548.34
+  Sleeping 60s...
+
+── Cycle 11  2026-04-24 01:38:30 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,547.21
+  Sleeping 60s...
+
+── Cycle 12  2026-04-24 01:39:31 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.08%
+  [Main] Error on EUR/USD: You must call `compile()` before using the model.
+  [Main] Error on GBP/USD: You must call `compile()` before using the model.
+  [Main] Error on AUD/USD: You must call `compile()` before using the model.
+  [Main] Error on USD/JPY: You must call `compile()` before using the model.
+  [Main] Error on USD/CAD: You must call `compile()` before using the model.
+  Portfolio value: $99,554.60
+  Sleeping 60s...
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995153.451148  126359 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995159.076287  126359 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995214.986945  127668 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995221.625691  127668 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING:tensorflow:5 out of the last 5 calls to <function TensorFlowTrainer._make_function.<locals>.multi_step_on_iterator at 0x7642c4154cc0> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995366.149672  130460 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995372.209288  130460 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING:tensorflow:5 out of the last 5 calls to <function TensorFlowTrainer._make_function.<locals>.multi_step_on_iterator at 0x72ff99dfcc20> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995602.085255  133824 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995606.710115  133824 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING:tensorflow:5 out of the last 5 calls to <function TensorFlowTrainer._make_function.<locals>.multi_step_on_iterator at 0x700f90d29b20> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.

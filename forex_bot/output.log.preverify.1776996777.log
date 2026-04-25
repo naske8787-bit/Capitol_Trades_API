@@ -1,0 +1,119 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995837.473622  140113 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1776995848.226736  140113 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+WARNING:tensorflow:5 out of the last 5 calls to <function TensorFlowTrainer._make_function.<locals>.multi_step_on_iterator at 0x75531d66cc20> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+============================================================
+  Forex Bot  (paper trading)
+  Pairs   : EUR/USD, GBP/USD, AUD/USD, USD/JPY, USD/CAD
+  Interval: 60s
+============================================================
+[Main] Starting balance: $-627.17
+
+── Cycle 1  2026-04-24 01:57:10 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  Auto-improvement: Auto-improvement: not enough closed-trade history yet.
+[ForexModel] EUR/USD loaded from disk.
+  EUR/USD    | BUY  | pred_chg=+0.1282%  RSI=60.0  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+[ForexModel] GBP/USD loaded from disk.
+  GBP/USD    | BUY  | pred_chg=+0.0808%  RSI=62.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+[ForexModel] AUD/USD loaded from disk.
+  AUD/USD    | HOLD | pred_chg=+0.1463%  RSI=47.3  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+[ForexModel] USD/JPY loaded from disk.
+  USD/JPY    | HOLD | pred_chg=-0.0106%  RSI=45.1  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+[ForexModel] USD/CAD loaded from disk.
+  USD/CAD    | HOLD | pred_chg=-0.0379%  RSI=47.6  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,852.19
+  Sleeping 60s...
+
+── Cycle 2  2026-04-24 01:59:44 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  EUR/USD    | HOLD | pred_chg=-0.0227%  RSI=70.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=-0.0078%  RSI=66.1  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0503%  RSI=57.6  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0377%  RSI=41.3  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0284%  RSI=46.5  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,851.95
+  Sleeping 60s...
+
+── Cycle 3  2026-04-24 02:00:55 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  EUR/USD    | HOLD | pred_chg=-0.1308%  RSI=70.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=-0.0752%  RSI=60.1  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0036%  RSI=51.5  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=+0.0245%  RSI=46.7  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0469%  RSI=52.1  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,841.79
+  Sleeping 60s...
+
+── Cycle 4  2026-04-24 02:02:07 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | HOLD | pred_chg=-0.1246%  RSI=53.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=-0.0829%  RSI=60.8  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=-0.0671%  RSI=51.5  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=-0.0049%  RSI=54.8  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0413%  RSI=50.1  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,906.64
+  Sleeping 60s...
+
+── Cycle 5  2026-04-24 02:03:20 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | HOLD | pred_chg=-0.0882%  RSI=53.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=-0.0558%  RSI=60.3  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | SELL | pred_chg=-0.1082%  RSI=48.7  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=-0.0289%  RSI=57.4  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0195%  RSI=52.0  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,911.82
+  Sleeping 60s...
+
+── Cycle 6  2026-04-24 02:04:30 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | HOLD | pred_chg=-0.0273%  RSI=53.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=-0.0203%  RSI=60.8  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | SELL | pred_chg=-0.1213%  RSI=48.7  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=-0.0263%  RSI=44.5  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=+0.0000%  RSI=48.7  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,924.44
+  Sleeping 60s...
+
+── Cycle 7  2026-04-24 02:05:39 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | HOLD | pred_chg=+0.0385%  RSI=51.3  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0168%  RSI=57.7  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | SELL | pred_chg=-0.1047%  RSI=50.0  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=-0.0379%  RSI=49.1  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=-0.0199%  RSI=49.5  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,924.44
+  Sleeping 60s...
+
+── Cycle 8  2026-04-24 02:06:48 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.01%
+  EUR/USD    | BUY  | pred_chg=+0.0806%  RSI=51.3  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0466%  RSI=51.6  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=-0.0544%  RSI=45.8  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=-0.0396%  RSI=52.6  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=-0.0335%  RSI=52.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,913.54
+  Sleeping 60s...
+
+── Cycle 9  2026-04-24 02:07:56 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  EUR/USD    | BUY  | pred_chg=+0.0966%  RSI=51.3  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0501%  RSI=56.2  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=-0.0143%  RSI=45.8  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=-0.0250%  RSI=48.5  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=-0.0384%  RSI=54.1  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,903.17
+  Sleeping 60s...
+
+── Cycle 10  2026-04-24 02:09:04 ──
+  Autonomy profile: mode=capital_preservation score=-8 allow_entries=False risk_mult=0.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.02%
+  EUR/USD    | BUY  | pred_chg=+0.0888%  RSI=51.3  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  GBP/USD    | HOLD | pred_chg=+0.0566%  RSI=51.7  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  AUD/USD    | HOLD | pred_chg=+0.0204%  RSI=45.0  EMA=bearish  EXT=-3.00  AUTO=capital_preservation
+  USD/JPY    | HOLD | pred_chg=-0.0130%  RSI=52.0  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  USD/CAD    | HOLD | pred_chg=-0.0368%  RSI=54.9  EMA=bullish  EXT=-3.00  AUTO=capital_preservation
+  Portfolio value: $99,910.39
+  Sleeping 60s...
+
+── Cycle 11  2026-04-24 02:10:17 ──

@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+APP_DIR="/opt/Capitol_Trades_API"
+APP_USER="ubuntu"
+ENV_FILE="/etc/capitol-trades/capitol-trades.env"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  install_systemd_units.sh [--app-dir <dir>] [--app-user <user>] [--env-file <path>]
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --app-dir)
+      APP_DIR="$2"; shift 2 ;;
+    --app-user)
+      APP_USER="$2"; shift 2 ;;
+    --env-file)
+      ENV_FILE="$2"; shift 2 ;;
+    -h|--help)
+      usage; exit 0 ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage
+      exit 1 ;;
+  esac
+done
+
+if [[ "$(id -u)" -ne 0 ]]; then
+  echo "Run as root: sudo bash $0 ..." >&2
+  exit 1
+fi
+
+if [[ ! -d "$APP_DIR" ]]; then
+  echo "App dir does not exist: $APP_DIR" >&2
+  exit 1
+fi
+
+mkdir -p /etc/capitol-trades
+if [[ ! -f "$ENV_FILE" ]]; then
+  touch "$ENV_FILE"
+  chmod 600 "$ENV_FILE"
+fi
+
+cat >/etc/systemd/system/capitol-api.service <<EOF
+[Unit]
+Description=Capitol Trades API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$APP_USER
+WorkingDirectory=$APP_DIR
+EnvironmentFile=$ENV_FILE
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHON_BIN=$APP_DIR/.venv/bin/python
+ExecStart=/bin/bash -lc 'exec ./supervise_api.sh'
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat >/etc/systemd/system/capitol-dashboard.service <<EOF
+[Unit]
+Description=Capitol Mining Dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$APP_USER
+WorkingDirectory=$APP_DIR
+EnvironmentFile=$ENV_FILE
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHON_BIN=$APP_DIR/.venv/bin/python
+ExecStart=/bin/bash -lc 'exec ./supervise_dashboard.sh'
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat >/etc/systemd/system/capitol-trading-bot.service <<EOF
+[Unit]
+Description=Capitol Trading Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$APP_USER
+WorkingDirectory=$APP_DIR/trading_bot
+EnvironmentFile=$ENV_FILE
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHON_BIN=$APP_DIR/.venv/bin/python
+ExecStart=/bin/bash -lc 'exec ./supervise_bot.sh'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat >/etc/systemd/system/capitol-crypto-bot.service <<EOF
+[Unit]
+Description=Capitol Crypto Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$APP_USER
+WorkingDirectory=$APP_DIR/crypto_bot
+EnvironmentFile=$ENV_FILE
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHON_BIN=$APP_DIR/.venv/bin/python
+ExecStart=/bin/bash -lc 'exec ./supervise_bot.sh'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat >/etc/systemd/system/capitol-asx-bot.service <<EOF
+[Unit]
+Description=Capitol ASX Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$APP_USER
+WorkingDirectory=$APP_DIR/asx_bot
+EnvironmentFile=$ENV_FILE
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHON_BIN=$APP_DIR/.venv/bin/python
+ExecStart=/bin/bash -lc 'exec $APP_DIR/.venv/bin/python -u main.py'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable capitol-api capitol-dashboard capitol-trading-bot capitol-crypto-bot capitol-asx-bot
+
+echo "Installed and enabled systemd units:"
+echo "  - capitol-api"
+echo "  - capitol-dashboard"
+echo "  - capitol-trading-bot"
+echo "  - capitol-crypto-bot"
+echo "  - capitol-asx-bot"

@@ -9,3 +9,4 @@ ta-lib
 matplotlib
 python-dotenv
 beautifulsoup4
+ib_insync

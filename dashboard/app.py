@@ -55,6 +55,75 @@ FAULT_CODES = [
 
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
+_REPO_ROOT = os.path.dirname(_HERE)
+_TRADING_EQUITY_LOG = os.path.join(_REPO_ROOT, 'trading_bot', 'logs', 'equity_log.csv')
+_CRYPTO_TRADE_LOG = os.path.join(_REPO_ROOT, 'crypto_bot', 'logs', 'trade_log.csv')
+
+
+def _parse_iso_timestamp(value):
+    if not value:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    try:
+        return datetime.fromisoformat(text.replace('Z', '+00:00'))
+    except ValueError:
+        return None
+
+
+def _read_trading_equity_series(path):
+    out = []
+    if not os.path.exists(path):
+        return out
+    try:
+        with open(path, 'r', encoding='utf-8', newline='') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                ts_raw = row.get('timestamp')
+                ts = _parse_iso_timestamp(ts_raw)
+                if ts is None:
+                    continue
+                try:
+                    portfolio_value = float(row.get('portfolio_value', 0.0) or 0.0)
+                    cash_balance = float(row.get('cash_balance', 0.0) or 0.0)
+                except (TypeError, ValueError):
+                    continue
+                out.append({
+                    't': ts.isoformat(),
+                    'portfolio_value': round(portfolio_value, 2),
+                    'cash_balance': round(cash_balance, 2),
+                })
+    except Exception:
+        return []
+    return sorted(out, key=lambda x: x['t'])
+
+
+def _read_crypto_realized_pnl_series(path):
+    out = []
+    if not os.path.exists(path):
+        return out
+    running = 0.0
+    rows = []
+    try:
+        with open(path, 'r', encoding='utf-8', newline='') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                ts = _parse_iso_timestamp(row.get('exit_time'))
+                if ts is None:
+                    continue
+                try:
+                    pnl = float(row.get('pnl', 0.0) or 0.0)
+                except (TypeError, ValueError):
+                    pnl = 0.0
+                rows.append((ts, pnl))
+    except Exception:
+        return []
+
+    for ts, pnl in sorted(rows, key=lambda x: x[0]):
+        running += pnl
+        out.append({'t': ts.isoformat(), 'cum_realized_pnl': round(running, 2)})
+    return out
 
 # ── Static ────────────────────────────────────────────────────────────────
 
@@ -333,6 +402,50 @@ def combined():
             result[machine] = m
 
     return jsonify(result)
+
+
+@app.route('/api/investment-performance')
+def investment_performance():
+    """Return investment progress series from bot logs for dashboard charting."""
+    try:
+        points = int(request.args.get('points', '240'))
+    except ValueError:
+        points = 240
+    points = max(30, min(points, 1000))
+
+    equity_rows = _read_trading_equity_series(_TRADING_EQUITY_LOG)
+    crypto_rows = _read_crypto_realized_pnl_series(_CRYPTO_TRADE_LOG)
+
+    if len(equity_rows) > points:
+        equity_rows = equity_rows[-points:]
+    if len(crypto_rows) > points:
+        crypto_rows = crypto_rows[-points:]
+
+    latest_portfolio = equity_rows[-1]['portfolio_value'] if equity_rows else 0.0
+    latest_cash = equity_rows[-1]['cash_balance'] if equity_rows else 0.0
+    latest_crypto_pnl = crypto_rows[-1]['cum_realized_pnl'] if crypto_rows else 0.0
+    start_portfolio = equity_rows[0]['portfolio_value'] if equity_rows else 0.0
+    net_change = latest_portfolio - start_portfolio if equity_rows else 0.0
+    pct_change = (net_change / start_portfolio) if start_portfolio > 0 else 0.0
+
+    return jsonify({
+        'portfolio': [
+            {'t': row['t'], 'v': row['portfolio_value']} for row in equity_rows
+        ],
+        'cash': [
+            {'t': row['t'], 'v': row['cash_balance']} for row in equity_rows
+        ],
+        'crypto_pnl': [
+            {'t': row['t'], 'v': row['cum_realized_pnl']} for row in crypto_rows
+        ],
+        'latest': {
+            'portfolio_value': round(latest_portfolio, 2),
+            'cash_balance': round(latest_cash, 2),
+            'crypto_cum_realized_pnl': round(latest_crypto_pnl, 2),
+            'window_net_change': round(net_change, 2),
+            'window_pct_change': round(pct_change * 100, 2),
+        },
+    })
 
 
 

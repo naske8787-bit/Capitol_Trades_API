@@ -1,8 +1,27 @@
+import json
+import os
 import pandas as pd
+from datetime import datetime, timedelta, timezone
 
 from config import (
+    AUTO_IMPLEMENT_IMPROVEMENTS_ENABLED,
+    AUTO_IMPROVEMENT_LOOKBACK_DAYS,
+    AUTO_IMPROVEMENT_MIN_TRADES_PER_SYMBOL,
+    AUTO_IMPROVEMENT_REBALANCE_HOURS,
+    AUTONOMOUS_MAX_DRAWDOWN_7D_PCT,
+    AUTONOMOUS_MIN_CLOSED_TRADES,
+    AUTONOMOUS_MIN_PROFIT_FACTOR,
+    AUTONOMOUS_MIN_REALIZED_PNL_7D,
+    AUTONOMOUS_MIN_WIN_RATE,
+    AUTONOMY_AGGRESSIVE_COOLDOWN_HOURS,
+    AUTONOMY_AGGRESSIVE_MIN_CLOSED_TRADES,
+    AUTONOMY_AGGRESSIVE_MIN_CONFIDENCE,
+    AUTONOMY_LEARNING_ENABLED,
+    AUTONOMY_LOSS_EVENT_MIN_PNL,
+    AUTONOMY_RECOVERY_EVENT_MIN_PNL,
     CRYPTO_MAX_POSITIONS,
     CRYPTO_MIN_NOTIONAL_PER_TRADE,
+    CRYPTO_SELL_QTY_BUFFER_PCT,
     CRYPTO_MIN_TREND_STRENGTH_PCT,
     CRYPTO_RISK_PER_TRADE,
     CRYPTO_RSI_BUY_THRESHOLD,
@@ -15,14 +34,385 @@ from config import (
     CRYPTO_MACD_SLOW,
     CRYPTO_MACD_SIGNAL,
     CRYPTO_MIN_VOLUME_PERCENTILE,
+    CRYPTO_RESEARCH_ENTRY_GUARD_SCORE,
+    CRYPTO_RESEARCH_HARD_BLOCK_SCORE,
+    CRYPTO_RESEARCH_SOFT_BLOCK_SCORE,
 )
-from data_fetcher import fetch_crypto_data, preprocess_data
+from data_fetcher import fetch_crypto_data, preprocess_data, fetch_external_research_sentiment
+import sys as _sys
+import os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), "shared"))
+from proven_patterns import score_conditions_against_patterns, build_crypto_conditions
+from setup_validator import evaluate_crypto_setup
+from regime_detector import detect_crypto_regime
 
 
 class TradingStrategy:
     def __init__(self):
         self.positions = {}
         self.last_analysis = {}
+        self.trade_history = []
+        self.portfolio_history = []
+        self.symbol_risk_multipliers = {}
+        self.setup_rank_multipliers = {}
+        self.blocked_symbols_by_improvement = set()
+        self.active_setup_candidates = set()
+        self.last_improvement_rebalance_ts = None
+        self.autonomy_profile = {
+            "mode": "normal",
+            "score": 0,
+            "allow_new_entries": True,
+            "risk_multiplier": 1.0,
+            "max_positions_multiplier": 1.0,
+            "buy_threshold_multiplier": 1.0,
+            "blocked_symbols": [],
+        }
+        self.learning_enabled = bool(AUTONOMY_LEARNING_ENABLED)
+        self.state_path = os.path.join(os.path.dirname(__file__), "models", "autonomy_state.json")
+        self.autonomy_state = {
+            "last_mode": "normal",
+            "last_realized_pnl_7d": 0.0,
+            "last_drawdown_7d": 0.0,
+            "aggressive_cooldown_until": "",
+            "mode_stats": {
+                "aggressive": {"wins": 0, "losses": 0, "pnl_sum": 0.0},
+                "normal": {"wins": 0, "losses": 0, "pnl_sum": 0.0},
+                "cautious": {"wins": 0, "losses": 0, "pnl_sum": 0.0},
+                "capital_preservation": {"wins": 0, "losses": 0, "pnl_sum": 0.0},
+            },
+        }
+        self._load_autonomy_state()
+
+    def _load_autonomy_state(self):
+        if not self.learning_enabled or not os.path.exists(self.state_path):
+            return
+        try:
+            with open(self.state_path, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            if isinstance(payload, dict):
+                self.autonomy_state.update(payload)
+        except Exception:
+            return
+
+    def _persist_autonomy_state(self):
+        if not self.learning_enabled:
+            return
+        try:
+            os.makedirs(os.path.dirname(self.state_path), exist_ok=True)
+            with open(self.state_path, "w", encoding="utf-8") as f:
+                json.dump(self.autonomy_state, f, indent=2, sort_keys=True)
+        except Exception:
+            return
+
+    @staticmethod
+    def _safe_mode_stats(mode_stats, mode):
+        base = mode_stats.get(mode) or {}
+        return {
+            "wins": int(base.get("wins", 0) or 0),
+            "losses": int(base.get("losses", 0) or 0),
+            "pnl_sum": float(base.get("pnl_sum", 0.0) or 0.0),
+        }
+
+    @staticmethod
+    def _parse_state_ts(value):
+        try:
+            return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        except Exception:
+            return None
+
+    def _update_mode_learning(self, now, realized_pnl_7d, drawdown_7d):
+        reasons = []
+        if not self.learning_enabled:
+            return reasons
+
+        last_mode = str(self.autonomy_state.get("last_mode") or "normal")
+        prev_pnl = float(self.autonomy_state.get("last_realized_pnl_7d", 0.0) or 0.0)
+        prev_dd = float(self.autonomy_state.get("last_drawdown_7d", 0.0) or 0.0)
+        delta_pnl = float(realized_pnl_7d) - prev_pnl
+        delta_dd = float(drawdown_7d) - prev_dd
+
+        mode_stats = dict(self.autonomy_state.get("mode_stats") or {})
+        stats = self._safe_mode_stats(mode_stats, last_mode)
+
+        if delta_pnl <= float(AUTONOMY_LOSS_EVENT_MIN_PNL) or (delta_pnl < 0 and delta_dd > 0.005):
+            stats["losses"] += 1
+            stats["pnl_sum"] += delta_pnl
+            reasons.append(
+                f"learning update: {last_mode} underperformed (delta_pnl={delta_pnl:.2f}, delta_dd={delta_dd:.2%})"
+            )
+            if last_mode == "aggressive":
+                cooldown_until = now + timedelta(hours=max(1, AUTONOMY_AGGRESSIVE_COOLDOWN_HOURS))
+                self.autonomy_state["aggressive_cooldown_until"] = cooldown_until.isoformat()
+                reasons.append(
+                    f"aggressive cooldown enabled for {AUTONOMY_AGGRESSIVE_COOLDOWN_HOURS}h after loss event"
+                )
+        elif delta_pnl >= float(AUTONOMY_RECOVERY_EVENT_MIN_PNL):
+            stats["wins"] += 1
+            stats["pnl_sum"] += delta_pnl
+            reasons.append(f"learning update: {last_mode} delivered positive outcome (delta_pnl={delta_pnl:.2f})")
+
+        mode_stats[last_mode] = stats
+        self.autonomy_state["mode_stats"] = mode_stats
+        return reasons
+
+    def _mode_confidence_penalty(self, mode):
+        mode_stats = dict(self.autonomy_state.get("mode_stats") or {})
+        stats = self._safe_mode_stats(mode_stats, mode)
+        total = stats["wins"] + stats["losses"]
+        if total < 4:
+            return 0.0
+        success_rate = stats["wins"] / max(1, total)
+        avg_outcome = stats["pnl_sum"] / max(1, total)
+        penalty = 0.0
+        if success_rate < 0.45:
+            penalty += 4.0
+        if avg_outcome < 0:
+            penalty += 4.0
+        return penalty
+
+    def _symbol_trade_stats(self):
+        cutoff = datetime.now(timezone.utc) - timedelta(days=AUTO_IMPROVEMENT_LOOKBACK_DAYS)
+        by_symbol = {}
+        for t in self.trade_history:
+            if t["ts"] < cutoff:
+                continue
+            sym = str(t.get("symbol") or "").upper()
+            if not sym:
+                continue
+            by_symbol.setdefault(sym, []).append(float(t.get("pnl") or 0.0))
+
+        out = {}
+        for sym, pnls in by_symbol.items():
+            if not pnls:
+                continue
+            wins = [x for x in pnls if x > 0]
+            losses = [x for x in pnls if x < 0]
+            gross_profit = sum(wins)
+            gross_loss = abs(sum(losses))
+            profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else (2.0 if gross_profit > 0 else 0.0)
+            out[sym] = {
+                "trades": len(pnls),
+                "expectancy": sum(pnls) / len(pnls),
+                "win_rate": (len(wins) / len(pnls)) if pnls else 0.0,
+                "profit_factor": profit_factor,
+            }
+        return out
+
+    def auto_apply_improvements(self, force=False):
+        if not AUTO_IMPLEMENT_IMPROVEMENTS_ENABLED:
+            return []
+
+        now = datetime.now(timezone.utc)
+        if not force and self.last_improvement_rebalance_ts is not None:
+            elapsed_h = (now - self.last_improvement_rebalance_ts).total_seconds() / 3600.0
+            if elapsed_h < max(1, AUTO_IMPROVEMENT_REBALANCE_HOURS):
+                return []
+
+        stats = self._symbol_trade_stats()
+        if not stats:
+            self.last_improvement_rebalance_ts = now
+            return ["Auto-improvement: not enough closed-trade history yet."]
+
+        eligible = [
+            (sym, s) for sym, s in stats.items()
+            if int(s.get("trades", 0)) >= AUTO_IMPROVEMENT_MIN_TRADES_PER_SYMBOL
+        ]
+        if not eligible:
+            self.last_improvement_rebalance_ts = now
+            return ["Auto-improvement: waiting for more closes per symbol before tuning."]
+
+        def rank_key(item):
+            s = item[1]
+            return (
+                float(s.get("expectancy", 0.0)),
+                float(s.get("profit_factor", 0.0)),
+                float(s.get("win_rate", 0.0)),
+            )
+
+        ranked = sorted(eligible, key=rank_key, reverse=True)
+
+        new_multipliers = {}
+        new_blocked = set()
+        n = len(ranked)
+        for i, (sym, s) in enumerate(ranked):
+            if i == 0:
+                mult = 1.25
+            elif i < max(1, n // 2):
+                mult = 1.05
+            elif i == n - 1:
+                mult = 0.55
+            else:
+                mult = 0.80
+
+            if float(s.get("expectancy", 0.0)) < 0 and float(s.get("profit_factor", 0.0)) < 0.9:
+                new_blocked.add(sym)
+                mult = 0.0
+
+            new_multipliers[sym] = mult
+
+        self.symbol_risk_multipliers = new_multipliers
+        self.blocked_symbols_by_improvement = new_blocked
+        self.last_improvement_rebalance_ts = now
+
+        top = ", ".join([
+            f"{sym} x{new_multipliers.get(sym, 1.0):.2f}" for sym, _ in ranked[:3]
+        ]) or "none"
+        blocked = ", ".join(sorted(new_blocked)) or "none"
+        return [
+            "Auto-improvement applied (daily return-per-risk rebalance).",
+            f"Top allocations: {top}",
+            f"Underperformer cap/block list: {blocked}",
+        ]
+
+    def observe_portfolio_value(self, value):
+        self.portfolio_history.append({"ts": datetime.now(timezone.utc), "value": float(value)})
+        cutoff = datetime.now(timezone.utc) - timedelta(days=7)
+        self.portfolio_history = [x for x in self.portfolio_history if x["ts"] >= cutoff]
+
+    def apply_autonomy_profile(self, profile):
+        if isinstance(profile, dict):
+            self.autonomy_profile.update(profile)
+
+    def apply_setup_candidates(self, symbols):
+        self.active_setup_candidates = {str(symbol).upper() for symbol in (symbols or []) if str(symbol).strip()}
+
+    def apply_setup_rank_multipliers(self, multipliers):
+        self.setup_rank_multipliers = {
+            str(symbol).upper(): float(mult)
+            for symbol, mult in (multipliers or {}).items()
+            if str(symbol).strip()
+        }
+
+    def evaluate_autonomy_profile(self, research_payload=None):
+        cutoff = datetime.now(timezone.utc) - timedelta(days=7)
+        recent = [t for t in self.trade_history if t["ts"] >= cutoff]
+        pnls = [t["pnl"] for t in recent]
+        wins = [x for x in pnls if x > 0]
+        losses = [x for x in pnls if x < 0]
+        closed = len(pnls)
+        win_rate = (len(wins) / closed) if closed else 0.0
+        gross_profit = sum(wins)
+        gross_loss = abs(sum(losses))
+        profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else (2.0 if gross_profit > 0 else 0.0)
+        realized_pnl_7d = sum(pnls)
+
+        values = [x["value"] for x in self.portfolio_history if x["ts"] >= cutoff]
+        max_dd = 0.0
+        if len(values) >= 2:
+            peak = values[0]
+            for v in values:
+                peak = max(peak, v)
+                dd = (peak - v) / peak if peak > 0 else 0.0
+                max_dd = max(max_dd, dd)
+
+        research_score = float((research_payload or {}).get("weighted_score", (research_payload or {}).get("score", 0.0)))
+        score = 0
+        if closed >= AUTONOMOUS_MIN_CLOSED_TRADES:
+            score += 10
+        else:
+            score -= 8
+        # Cold-start grace: with zero closed trades, win rate and profit factor
+        # are undefined rather than bad. Treat them as neutral so a fresh funded
+        # account can start trading and generate the feedback data it needs.
+        if closed > 0:
+            if win_rate >= AUTONOMOUS_MIN_WIN_RATE:
+                score += 10
+            else:
+                score -= 8
+            if profit_factor >= AUTONOMOUS_MIN_PROFIT_FACTOR:
+                score += 10
+            else:
+                score -= 8
+        if realized_pnl_7d >= AUTONOMOUS_MIN_REALIZED_PNL_7D:
+            score += 8
+        else:
+            score -= 8
+        if max_dd <= AUTONOMOUS_MAX_DRAWDOWN_7D_PCT:
+            score += 8
+        else:
+            score -= 10
+        if research_score > 3:
+            score += 4
+        elif research_score < -3:
+            score -= 4
+
+        reasons = []
+        reasons.extend(self._update_mode_learning(datetime.now(timezone.utc), realized_pnl_7d, max_dd))
+
+        aggressive_penalty = self._mode_confidence_penalty("aggressive")
+        if aggressive_penalty > 0:
+            score -= aggressive_penalty
+            reasons.append(
+                f"historical penalty: aggressive mode reliability is weak ({aggressive_penalty:.0f} score points removed)"
+            )
+
+        passed_checks = 0
+        passed_checks += 1 if closed >= 5 else 0
+        passed_checks += 1 if (closed == 0 or win_rate >= 0.4) else 0
+        passed_checks += 1 if (closed == 0 or profit_factor >= 1.0) else 0
+        passed_checks += 1 if realized_pnl_7d >= -500 else 0
+        passed_checks += 1 if max_dd <= 0.15 else 0
+        confidence = passed_checks / 5.0
+        cooldown_until = self._parse_state_ts(self.autonomy_state.get("aggressive_cooldown_until"))
+        aggressive_cooldown_active = bool(cooldown_until and cooldown_until > datetime.now(timezone.utc))
+
+        if score >= 28:
+            mode = "aggressive"
+            profile = {"allow_new_entries": True, "risk_multiplier": 1.25, "max_positions_multiplier": 1.1, "buy_threshold_multiplier": 0.9}
+        elif score >= 14:
+            mode = "normal"
+            profile = {"allow_new_entries": True, "risk_multiplier": 1.0, "max_positions_multiplier": 1.0, "buy_threshold_multiplier": 1.0}
+        elif score >= 4:
+            mode = "cautious"
+            profile = {"allow_new_entries": True, "risk_multiplier": 0.6, "max_positions_multiplier": 0.8, "buy_threshold_multiplier": 1.2}
+        else:
+            mode = "capital_preservation"
+            profile = {"allow_new_entries": False, "risk_multiplier": 0.0, "max_positions_multiplier": 0.6, "buy_threshold_multiplier": 2.0}
+
+        if mode == "aggressive":
+            if aggressive_cooldown_active:
+                mode = "cautious"
+                profile = {"allow_new_entries": True, "risk_multiplier": 0.6, "max_positions_multiplier": 0.8, "buy_threshold_multiplier": 1.2}
+                reasons.append("aggressive blocked during cooldown after recent underperformance")
+            elif closed < max(1, AUTONOMY_AGGRESSIVE_MIN_CLOSED_TRADES):
+                mode = "normal"
+                profile = {"allow_new_entries": True, "risk_multiplier": 1.0, "max_positions_multiplier": 1.0, "buy_threshold_multiplier": 1.0}
+                reasons.append(
+                    f"aggressive held back until closed trades >= {AUTONOMY_AGGRESSIVE_MIN_CLOSED_TRADES}"
+                )
+            elif confidence < max(0.0, min(1.0, AUTONOMY_AGGRESSIVE_MIN_CONFIDENCE)):
+                mode = "normal"
+                profile = {"allow_new_entries": True, "risk_multiplier": 1.0, "max_positions_multiplier": 1.0, "buy_threshold_multiplier": 1.0}
+                reasons.append(
+                    f"aggressive held back: confidence {confidence:.0%} below {AUTONOMY_AGGRESSIVE_MIN_CONFIDENCE:.0%}"
+                )
+
+        by_symbol = {}
+        for t in recent:
+            by_symbol.setdefault(t["symbol"], []).append(t["pnl"])
+        blocked = sorted([s for s, vals in by_symbol.items() if vals and (sum(vals) / len(vals)) < 0])[:6]
+
+        self.autonomy_state["last_mode"] = mode
+        self.autonomy_state["last_realized_pnl_7d"] = realized_pnl_7d
+        self.autonomy_state["last_drawdown_7d"] = max_dd
+        self._persist_autonomy_state()
+
+        return {
+            "mode": mode,
+            "score": score,
+            "blocked_symbols": blocked,
+            **profile,
+            "metrics": {
+                "closed_trades_7d": closed,
+                "win_rate_7d": win_rate,
+                "profit_factor_7d": profit_factor,
+                "realized_pnl_7d": realized_pnl_7d,
+                "max_drawdown_7d": max_dd,
+                "research_score": research_score,
+                "confidence": confidence,
+            },
+            "reasons": reasons,
+        }
 
     @staticmethod
     def _compute_macd(close, fast, slow, signal):
@@ -63,11 +453,24 @@ class TradingStrategy:
             rsi = float(data["rsi"].iloc[-1])
             momentum_pct = float(data["momentum_pct"].iloc[-1])
             trend_strength = (ema_fast - ema_slow) / max(abs(ema_slow), 1e-9)
-
             macd_line, macd_signal, macd_hist = self._compute_macd(
                 close, CRYPTO_MACD_FAST, CRYPTO_MACD_SLOW, CRYPTO_MACD_SIGNAL
             )
+            macd_bullish = macd_line > macd_signal and macd_hist > 0
+            oversold_rebound = rsi <= CRYPTO_RSI_BUY_THRESHOLD and momentum_pct >= 0 and macd_bullish
+
             atr = self._compute_atr(data, CRYPTO_ATR_PERIOD)
+            regime_state = detect_crypto_regime(
+                close,
+                atr_pct=(atr / current_price) if current_price > 0 else None,
+                ema_fast=ema_fast,
+                ema_slow=ema_slow,
+            )
+            regime_label = str(regime_state.get("label") or "unknown")
+            regime_confidence = float(regime_state.get("confidence", 0.0) or 0.0)
+            regime_entry_multiplier = float(regime_state.get("entry_threshold_multiplier", 1.0) or 1.0)
+            regime_risk_multiplier = float(regime_state.get("risk_multiplier", 1.0) or 1.0)
+            regime_allow_new_entries = bool(regime_state.get("allow_new_entries", True))
 
             # Volume filter: only trade when volume is above the configured percentile
             volume_ok = True
@@ -79,6 +482,16 @@ class TradingStrategy:
                 volume_ok = current_volume >= volume_threshold
 
             position = self.positions.get(symbol)
+            profile = self.autonomy_profile
+            external_research = fetch_external_research_sentiment()
+            external_research_score = float(external_research.get("weighted_score", external_research.get("score", 0.0)))
+            topic_scores = external_research.get("topic_scores") or {}
+            risk_on_signal = float(topic_scores.get("etf_flows", 0.0)) + float(topic_scores.get("liquidity_rates", 0.0)) + float(topic_scores.get("stablecoin_liquidity", 0.0)) + float(topic_scores.get("onchain_activity", 0.0))
+            risk_off_signal = float(topic_scores.get("regulation_policy", 0.0)) + float(topic_scores.get("exchange_security", 0.0)) + float(topic_scores.get("derivatives_leverage", 0.0))
+
+            blocked_union = set(profile.get("blocked_symbols", []) or set()) | set(self.blocked_symbols_by_improvement)
+            if symbol in blocked_union:
+                return "HOLD"
 
             self.last_analysis[symbol] = {
                 "current_price": current_price,
@@ -95,6 +508,15 @@ class TradingStrategy:
                 "current_volume": current_volume,
                 "volume_threshold": volume_threshold,
                 "has_position": bool(position),
+                "external_research_score": external_research_score,
+                "research_risk_on_signal": risk_on_signal,
+                "research_risk_off_signal": risk_off_signal,
+                "research_topics": external_research.get("dominant_topics", []),
+                "risk_multiplier_symbol": float(self.symbol_risk_multipliers.get(symbol, 1.0)),
+                "regime": regime_label,
+                "regime_confidence": regime_confidence,
+                "regime_entry_multiplier": regime_entry_multiplier,
+                "regime_risk_multiplier": regime_risk_multiplier,
             }
 
             if position:
@@ -132,19 +554,124 @@ class TradingStrategy:
             if not volume_ok:
                 return "HOLD"
 
-            has_capacity = len(self.positions) < CRYPTO_MAX_POSITIONS
-            bullish_trend = trend_strength >= CRYPTO_MIN_TREND_STRENGTH_PCT and ema_fast > ema_slow
-            macd_bullish = macd_line > macd_signal and macd_hist > 0
-            oversold_rebound = rsi <= CRYPTO_RSI_BUY_THRESHOLD and momentum_pct >= 0 and macd_bullish
+            if self.active_setup_candidates and symbol not in self.active_setup_candidates:
+                return "HOLD"
+
+            if not bool(profile.get("allow_new_entries", True)):
+                return "HOLD"
+            if not regime_allow_new_entries and not oversold_rebound:
+                return "HOLD"
+            if regime_confidence < 0.35 and not oversold_rebound:
+                return "HOLD"
+
+            # Macro filter: During extreme bearish research regime, block all new entries
+            # unless we have a strong oversold rebound signal with positive momentum
+            if external_research_score <= CRYPTO_RESEARCH_HARD_BLOCK_SCORE:
+                if not (oversold_rebound and momentum_pct > 0):
+                    return "HOLD"
+
+            effective_max_positions = max(1, int(CRYPTO_MAX_POSITIONS * float(profile.get("max_positions_multiplier", 1.0))))
+            dynamic_trend_threshold = CRYPTO_MIN_TREND_STRENGTH_PCT * float(profile.get("buy_threshold_multiplier", 1.0))
+            dynamic_trend_threshold *= regime_entry_multiplier
+
+            has_capacity = len(self.positions) < effective_max_positions
+            bullish_trend = trend_strength >= dynamic_trend_threshold and ema_fast > ema_slow
             trend_continuation = (
                 bullish_trend
                 and 45 <= rsi <= CRYPTO_RSI_SELL_THRESHOLD
                 and momentum_pct > 0
                 and macd_bullish
             )
+            current_setup = None
+            if oversold_rebound:
+                current_setup = "oversold_rebound"
+            elif trend_continuation:
+                current_setup = "trend_continuation"
+            if risk_off_signal <= -2.5 and not oversold_rebound:
+                return "HOLD"
+            if external_research_score <= CRYPTO_RESEARCH_SOFT_BLOCK_SCORE and not oversold_rebound:
+                return "HOLD"
+
+            # ── Proven historical pattern scoring ─────────────────────────────
+            # Score current crypto conditions against documented historical patterns.
+            # The result can loosen or tighten the entry guard threshold.
+            research_confidence = float(external_research.get("confidence", 0.5))
+            topic_scores_all = external_research.get("topic_scores") or {}
+            _etf_flow = float(topic_scores_all.get("etf_flows", 0.0))
+            _stable = float(topic_scores_all.get("stablecoin_liquidity", 0.0))
+            _deriv = float(topic_scores_all.get("derivatives_leverage", 0.0))
+            _reg = float(topic_scores_all.get("regulation_policy", 0.0))
+            _exch = float(topic_scores_all.get("exchange_security", 0.0))
+            _onchain = float(topic_scores_all.get("onchain_activity", 0.0))
+            # Try to get VIX from yfinance (cached globally; 0 = unknown)
+            try:
+                import yfinance as _yf
+                _vix_data = _yf.download("^VIX", period="5d", progress=False, auto_adjust=False)
+                _vix = float(_vix_data["Close"].iloc[-1]) if len(_vix_data) > 0 else 20.0
+            except Exception:
+                _vix = 20.0
+            crypto_conditions = build_crypto_conditions(
+                rsi=rsi,
+                macd_bullish=macd_bullish,
+                trend_positive=bullish_trend,
+                momentum_positive=momentum_pct > 0,
+                volume_ok=volume_ok,
+                etf_flow_score=_etf_flow,
+                stablecoin_score=_stable,
+                regulation_score=_reg,
+                onchain_score=_onchain,
+                funding_rate_score=_deriv,
+                macro_risk_off=_vix > 25,
+                vix=_vix,
+                above_long_ma=bool(ema_fast > ema_slow),
+            )
+            pattern_result = score_conditions_against_patterns(crypto_conditions, asset_class="crypto")
+            pattern_score = float(pattern_result["total_score"])
+            # Store in analysis for logging
+            self.last_analysis[symbol]["pattern_hits"] = pattern_result.get("pattern_hits", [])
+            self.last_analysis[symbol]["pattern_score"] = pattern_score
+            if current_setup is None and pattern_score >= 2.0 and momentum_pct > 0:
+                current_setup = "pattern_breakout"
+
+            setup_validation = evaluate_crypto_setup(close, current_setup=current_setup, rsi_period=14)
+            self.last_analysis[symbol].update(
+                {
+                    "setup_validation": setup_validation,
+                    "validated_setup": setup_validation.get("setup", "none"),
+                    "setup_passed": bool(setup_validation.get("passed", False)),
+                    "setup_expectancy_pct": float(setup_validation.get("expectancy", 0.0)) * 100,
+                    "setup_win_rate_pct": float(setup_validation.get("win_rate", 0.0)) * 100,
+                    "setup_sample_size": int(setup_validation.get("sample_size", 0)),
+                }
+            )
+
+            # When strong proven bullish patterns fire, allow entry even if the
+            # research score is slightly below the soft guard threshold.
+            pattern_override = pattern_score >= 1.0 and research_confidence >= 0.3
+            setup_passed = bool(setup_validation.get("passed", False))
 
             if has_capacity and (oversold_rebound or trend_continuation):
+                if not setup_passed:
+                    return "HOLD"
+                if external_research_score <= CRYPTO_RESEARCH_ENTRY_GUARD_SCORE and risk_on_signal <= 0 and not pattern_override:
+                    return "HOLD"
                 return "BUY"
+
+            # Research-assisted momentum entry: allow strong trend continuation
+            # when market-impact topics are broadly supportive.
+            if has_capacity and bullish_trend and macd_bullish and momentum_pct > 0 and risk_on_signal >= 2.0 and risk_off_signal >= -1.0:
+                if not setup_passed:
+                    return "HOLD"
+                return "BUY"
+
+            # Pattern-driven entry: if multiple proven bullish patterns are firing
+            # and the bot has capacity, allow a cautious entry even without a strong
+            # MACD/RSI signal — patterns represent 60-80% win-rate historical setups.
+            if has_capacity and pattern_score >= 2.0 and external_research_score > CRYPTO_RESEARCH_SOFT_BLOCK_SCORE and momentum_pct > 0:
+                if not setup_passed:
+                    return "HOLD"
+                return "BUY"
+
             return "HOLD"
         except Exception as e:
             print(f"Error analyzing signal for {symbol}: {e}")
@@ -154,14 +681,31 @@ class TradingStrategy:
         symbol = symbol.upper()
         try:
             if signal == "BUY":
+                profile = self.autonomy_profile
+                if not bool(profile.get("allow_new_entries", True)):
+                    return None
                 if symbol in self.positions:
+                    return None
+                if symbol in self.blocked_symbols_by_improvement:
                     return None
 
                 capital = broker.get_account_balance()
+                if capital <= 0:
+                    details = broker.get_account_details() if hasattr(broker, 'get_account_details') else {}
+                    cash = details.get('cash', 'unknown')
+                    buying_power = details.get('buying_power', 'unknown')
+                    status = details.get('status', 'unknown')
+                    print(f"Skipping BUY for {symbol}: insufficient account balance (balance={capital:.2f}, cash={cash}, buying_power={buying_power}, status={status})")
+                    return None
                 current_price = broker.get_current_price(symbol)
-                notional = capital * CRYPTO_RISK_PER_TRADE
+                effective_risk = CRYPTO_RISK_PER_TRADE * float(profile.get("risk_multiplier", 1.0))
+                regime_risk = float(self.last_analysis.get(symbol, {}).get("regime_risk_multiplier", 1.0) or 1.0)
+                effective_risk *= regime_risk
+                effective_risk *= float(self.symbol_risk_multipliers.get(symbol, 1.0))
+                effective_risk *= float(self.setup_rank_multipliers.get(symbol, 1.0))
+                notional = capital * effective_risk
                 if current_price <= 0 or notional < CRYPTO_MIN_NOTIONAL_PER_TRADE:
-                    print(f"Skipping BUY for {symbol}: notional too small or price invalid.")
+                    print(f"Skipping BUY for {symbol}: notional={notional:.2f} < min={CRYPTO_MIN_NOTIONAL_PER_TRADE} or price invalid (capital={capital:.2f}, risk={effective_risk:.2%}, price={current_price:.2f})")
                     return None
 
                 qty = round(notional / current_price, 6)
@@ -170,19 +714,30 @@ class TradingStrategy:
                     return None
 
                 broker.buy(symbol, qty)
-                self.positions[symbol] = {"entry_price": current_price, "qty": qty}
+                self.positions[symbol] = {"entry_price": current_price, "qty": qty, "entry_ts": datetime.now(timezone.utc)}
                 print(f"BUY signal for {symbol}: {qty} units at ${current_price:.2f}")
                 return {"action": "BUY", "symbol": symbol, "qty": qty, "price": current_price}
 
             if signal == "SELL":
-                qty = broker.get_position_size(symbol) or float(self.positions.get(symbol, {}).get("qty", 0.0))
+                broker_qty = float(broker.get_position_size(symbol) or 0.0)
+                tracked_qty = float(self.positions.get(symbol, {}).get("qty", 0.0) or 0.0)
+                qty_basis = broker_qty if broker_qty > 0 else tracked_qty
+                qty = round(max(0.0, qty_basis * float(CRYPTO_SELL_QTY_BUFFER_PCT)), 6)
+
                 if qty <= 0:
                     print(f"Skipping SELL for {symbol}: no open quantity found.")
                     self.positions.pop(symbol, None)
                     return None
 
                 current_price = broker.get_current_price(symbol)
+                entry_price = float(self.positions.get(symbol, {}).get("entry_price", current_price))
                 broker.sell(symbol, qty)
+                pnl = (current_price - entry_price) * float(qty)
+                self.trade_history.append({
+                    "ts": datetime.now(timezone.utc),
+                    "symbol": symbol,
+                    "pnl": float(pnl),
+                })
                 self.positions.pop(symbol, None)
                 print(f"SELL signal for {symbol}: {qty} units at ${current_price:.2f}")
                 return {"action": "SELL", "symbol": symbol, "qty": qty, "price": current_price}

@@ -10,11 +10,19 @@ No pre-trained ML model is required — pure technical analysis.
 """
 
 import time
+import os
 
 import pandas as pd
 
 from config import (
     BUY_THRESHOLD_PCT,
+    EVENT_BOOTSTRAP_ENABLED,
+    EVENT_BOOTSTRAP_INTERVAL,
+    EVENT_BOOTSTRAP_MIN_OBSERVATIONS,
+    EVENT_BOOTSTRAP_YEARS,
+    EVENT_LEARNER_ALPHA,
+    EVENT_LEARNER_LAGS,
+    EVENT_MAX_EDGE_ADJUSTMENT_PCT,
     MARKET_REGIME_LONG_WINDOW,
     MARKET_REGIME_SHORT_WINDOW,
     MARKET_REGIME_SYMBOL,
@@ -26,6 +34,7 @@ from config import (
     TRADE_COOLDOWN_MINUTES,
 )
 from data_fetcher import fetch_realtime_price, fetch_stock_data, preprocess_data
+from event_learner import EventImpactLearner
 
 # RSI / EMA config
 RSI_PERIOD = 14
@@ -67,6 +76,144 @@ class TradingStrategy:
         self.last_trade_times: dict = {}
         self._market_state_cache = None
         self._market_state_ts = 0.0
+        self._historical_bootstrap_attempted = set()
+        learner_state_path = os.path.join(os.path.dirname(__file__), "models", "event_impact_state.json")
+        self.event_learner = EventImpactLearner(
+            storage_path=learner_state_path,
+            alpha=EVENT_LEARNER_ALPHA,
+            max_adjustment_abs=EVENT_MAX_EDGE_ADJUSTMENT_PCT / 100.0,
+            lags=EVENT_LEARNER_LAGS,
+        )
+
+    @staticmethod
+    def _safe_return(close_series: pd.Series, periods: int) -> float:
+        if len(close_series) <= periods:
+            return 0.0
+        base = float(close_series.iloc[-(periods + 1)])
+        if base <= 0:
+            return 0.0
+        return (float(close_series.iloc[-1]) - base) / base
+
+    @staticmethod
+    def _clip(value: float, lo: float = -3.0, hi: float = 3.0) -> float:
+        return max(lo, min(hi, float(value)))
+
+    def _build_topic_scores_from_closes(self, symbol_close: pd.Series, spx_close: pd.Series, rates_close: pd.Series, ndx_close: pd.Series, oil_close: pd.Series, gold_close: pd.Series, symbol: str) -> dict:
+        sym_ret_1 = self._safe_return(symbol_close, 1)
+        sym_ret_3 = self._safe_return(symbol_close, 3)
+        sym_ret_12 = self._safe_return(symbol_close, 12)
+        spx_ret_12 = self._safe_return(spx_close, 12)
+        ndx_ret_12 = self._safe_return(ndx_close, 12)
+        rates_ret_3 = self._safe_return(rates_close, 3)
+        oil_ret_6 = self._safe_return(oil_close, 6)
+        gold_ret_6 = self._safe_return(gold_close, 6)
+
+        rolling_vol = float(symbol_close.pct_change().tail(6).std() or 0.0)
+        rolling_drawdown = float((symbol_close.iloc[-1] / max(symbol_close.tail(12))) - 1.0)
+        ndx_rel_spx = ndx_ret_12 - spx_ret_12
+        sym_rel_spx = sym_ret_12 - spx_ret_12
+
+        tech_base = 0.2 if symbol.upper() in {"INFY", "TCS", "WIPRO", "HCLTECH", "TECHM"} else 0.0
+        inflation_proxy = (oil_ret_6 + gold_ret_6) / 2.0
+
+        return {
+            "technology": self._clip((2.8 * ndx_rel_spx) + (1.8 * sym_rel_spx) + tech_base),
+            "rates": self._clip(-8.0 * rates_ret_3),
+            "inflation": self._clip(6.0 * inflation_proxy),
+            "energy": self._clip(6.0 * oil_ret_6),
+            "earnings": self._clip(6.0 * sym_rel_spx),
+            "geopolitics": self._clip((8.0 * oil_ret_6) + (10.0 * rolling_vol) - (4.0 * sym_ret_1)),
+            "regulation": self._clip((-5.0 * sym_ret_3) + (10.0 * min(0.0, rolling_drawdown))),
+            "supply_chain": self._clip((5.0 * oil_ret_6) + (4.0 * rolling_vol)),
+        }
+
+    def _build_historical_observations(self, symbol: str):
+        years = max(1, int(EVENT_BOOTSTRAP_YEARS))
+        interval = EVENT_BOOTSTRAP_INTERVAL or "1mo"
+        period = f"{years}y"
+
+        symbol_df = fetch_stock_data(symbol, period=period, interval=interval, use_cache=False)
+        spx_df = fetch_stock_data("^GSPC", period=period, interval=interval, use_cache=False)
+        rates_df = fetch_stock_data("^TNX", period=period, interval=interval, use_cache=False)
+        ndx_df = fetch_stock_data("^IXIC", period=period, interval=interval, use_cache=False)
+        oil_df = fetch_stock_data("CL=F", period=period, interval=interval, use_cache=False)
+        gold_df = fetch_stock_data("GC=F", period=period, interval=interval, use_cache=False)
+
+        if symbol_df.empty or spx_df.empty:
+            return []
+
+        merged = pd.DataFrame(index=symbol_df.index)
+        merged["symbol_close"] = symbol_df["Close"].astype(float)
+        merged["spx_close"] = spx_df["Close"].astype(float)
+        merged["rates_close"] = rates_df["Close"].astype(float) if not rates_df.empty else 0.0
+        merged["ndx_close"] = ndx_df["Close"].astype(float) if not ndx_df.empty else merged["spx_close"]
+        merged["oil_close"] = oil_df["Close"].astype(float) if not oil_df.empty else merged["spx_close"]
+        merged["gold_close"] = gold_df["Close"].astype(float) if not gold_df.empty else merged["spx_close"]
+        merged = merged.ffill().dropna()
+
+        observations = []
+        for i in range(24, len(merged)):
+            window = merged.iloc[: i + 1]
+            topics = self._build_topic_scores_from_closes(
+                window["symbol_close"],
+                window["spx_close"],
+                window["rates_close"],
+                window["ndx_close"],
+                window["oil_close"],
+                window["gold_close"],
+                symbol,
+            )
+            observations.append({"price": float(window["symbol_close"].iloc[-1]), "topic_scores": topics})
+
+        return observations
+
+    def _bootstrap_symbol_history_if_needed(self, symbol: str):
+        symbol = symbol.upper()
+        if not EVENT_BOOTSTRAP_ENABLED:
+            return
+        if symbol in self._historical_bootstrap_attempted:
+            return
+        if self.event_learner.is_bootstrap_completed(symbol):
+            self._historical_bootstrap_attempted.add(symbol)
+            return
+
+        self._historical_bootstrap_attempted.add(symbol)
+        try:
+            observations = self._build_historical_observations(symbol)
+            if len(observations) < max(10, EVENT_BOOTSTRAP_MIN_OBSERVATIONS):
+                print(
+                    f"[Strategy] Historical bootstrap skipped for {symbol}: "
+                    f"{len(observations)} observations (target={EVENT_BOOTSTRAP_MIN_OBSERVATIONS})."
+                )
+                return
+            consumed = self.event_learner.bootstrap_symbol_history(symbol, observations)
+            print(
+                f"[Strategy] Historical bootstrap complete for {symbol}: "
+                f"{consumed} observations (up to {EVENT_BOOTSTRAP_YEARS}y, interval={EVENT_BOOTSTRAP_INTERVAL})."
+            )
+        except Exception as e:
+            print(f"[Strategy] Historical bootstrap failed for {symbol}: {e}")
+
+    def _current_topic_scores(self, symbol: str) -> dict:
+        symbol_df = fetch_stock_data(symbol, period="1y", interval="1d", use_cache=True)
+        spx_df = fetch_stock_data("^GSPC", period="1y", interval="1d", use_cache=True)
+        rates_df = fetch_stock_data("^TNX", period="1y", interval="1d", use_cache=True)
+        ndx_df = fetch_stock_data("^IXIC", period="1y", interval="1d", use_cache=True)
+        oil_df = fetch_stock_data("CL=F", period="1y", interval="1d", use_cache=True)
+        gold_df = fetch_stock_data("GC=F", period="1y", interval="1d", use_cache=True)
+
+        if symbol_df.empty or spx_df.empty:
+            return {}
+
+        return self._build_topic_scores_from_closes(
+            symbol_df["Close"].astype(float),
+            spx_df["Close"].astype(float),
+            rates_df["Close"].astype(float) if not rates_df.empty else spx_df["Close"].astype(float),
+            ndx_df["Close"].astype(float) if not ndx_df.empty else spx_df["Close"].astype(float),
+            oil_df["Close"].astype(float) if not oil_df.empty else spx_df["Close"].astype(float),
+            gold_df["Close"].astype(float) if not gold_df.empty else spx_df["Close"].astype(float),
+            symbol,
+        )
 
     def _in_cooldown(self, symbol: str) -> tuple[bool, float]:
         cooldown_secs = max(0, TRADE_COOLDOWN_MINUTES) * 60
@@ -112,6 +259,7 @@ class TradingStrategy:
 
     def analyze_signal(self, symbol: str, broker=None) -> str:
         symbol = symbol.upper()
+        self._bootstrap_symbol_history_if_needed(symbol)
         try:
             data = preprocess_data(fetch_stock_data(symbol, period="1y"))
             if len(data) < MACD_SLOW + MACD_SIGNAL + 5:
@@ -127,6 +275,16 @@ class TradingStrategy:
             rsi_val = _rsi(close)
             macd_line, macd_sig, macd_hist = _macd(close)
             recent_return = float(close.pct_change(5).fillna(0.0).iloc[-1])
+
+            topic_scores = self._current_topic_scores(symbol)
+            self.event_learner.observe(symbol, current_price, topic_scores)
+            learned_edge_adjustment_pct = self.event_learner.get_edge_adjustment(symbol, topic_scores) * 100.0
+
+            ema_edge_pct = ((ema_short_val - ema_long_val) / max(current_price, 1e-9)) * 100.0
+            macd_edge_pct = (macd_hist / max(current_price, 1e-9)) * 100.0 * 50.0
+            momentum_edge_pct = recent_return * 100.0
+            base_edge_pct = (0.5 * ema_edge_pct) + (0.3 * macd_edge_pct) + (0.2 * momentum_edge_pct)
+            effective_edge_pct = base_edge_pct + learned_edge_adjustment_pct
 
             ema_bullish = ema_short_val > ema_long_val
             rsi_oversold = rsi_val < 35
@@ -146,6 +304,9 @@ class TradingStrategy:
                 "macd_signal": macd_sig,
                 "macd_histogram": macd_hist,
                 "recent_return_pct": recent_return * 100,
+                "base_edge_pct": base_edge_pct,
+                "learned_edge_adjustment_pct": learned_edge_adjustment_pct,
+                "effective_edge_pct": effective_edge_pct,
                 "market_favorable": bool(market.get("favorable", True)),
                 "has_position": bool(position),
                 "cooldown_remaining_minutes": cooldown_remaining / 60,
@@ -169,7 +330,7 @@ class TradingStrategy:
                         return "SELL"
                 if not ema_bullish and rsi_overbought:
                     return "SELL"
-                if recent_return <= -SELL_THRESHOLD_PCT and not macd_bullish:
+                if effective_edge_pct <= -(SELL_THRESHOLD_PCT * 100) and not macd_bullish:
                     return "SELL"
                 return "HOLD"
 
@@ -186,7 +347,7 @@ class TradingStrategy:
 
             # Buy when EMA crossover up + MACD bullish + RSI not overbought
             if ema_bullish and macd_bullish and not rsi_overbought:
-                if rsi_oversold or recent_return >= BUY_THRESHOLD_PCT:
+                if effective_edge_pct >= (BUY_THRESHOLD_PCT * 100) and (rsi_oversold or recent_return >= BUY_THRESHOLD_PCT):
                     return "BUY"
 
             return "HOLD"

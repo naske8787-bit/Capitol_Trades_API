@@ -1,0 +1,19 @@
+============================================================
+  ASX Day-Trading Bot
+  Watchlist : BHP.AX, CBA.AX, NAB.AX, WBC.AX, ANZ.AX, RIO.AX, WES.AX, WOW.AX, MQG.AX, CSL.AX
+  Interval  : 300s
+  Market hrs: 10:00 – 16:00 Australia/Sydney
+  Broker cfg: paper
+============================================================
+[Broker] Paper broker ready  |  Cash: $100,000.00  |  Positions: none
+[Main] Active broker: paper
+[Main] Cash: $100,000.00  |  Portfolio: $100,000.00
+
+── Cycle 1  2026-04-25 04:16:42 UTC ──
+  Autonomy profile: mode=normal score=46 allow_entries=True risk_mult=1.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  Auto-improvement: Auto-improvement: not enough closed-trade history yet.
+  Market weekend — sleeping 300s until next check
+
+── Cycle 2  2026-04-25 04:21:46 UTC ──
+  Autonomy profile: mode=normal score=46 allow_entries=True risk_mult=1.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.00%
+  Market weekend — sleeping 300s until next check

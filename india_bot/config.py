@@ -10,6 +10,22 @@ def _parse_symbol_list(value, default):
     return [s.strip().upper() for s in raw.split(",") if s.strip()]
 
 
+def _parse_int_list(value, default):
+    raw = value or default
+    out = []
+    for part in str(raw).split(","):
+        token = part.strip()
+        if not token:
+            continue
+        try:
+            val = int(token)
+            if val > 0:
+                out.append(val)
+        except ValueError:
+            continue
+    return out
+
+
 # Interactive Brokers (IBKR) connection settings
 # IBKR uses TWS (Trader Workstation) or IB Gateway running locally.
 # No API key needed — the bot connects via socket to your running TWS/Gateway.
@@ -64,3 +80,12 @@ STOCK_DATA_CACHE_TTL_SECONDS = int(os.getenv("STOCK_DATA_CACHE_TTL_SECONDS", "90
 
 # Loop interval
 LOOP_INTERVAL_SECONDS = int(os.getenv("LOOP_INTERVAL_SECONDS", "3600"))
+
+# Event/news learning settings
+EVENT_LEARNER_ALPHA = float(os.getenv("EVENT_LEARNER_ALPHA", "0.15"))
+EVENT_MAX_EDGE_ADJUSTMENT_PCT = float(os.getenv("EVENT_MAX_EDGE_ADJUSTMENT_PCT", "0.8"))
+EVENT_LEARNER_LAGS = _parse_int_list(os.getenv("EVENT_LEARNER_LAGS"), "1,3,6")
+EVENT_BOOTSTRAP_ENABLED = os.getenv("EVENT_BOOTSTRAP_ENABLED", "true").lower() == "true"
+EVENT_BOOTSTRAP_YEARS = int(os.getenv("EVENT_BOOTSTRAP_YEARS", "50"))
+EVENT_BOOTSTRAP_INTERVAL = os.getenv("EVENT_BOOTSTRAP_INTERVAL", "1mo")
+EVENT_BOOTSTRAP_MIN_OBSERVATIONS = int(os.getenv("EVENT_BOOTSTRAP_MIN_OBSERVATIONS", "120"))

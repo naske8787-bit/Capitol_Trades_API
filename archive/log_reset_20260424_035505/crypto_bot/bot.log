@@ -1,0 +1,6 @@
+Autonomy profile: mode=normal score=42 allow_entries=True risk_mult=1.0 blocked=none closed_7d=0 win_7d=0.0% pf_7d=0.00 pnl_7d=0.00 dd_7d=0.03%
+Research regime: score=-39.20 provider=brave headlines=10 topics=liquidity_rates,exchange_security,derivatives_leverage,regulation_policy
+Research strategy notes: Favor long bias when macro liquidity/rate headlines turn supportive. | De-risk quickly when exchange/security stress headlines appear.
+BTC/USD: HOLD | trend=0.04% | rsi=44.9 | macd_hist=-22.1865 | atr=472.4840 | ext=-39.20 | vol_ok=True | momentum=-0.88% | autonomy=normal
+ETH/USD: HOLD | trend=-0.32% | rsi=37.5 | macd_hist=-0.2094 | atr=16.6349 | ext=-39.20 | vol_ok=True | momentum=-1.04% | autonomy=normal
+SOL/USD: HOLD | trend=-0.09% | rsi=43.4 | macd_hist=0.0190 | atr=0.5350 | ext=-39.20 | vol_ok=True | momentum=-0.65% | autonomy=normal

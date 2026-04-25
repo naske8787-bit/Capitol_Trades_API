@@ -6,6 +6,7 @@ This project contains a simple machine-learning trading bot that combines market
 - Fetches stock price history with `yfinance`
 - Pulls recent Capitol Trades activity for simple sentiment signals
 - Trains and loads an LSTM-based prediction model
+- Learns from closed trades with an adaptive experience policy
 - Supports smoke testing and basic backtesting
 
 ## Setup
@@ -30,6 +31,19 @@ This project contains a simple machine-learning trading bot that combines market
 - `trade_log.csv` records each executed buy/sell
 - `equity_log.csv` records periodic portfolio snapshots for the month-long trial
 - `supervisor.log` records automatic restarts when using `./run_tmux.sh`
+
+## Adaptive learning
+- The strategy now combines:
+	- Model prediction edge
+	- Event/news impact learner
+	- Experience policy adjustment from realized trade outcomes
+- Experience policy state is saved in `trading_bot/models/experience_policy_state.json`
+- Tune behavior with these `.env` values:
+	- `ADAPTIVE_POLICY_ENABLED`
+	- `ADAPTIVE_POLICY_LEARNING_RATE`
+	- `ADAPTIVE_POLICY_DECAY`
+	- `ADAPTIVE_POLICY_MAX_ADJUSTMENT_PCT`
+- Safety note: this layer only nudges entry confidence and does not bypass stop-loss, take-profit, max positions, cooldown, or market regime filters
 
 ## Unattended running
 - For the most reliable local setup, start the bot with `./run_tmux.sh`

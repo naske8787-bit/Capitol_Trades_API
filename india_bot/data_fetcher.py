@@ -22,6 +22,9 @@ _STOCK_DATA_CACHE: dict = {}
 def _yf_symbol(symbol: str) -> str:
     """Append the correct yfinance exchange suffix if not already present."""
     symbol = symbol.upper()
+    # Keep global indices/futures untouched (e.g. ^GSPC, ^TNX, CL=F, GC=F).
+    if symbol.startswith("^") or "=" in symbol:
+        return symbol
     if "." in symbol:
         return symbol  # already has suffix (e.g. RELIANCE.NS)
     return symbol + YF_SUFFIX
@@ -65,10 +68,11 @@ def fetch_stock_data(
     start=None,
     end=None,
     use_cache: bool = True,
+    interval: str | None = None,
 ) -> pd.DataFrame:
     """Fetch historical OHLCV data via yfinance."""
     yf_sym = _yf_symbol(symbol)
-    cache_key = (yf_sym, period, start, end)
+    cache_key = (yf_sym, period, start, end, interval)
     now = time.time()
 
     if use_cache and start is None and end is None:
@@ -77,6 +81,8 @@ def fetch_stock_data(
             return cached[1].copy()
 
     kwargs: dict = {"progress": False}
+    if interval:
+        kwargs["interval"] = interval
     if start is not None or end is not None:
         if start is not None:
             kwargs["start"] = start

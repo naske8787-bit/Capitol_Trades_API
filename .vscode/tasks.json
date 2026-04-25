@@ -90,6 +90,44 @@
       "problemMatcher": []
     },
     {
+      "label": "Auto-start ASX bot",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "if command -v tmux >/dev/null 2>&1 && tmux has-session -t asx_bot 2>/dev/null; then echo \"ASX bot already running in tmux.\"; else PYTHON_BIN=/home/codespace/.python/current/bin/python bash ./run_tmux.sh; fi"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/asx_bot"
+      },
+      "presentation": {
+        "reveal": "never",
+        "panel": "dedicated",
+        "focus": false,
+        "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Auto-start forex bot",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "if command -v tmux >/dev/null 2>&1 && tmux has-session -t forex_bot 2>/dev/null; then echo \"Forex bot already running in tmux.\"; else PYTHON_BIN=/home/codespace/.python/current/bin/python bash ./run_tmux.sh; fi"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/forex_bot"
+      },
+      "presentation": {
+        "reveal": "never",
+        "panel": "dedicated",
+        "focus": false,
+        "clear": false
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Trading bot output",
       "type": "shell",
       "command": "bash",

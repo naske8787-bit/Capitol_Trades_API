@@ -1,8 +1,42 @@
 import os
+import re
 from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+
+def _validate_env_file(env_path):
+    if not os.path.exists(env_path):
+        return
+
+    key_prefix_re = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*\s*=")
+    embedded_key_re = re.compile(r"[A-Z][A-Z0-9_]{2,}\s*=")
+
+    with open(env_path, "r", encoding="utf-8") as handle:
+        for line_no, raw_line in enumerate(handle, start=1):
+            line = raw_line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if line.startswith("export "):
+                line = line[len("export "):].lstrip()
+            if not key_prefix_re.match(line):
+                continue
+
+            _, value = line.split("=", 1)
+            for match in embedded_key_re.finditer(value):
+                idx = match.start()
+                prev = value[idx - 1] if idx > 0 else ""
+                if prev.isalnum() or prev == "_":
+                    token = match.group(0).strip()
+                    raise RuntimeError(
+                        f"Malformed .env at {env_path}:{line_no} - detected concatenated assignment before '{token}'. "
+                        "Put each KEY=VALUE on its own line."
+                    )
+
+
+_ENV_PATH = os.path.join(BASE_DIR, ".env")
+_validate_env_file(_ENV_PATH)
+load_dotenv(_ENV_PATH, override=True)
 
 
 def _parse_symbol_list(value, default):
@@ -10,25 +44,50 @@ def _parse_symbol_list(value, default):
     return [symbol.strip().upper() for symbol in raw_value.split(",") if symbol.strip()]
 
 
+def _parse_int_list(value, default):
+    raw_value = value or default
+    parsed = []
+    for part in str(raw_value).split(","):
+        token = part.strip()
+        if not token:
+            continue
+        try:
+            val = int(token)
+            if val > 0:
+                parsed.append(val)
+        except ValueError:
+            continue
+    return parsed
+
+
 # API Keys
-CAPITOL_TRADES_API_URL = os.getenv("CAPITOL_TRADES_API_URL", "https://api.capitoltrades.com")
+CAPITOL_TRADES_API_URL = os.getenv("CAPITOL_TRADES_API_URL", "https://www.capitoltrades.com")
 CAPITOL_TRADES_MAX_PAGES = int(os.getenv("CAPITOL_TRADES_MAX_PAGES", "5"))
+CAPITOL_TRADES_REQUEST_RETRIES = int(os.getenv("CAPITOL_TRADES_REQUEST_RETRIES", "3"))
+CAPITOL_TRADES_RETRY_BACKOFF_SECONDS = float(os.getenv("CAPITOL_TRADES_RETRY_BACKOFF_SECONDS", "1.5"))
+CAPITOL_TRADES_FAILURE_RETRY_SECONDS = int(os.getenv("CAPITOL_TRADES_FAILURE_RETRY_SECONDS", "90"))
 ALPACA_API_KEY = os.getenv("ALPACA_API_KEY")
 ALPACA_API_SECRET = os.getenv("ALPACA_API_SECRET")
 ALPACA_BASE_URL = os.getenv("ALPACA_BASE_URL", "https://paper-api.alpaca.markets")  # Use paper trading for testing
 ALPACA_DATA_FEED = os.getenv("ALPACA_DATA_FEED", "iex")  # "iex" (free) or "sip" (paid, full market)
 
+# IBKR settings (used for international symbols)
+IBKR_HOST = os.getenv("IBKR_HOST", "127.0.0.1")
+IBKR_PORT = int(os.getenv("IBKR_PORT", "4002"))          # 4002=IB Gateway paper, 4001=live, 7497=TWS paper
+IBKR_CLIENT_ID = int(os.getenv("IBKR_CLIENT_ID", "1"))
+IBKR_ENABLED = os.getenv("IBKR_ENABLED", "false").lower() == "true"
+
 # Trading settings
 INITIAL_CAPITAL = 10000
-RISK_PER_TRADE = float(os.getenv("RISK_PER_TRADE", "0.05"))
+RISK_PER_TRADE = float(os.getenv("RISK_PER_TRADE", "0.03"))        # 3% of capital per trade (was 5%)
 MAX_POSITIONS = int(os.getenv("MAX_POSITIONS", "10"))
-BUY_THRESHOLD_PCT = float(os.getenv("BUY_THRESHOLD_PCT", "0.001"))
-SELL_THRESHOLD_PCT = float(os.getenv("SELL_THRESHOLD_PCT", "0.001"))
+BUY_THRESHOLD_PCT = float(os.getenv("BUY_THRESHOLD_PCT", "0.005"))  # 0.5% predicted upside required (was 0.1%)
+SELL_THRESHOLD_PCT = float(os.getenv("SELL_THRESHOLD_PCT", "0.005")) # 0.5% predicted downside to sell (was 0.1%)
 MIN_SENTIMENT_TO_BUY = int(os.getenv("MIN_SENTIMENT_TO_BUY", "1"))
-STOP_LOSS_PCT = float(os.getenv("STOP_LOSS_PCT", "0.05"))
-TAKE_PROFIT_PCT = float(os.getenv("TAKE_PROFIT_PCT", "0.12"))
-MIN_TREND_STRENGTH_PCT = float(os.getenv("MIN_TREND_STRENGTH_PCT", "0.001"))
-TRADE_COOLDOWN_MINUTES = int(os.getenv("TRADE_COOLDOWN_MINUTES", "15"))
+STOP_LOSS_PCT = float(os.getenv("STOP_LOSS_PCT", "0.03"))            # 3% stop loss (was 5%) — cut losses faster
+TAKE_PROFIT_PCT = float(os.getenv("TAKE_PROFIT_PCT", "0.12"))        # 12% take profit — 1:4 risk/reward
+MIN_TREND_STRENGTH_PCT = float(os.getenv("MIN_TREND_STRENGTH_PCT", "0.005")) # 0.5% trend confirmation (was 0.1%)
+TRADE_COOLDOWN_MINUTES = int(os.getenv("TRADE_COOLDOWN_MINUTES", "30")) # 30 min cooldown (was 15) — less overtrading
 MARKET_REGIME_SYMBOL = os.getenv("MARKET_REGIME_SYMBOL", "SPY")
 MARKET_REGIME_SHORT_WINDOW = int(os.getenv("MARKET_REGIME_SHORT_WINDOW", "50"))
 MARKET_REGIME_LONG_WINDOW = int(os.getenv("MARKET_REGIME_LONG_WINDOW", "200"))
@@ -36,6 +95,12 @@ STOCK_DATA_CACHE_TTL_SECONDS = int(os.getenv("STOCK_DATA_CACHE_TTL_SECONDS", "90
 WATCHLIST = _parse_symbol_list(
     os.getenv("WATCHLIST"),
     "AAPL,MSFT,NVDA,GOOGL,TSLA,AMZN",
+)
+# International symbols for IBKR — use exchange suffix format: SYMBOL:EXCHANGE
+# e.g. SHELL:AEB, ASML:AEB, BP:LSE, 7203:TSE
+IBKR_WATCHLIST = _parse_symbol_list(
+    os.getenv("IBKR_WATCHLIST"),
+    "",
 )
 TRAINING_SYMBOLS = _parse_symbol_list(
     os.getenv("TRAINING_SYMBOLS"),
@@ -53,3 +118,63 @@ MODEL_PATH = os.path.join(BASE_DIR, "models", "trading_model.h5")
 AUTO_RETRAIN_ENABLED = os.getenv("AUTO_RETRAIN_ENABLED", "true").lower() == "true"
 AUTO_RETRAIN_INTERVAL_HOURS = int(os.getenv("AUTO_RETRAIN_INTERVAL_HOURS", "24"))
 RETRAIN_LOOKBACK_PERIOD = os.getenv("RETRAIN_LOOKBACK_PERIOD", "1y")
+
+# Event/news learning settings
+EVENT_LEARNER_ALPHA = float(os.getenv("EVENT_LEARNER_ALPHA", "0.15"))
+EVENT_MAX_EDGE_ADJUSTMENT_PCT = float(os.getenv("EVENT_MAX_EDGE_ADJUSTMENT_PCT", "0.8"))
+EVENT_LEARNER_LAGS = _parse_int_list(os.getenv("EVENT_LEARNER_LAGS"), "1,3,6")
+EVENT_BOOTSTRAP_ENABLED = os.getenv("EVENT_BOOTSTRAP_ENABLED", "true").lower() == "true"
+EVENT_BOOTSTRAP_YEARS = int(os.getenv("EVENT_BOOTSTRAP_YEARS", "50"))
+EVENT_BOOTSTRAP_INTERVAL = os.getenv("EVENT_BOOTSTRAP_INTERVAL", "1mo")
+EVENT_BOOTSTRAP_MIN_OBSERVATIONS = int(os.getenv("EVENT_BOOTSTRAP_MIN_OBSERVATIONS", "120"))
+EVENT_INFLUENCE_REPORT_ENABLED = os.getenv("EVENT_INFLUENCE_REPORT_ENABLED", "true").lower() == "true"
+EVENT_INFLUENCE_REPORT_INTERVAL_MINUTES = int(os.getenv("EVENT_INFLUENCE_REPORT_INTERVAL_MINUTES", "1440"))
+EVENT_INFLUENCE_REPORT_TOPICS = int(os.getenv("EVENT_INFLUENCE_REPORT_TOPICS", "8"))
+EVENT_INFLUENCE_REPORT_SYMBOLS = int(os.getenv("EVENT_INFLUENCE_REPORT_SYMBOLS", "6"))
+
+# Adaptive experience policy settings
+ADAPTIVE_POLICY_ENABLED = os.getenv("ADAPTIVE_POLICY_ENABLED", "true").lower() == "true"
+ADAPTIVE_POLICY_LEARNING_RATE = float(os.getenv("ADAPTIVE_POLICY_LEARNING_RATE", "0.08"))
+ADAPTIVE_POLICY_DECAY = float(os.getenv("ADAPTIVE_POLICY_DECAY", "0.999"))
+ADAPTIVE_POLICY_MAX_ADJUSTMENT_PCT = float(os.getenv("ADAPTIVE_POLICY_MAX_ADJUSTMENT_PCT", "0.6"))
+
+# Autonomous execution + experimentation controls
+AUTONOMOUS_EXECUTION_ENABLED = os.getenv("AUTONOMOUS_EXECUTION_ENABLED", "true").lower() == "true"
+AUTONOMOUS_MIN_CLOSED_TRADES = int(os.getenv("AUTONOMOUS_MIN_CLOSED_TRADES", "8"))
+AUTONOMOUS_MIN_WIN_RATE = float(os.getenv("AUTONOMOUS_MIN_WIN_RATE", "0.52"))
+AUTONOMOUS_MIN_PROFIT_FACTOR = float(os.getenv("AUTONOMOUS_MIN_PROFIT_FACTOR", "1.10"))
+AUTONOMOUS_MIN_REALIZED_PNL_7D = float(os.getenv("AUTONOMOUS_MIN_REALIZED_PNL_7D", "0"))
+AUTONOMOUS_MAX_DRAWDOWN_7D_PCT = float(os.getenv("AUTONOMOUS_MAX_DRAWDOWN_7D_PCT", "0.06"))
+AUTONOMY_LEARNING_ENABLED = os.getenv("AUTONOMY_LEARNING_ENABLED", "true").lower() == "true"
+AUTONOMY_AGGRESSIVE_MIN_CONFIDENCE = float(os.getenv("AUTONOMY_AGGRESSIVE_MIN_CONFIDENCE", "0.75"))
+AUTONOMY_AGGRESSIVE_MIN_CLOSED_TRADES = int(
+    os.getenv("AUTONOMY_AGGRESSIVE_MIN_CLOSED_TRADES", str(AUTONOMOUS_MIN_CLOSED_TRADES))
+)
+AUTONOMY_AGGRESSIVE_COOLDOWN_HOURS = int(os.getenv("AUTONOMY_AGGRESSIVE_COOLDOWN_HOURS", "24"))
+AUTONOMY_LOSS_EVENT_MIN_PNL = float(os.getenv("AUTONOMY_LOSS_EVENT_MIN_PNL", "-25"))
+AUTONOMY_RECOVERY_EVENT_MIN_PNL = float(os.getenv("AUTONOMY_RECOVERY_EVENT_MIN_PNL", "25"))
+
+# External internet research settings
+EXTERNAL_RESEARCH_ENABLED = os.getenv("EXTERNAL_RESEARCH_ENABLED", "true").lower() == "true"
+EXTERNAL_RESEARCH_CACHE_TTL_SECONDS = int(os.getenv("EXTERNAL_RESEARCH_CACHE_TTL_SECONDS", "1800"))
+SEARCH_PROVIDER = os.getenv("SEARCH_PROVIDER", "serpapi").strip().lower()  # brave | serpapi
+SEARCH_API_KEY = (os.getenv("SEARCH_API_KEY") or os.getenv("SERPAPI_API_KEY") or "").strip()
+SEARCH_ENGINE = os.getenv("SEARCH_ENGINE", "google").strip().lower()  # for serpapi
+EXTERNAL_RESEARCH_MIN_HEADLINES = int(os.getenv("EXTERNAL_RESEARCH_MIN_HEADLINES", "12"))
+EXTERNAL_RESEARCH_MIN_SOURCES = int(os.getenv("EXTERNAL_RESEARCH_MIN_SOURCES", "3"))
+EXTERNAL_RESEARCH_MIN_FRESH_RATIO = float(os.getenv("EXTERNAL_RESEARCH_MIN_FRESH_RATIO", "0.25"))
+
+# Research bot assisted force-buy controls
+TECH_RESEARCH_FORCE_BUY_ENABLED = os.getenv("TECH_RESEARCH_FORCE_BUY_ENABLED", "true").lower() == "true"
+TECH_RESEARCH_FORCE_BUY_MIN_PROBABILITY = float(os.getenv("TECH_RESEARCH_FORCE_BUY_MIN_PROBABILITY", "0.85"))
+TECH_RESEARCH_FORCE_BUY_MIN_IMPACT_SCORE = float(os.getenv("TECH_RESEARCH_FORCE_BUY_MIN_IMPACT_SCORE", "6.5"))
+TECH_RESEARCH_FORCE_BUY_MIN_EVIDENCE_COUNT = int(os.getenv("TECH_RESEARCH_FORCE_BUY_MIN_EVIDENCE_COUNT", "3"))
+TECH_RESEARCH_FORCE_BUY_MAX_SIGNAL_AGE_HOURS = int(os.getenv("TECH_RESEARCH_FORCE_BUY_MAX_SIGNAL_AGE_HOURS", "48"))
+TECH_RESEARCH_FORCE_BUY_MAX_CANDIDATES = int(os.getenv("TECH_RESEARCH_FORCE_BUY_MAX_CANDIDATES", "12"))
+TECH_RESEARCH_FORCE_BUY_RISK_MULTIPLIER = float(os.getenv("TECH_RESEARCH_FORCE_BUY_RISK_MULTIPLIER", "0.4"))
+
+# Automatic strategy improvement controls
+AUTO_IMPLEMENT_IMPROVEMENTS_ENABLED = os.getenv("AUTO_IMPLEMENT_IMPROVEMENTS_ENABLED", "true").lower() == "true"
+AUTO_IMPROVEMENT_REBALANCE_HOURS = int(os.getenv("AUTO_IMPROVEMENT_REBALANCE_HOURS", "24"))
+AUTO_IMPROVEMENT_LOOKBACK_DAYS = int(os.getenv("AUTO_IMPROVEMENT_LOOKBACK_DAYS", "14"))
+AUTO_IMPROVEMENT_MIN_TRADES_PER_SYMBOL = int(os.getenv("AUTO_IMPROVEMENT_MIN_TRADES_PER_SYMBOL", "3"))

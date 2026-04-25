@@ -3,6 +3,7 @@ from alpaca.data.requests import CryptoLatestBarRequest
 from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.requests import MarketOrderRequest
+import math
 
 from config import ALPACA_API_KEY, ALPACA_API_SECRET, CRYPTO_PAPER_ONLY
 from data_fetcher import fetch_crypto_data, to_alpaca_symbol
@@ -14,15 +15,79 @@ class Broker:
             raise RuntimeError("Missing ALPACA_API_KEY or ALPACA_API_SECRET in the environment.")
         self.api = TradingClient(ALPACA_API_KEY, ALPACA_API_SECRET, paper=CRYPTO_PAPER_ONLY)
         self._data_client = CryptoHistoricalDataClient(ALPACA_API_KEY, ALPACA_API_SECRET)
+        self._last_account_snapshot = {
+            "cash": 0.0,
+            "buying_power": 0.0,
+            "portfolio_value": 0.0,
+        }
+
+    @staticmethod
+    def _is_auth_error(exc):
+        text = str(exc).lower()
+        return "unauthorized" in text or "forbidden" in text or " 401" in text or " 403" in text
+
+    def _refresh_clients(self):
+        self.api = TradingClient(ALPACA_API_KEY, ALPACA_API_SECRET, paper=CRYPTO_PAPER_ONLY)
+        self._data_client = CryptoHistoricalDataClient(ALPACA_API_KEY, ALPACA_API_SECRET)
+
+    def _fetch_account_with_retry(self):
+        try:
+            return self.api.get_account()
+        except Exception as exc:
+            if not self._is_auth_error(exc):
+                raise
+            # Transient auth hiccup: rebuild clients and retry once.
+            self._refresh_clients()
+            return self.api.get_account()
 
     def get_account_balance(self):
-        account = self.api.get_account()
-        return float(account.cash)
+        try:
+            account = self._fetch_account_with_retry()
+            # Use buying_power if available (accounts for margin/positions)
+            buying_power = float(getattr(account, "buying_power", None) or 0.0)
+            cash = float(account.cash or 0.0)
+            self._last_account_snapshot["cash"] = cash
+            self._last_account_snapshot["buying_power"] = buying_power
+            self._last_account_snapshot["portfolio_value"] = float(
+                getattr(account, "portfolio_value", self._last_account_snapshot.get("portfolio_value", 0.0)) or 0.0
+            )
+            # If buying_power is 0 but cash is positive, use cash
+            # If both are negative, return 0 (margin call or debt)
+            # If buying_power > cash, there's margin available, use buying_power
+            if buying_power > 0:
+                return buying_power
+            elif cash > 0:
+                return cash
+            else:
+                # Account in negative state (margin call, debt, or other issue)
+                return 0.0
+        except Exception as e:
+            # Handle Pydantic validation errors (e.g., ACCOUNT_CLOSED_PENDING)
+            print(f"[Alpaca] Error fetching account balance: {e}")
+            # Fall back to the most recent good value to avoid transient zeroing.
+            fallback = float(self._last_account_snapshot.get("buying_power", 0.0) or 0.0)
+            if fallback <= 0:
+                fallback = float(self._last_account_snapshot.get("cash", 0.0) or 0.0)
+            return fallback
 
     def get_portfolio_value(self):
-        account = self.api.get_account()
-        portfolio_value = getattr(account, "portfolio_value", account.cash)
-        return float(portfolio_value)
+        try:
+            account = self._fetch_account_with_retry()
+            portfolio_value = getattr(account, "portfolio_value", account.cash)
+            value = float(portfolio_value or 0.0)
+            self._last_account_snapshot["portfolio_value"] = value
+            self._last_account_snapshot["cash"] = float(account.cash or self._last_account_snapshot.get("cash", 0.0) or 0.0)
+            self._last_account_snapshot["buying_power"] = float(
+                getattr(account, "buying_power", self._last_account_snapshot.get("buying_power", 0.0)) or 0.0
+            )
+            return value
+        except Exception as e:
+            print(f"[Alpaca] Error fetching portfolio value: {e}")
+            # Use cached portfolio value if available, else balance fallback.
+            cached_value = float(self._last_account_snapshot.get("portfolio_value", 0.0) or 0.0)
+            if cached_value > 0:
+                return cached_value
+            return self.get_account_balance()
 
     def get_current_price(self, symbol):
         alpaca_symbol = to_alpaca_symbol(symbol)
@@ -42,18 +107,24 @@ class Broker:
         return float(price.item() if hasattr(price, "item") else price)
 
     def buy(self, symbol, qty):
+        quantized_qty = math.floor(max(0.0, float(qty)) * 1_000_000) / 1_000_000
+        if quantized_qty <= 0:
+            raise ValueError(f"Invalid BUY quantity after quantization for {symbol}: {qty}")
         order_data = MarketOrderRequest(
             symbol=to_alpaca_symbol(symbol),
-            qty=round(float(qty), 6),
+            qty=quantized_qty,
             side=OrderSide.BUY,
             time_in_force=TimeInForce.GTC,
         )
         self.api.submit_order(order_data)
 
     def sell(self, symbol, qty):
+        quantized_qty = math.floor(max(0.0, float(qty)) * 1_000_000) / 1_000_000
+        if quantized_qty <= 0:
+            raise ValueError(f"Invalid SELL quantity after quantization for {symbol}: {qty}")
         order_data = MarketOrderRequest(
             symbol=to_alpaca_symbol(symbol),
-            qty=round(float(qty), 6),
+            qty=quantized_qty,
             side=OrderSide.SELL,
             time_in_force=TimeInForce.GTC,
         )
@@ -61,9 +132,11 @@ class Broker:
 
     def get_position_size(self, symbol):
         normalized_symbol = to_alpaca_symbol(symbol)
+        normalized_symbol_compact = normalized_symbol.replace("/", "")
         try:
             for position in self.api.get_all_positions():
-                if str(position.symbol).upper() == normalized_symbol:
+                position_symbol = str(position.symbol).upper()
+                if position_symbol == normalized_symbol or position_symbol.replace("/", "") == normalized_symbol_compact:
                     return float(position.qty)
         except Exception:
             pass

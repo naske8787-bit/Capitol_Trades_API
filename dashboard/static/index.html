@@ -369,6 +369,12 @@ input:focus, select:focus { outline: none; border-color: var(--accent); }
 <!-- ── Main views ──────────────────────────────────────────────────────── -->
 <div class="main">
 
+  <div class="chart-card" id="investmentCard" style="margin-bottom:12px">
+    <h4>Investment Performance (Trading + Crypto)</h4>
+    <canvas id="chartInvestments" height="100"></canvas>
+    <p id="investmentMeta" style="margin-top:8px;color:var(--muted);font-size:12px">Loading investment history…</p>
+  </div>
+
   <!-- Single-crew rotation view -->
   <div class="view active" id="viewSingleCrew">
     <div id="chartsArea" style="display:none">
@@ -617,6 +623,7 @@ async function loadAllCrews() {
 let _lastCombinedData = null;
 async function loadCombined() {
   setContainer('combinedContainer', '<div class="loading">Loading…</div>');
+  loadInvestmentPerformance();
   try {
     const r    = await fetch('/api/combined');
     const data = await r.json();
@@ -624,6 +631,107 @@ async function loadCombined() {
     renderCombined(data);
   } catch(e) {
     setContainer('combinedContainer', `<div class="empty-state"><p>Error: ${e.message}</p></div>`);
+  }
+}
+
+async function loadInvestmentPerformance() {
+  const metaEl = document.getElementById('investmentMeta');
+  const canvas = document.getElementById('chartInvestments');
+  if (!metaEl || !canvas) return;
+
+  metaEl.textContent = 'Loading investment history…';
+  try {
+    const r = await fetch('/api/investment-performance?points=240');
+    if (!r.ok) throw new Error(r.statusText);
+    const data = await r.json();
+
+    const portfolio = data.portfolio || [];
+    const cash = data.cash || [];
+    const latest = data.latest || {};
+
+    if (!portfolio.length) {
+      metaEl.textContent = 'No trading equity data found yet. Once bots log equity snapshots, the chart will appear here.';
+      if (S.charts.investment) {
+        S.charts.investment.destroy();
+        delete S.charts.investment;
+      }
+      return;
+    }
+
+    const labels = portfolio.map(p => {
+      const d = new Date(p.t);
+      if (Number.isNaN(d.getTime())) return p.t;
+      return `${d.toLocaleDateString('en-AU', { month: 'short', day: 'numeric' })} ${d.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' })}`;
+    });
+    const portfolioVals = portfolio.map(p => p.v);
+    const cashVals = cash.map(p => p.v);
+
+    if (S.charts.investment) {
+      S.charts.investment.destroy();
+      delete S.charts.investment;
+    }
+
+    S.charts.investment = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Portfolio Value (USD)',
+            data: portfolioVals,
+            borderColor: '#3fb950',
+            backgroundColor: '#3fb95022',
+            borderWidth: 2,
+            pointRadius: 1.8,
+            pointHoverRadius: 4,
+            tension: 0.25,
+            fill: true,
+          },
+          {
+            label: 'Cash Balance (USD)',
+            data: cashVals,
+            borderColor: '#1f6feb',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            pointRadius: 1.8,
+            pointHoverRadius: 4,
+            tension: 0.25,
+            fill: false,
+          },
+        ]
+      },
+      options: {
+        ...chartOpts(),
+        plugins: {
+          legend: {
+            display: true,
+            labels: { color: '#8b949e', font: { size: 11 }, boxWidth: 12 }
+          }
+        },
+        scales: {
+          ...chartOpts().scales,
+          y: {
+            ...chartOpts().scales.y,
+            ticks: {
+              ...chartOpts().scales.y.ticks,
+              callback: (v) => `$${Number(v).toLocaleString('en-US', { maximumFractionDigits: 0 })}`
+            }
+          }
+        }
+      }
+    });
+
+    const toMoney = (v) => `$${Number(v || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const pct = Number(latest.window_pct_change || 0);
+    const pctText = `${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`;
+    const pnlColor = pct >= 0 ? 'var(--success)' : 'var(--danger)';
+    metaEl.innerHTML =
+      `Latest portfolio: <strong>${toMoney(latest.portfolio_value)}</strong> · ` +
+      `Cash: <strong>${toMoney(latest.cash_balance)}</strong> · ` +
+      `Window change: <strong style="color:${pnlColor}">${toMoney(latest.window_net_change)} (${pctText})</strong> · ` +
+      `Crypto realized PnL: <strong>${toMoney(latest.crypto_cum_realized_pnl)}</strong>`;
+  } catch (e) {
+    metaEl.textContent = `Could not load investment chart: ${e.message}`;
   }
 }
 
@@ -2078,7 +2186,11 @@ document.getElementById('modalOverlay').addEventListener('click', e => {
 
 // ── Initial load ──────────────────────────────────────────────────────
 _applyReadonly();
+loadInvestmentPerformance();
 loadShifts();
+setInterval(() => {
+  loadInvestmentPerformance();
+}, 120000);
 </script>
 <!-- ── Import Fault Log Modal ──────────────────────────────────────────── -->
 <div class="modal-overlay" id="importOverlay">

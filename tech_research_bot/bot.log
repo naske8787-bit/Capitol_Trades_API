@@ -1,0 +1,14 @@
+[2026-04-25T05:21:50Z] [2026-04-25T05:21:50Z] tech_research_bot started
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] research cycle complete: candidates=12, avg_prob=92.12%, output=/workspaces/Capitol_Trades_API/tech_research_bot/output/latest_research.json
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 1. p=98.5% impact=10.00 theme=ai_frontier :: Claude Code costs up to $200 a month. Goose does the same thing for free.
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 2. p=96.8% impact=9.80 theme=quantum_nextgen :: QuantumScape (QS) is building a foundation of partners to commercialize solid-state battery production - Electrek
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 3. p=96.3% impact=9.50 theme=ai_frontier :: Railway secures $100 million to challenge AWS with AI-native cloud infrastructure
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 4. p=95.5% impact=9.10 theme=ai_frontier :: Nous Research's NousCoder-14B is an open-source coding model landing right in the Claude Code moment
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 5. p=93.1% impact=8.20 theme=quantum_nextgen :: QuantumScape and PowerCo Expand Collaboration to Accelerate Solid-State Battery Technology Commercialization - Electric Cars Report
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 6. p=93.1% impact=8.20 theme=quantum_nextgen :: QuantumScape and PowerCo Expand Collaboration to Accelerate Solid-State Battery Technology Commercialization - Business Wire
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 7. p=90.9% impact=7.60 theme=automation_robotics :: Interview with Volvo autonomous trucks executive: ‘We are already in commercial deployment’ - Robotics & Automation News
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 8. p=90.9% impact=7.60 theme=compute_semiconductor :: [News] China Makes Breakthrough in Chip Technology, Paving the Way for Lithography Advancements - TrendForce
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 9. p=89.1% impact=7.20 theme=quantum_nextgen :: New European solid-state battery business targets commercial production - ESS News
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 10. p=89.1% impact=7.20 theme=quantum_nextgen :: Solid-State Battery Commercialization: Mass Production Taking Off - IDTechEx
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 11. p=86.4% impact=6.70 theme=quantum_nextgen :: QuantumScape Updates Solid-State Battery Strategy - Battery Technology
+[2026-04-25T05:21:59Z] [2026-04-25T05:21:59Z] 12. p=85.8% impact=6.60 theme=security_infra :: Datavault AI and Available Infrastructure to Scale Physical Private Edge Cloud to Deliver Powerful Zero Trust Cybersecurity, Digital Twin and Agentic Data Monetization to 100 U.S. Cities in 2026 - ACCESS Newswire
