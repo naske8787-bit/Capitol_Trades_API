@@ -14,52 +14,53 @@ from shared.regime_detector import detect_equity_regime, detect_crypto_regime
 from app.routes import ROUTES
 from app.utils.helpers import error_response, json_response
 
-PYTHON_BIN = "/home/codespace/.python/current/bin/python"
+_WORKSPACE = os.environ.get("BOT_WORKSPACE", "/workspaces/Capitol_Trades_API")
+PYTHON_BIN = os.environ.get("PYTHON_BIN", "/home/codespace/.python/current/bin/python")
 
 _BOT_CONFIG = {
     "trading_bot": {
         "session": "trading_bot",
-        "cwd": "/workspaces/Capitol_Trades_API/trading_bot",
+        "cwd": f"{_WORKSPACE}/trading_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./supervise_bot.sh",
-        "log": "/workspaces/Capitol_Trades_API/trading_bot/bot.log",
+        "log": f"{_WORKSPACE}/trading_bot/bot.log",
     },
     "crypto_bot": {
         "session": "crypto_bot",
-        "cwd": "/workspaces/Capitol_Trades_API/crypto_bot",
+        "cwd": f"{_WORKSPACE}/crypto_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./supervise_bot.sh",
-        "log": "/workspaces/Capitol_Trades_API/crypto_bot/bot.log",
+        "log": f"{_WORKSPACE}/crypto_bot/bot.log",
     },
     "asx_bot": {
         "session": "asx_bot",
-        "cwd": "/workspaces/Capitol_Trades_API/asx_bot",
+        "cwd": f"{_WORKSPACE}/asx_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./run_tmux.sh",
-        "log": "/workspaces/Capitol_Trades_API/asx_bot/output.log",
+        "log": f"{_WORKSPACE}/asx_bot/output.log",
     },
     "forex_bot": {
         "session": "forex_bot",
-        "cwd": "/workspaces/Capitol_Trades_API/forex_bot",
+        "cwd": f"{_WORKSPACE}/forex_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./run_tmux.sh",
-        "log": "/workspaces/Capitol_Trades_API/forex_bot/output.log",
+        "log": f"{_WORKSPACE}/forex_bot/output.log",
     },
     "tech_research_bot": {
         "session": "tech_research_bot",
-        "cwd": "/workspaces/Capitol_Trades_API/tech_research_bot",
+        "cwd": f"{_WORKSPACE}/tech_research_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./supervise_bot.sh",
-        "log": "/workspaces/Capitol_Trades_API/tech_research_bot/bot.log",
+        "log": f"{_WORKSPACE}/tech_research_bot/bot.log",
     },
 }
 
-_TRADING_TRADE_LOG = "/workspaces/Capitol_Trades_API/trading_bot/logs/trade_log.csv"
-_TRADING_EQUITY_LOG = "/workspaces/Capitol_Trades_API/trading_bot/logs/equity_log.csv"
-_CRYPTO_TRADE_LOG = "/workspaces/Capitol_Trades_API/crypto_bot/logs/trade_log.csv"
-_ASX_STATE_FILE = "/workspaces/Capitol_Trades_API/asx_bot/paper_state.json"
-_ASX_TRADE_LOG = "/workspaces/Capitol_Trades_API/asx_bot/logs/trades_log.csv"
-_TECH_RESEARCH_SNAPSHOT_FILE = "/workspaces/Capitol_Trades_API/tech_research_bot/output/latest_research.json"
+_TRADING_TRADE_LOG = f"{_WORKSPACE}/trading_bot/logs/trade_log.csv"
+_TRADING_EQUITY_LOG = f"{_WORKSPACE}/trading_bot/logs/equity_log.csv"
+_CRYPTO_TRADE_LOG = f"{_WORKSPACE}/crypto_bot/logs/trade_log.csv"
+_ASX_STATE_FILE = f"{_WORKSPACE}/asx_bot/paper_state.json"
+_ASX_TRADE_LOG = f"{_WORKSPACE}/asx_bot/logs/trades_log.csv"
+_TECH_RESEARCH_SNAPSHOT_FILE = f"{_WORKSPACE}/tech_research_bot/output/latest_research.json"
 _AUTONOMY_STATE_FILES = {
-    "trading_bot": "/workspaces/Capitol_Trades_API/trading_bot/models/autonomy_state.json",
-    "crypto_bot": "/workspaces/Capitol_Trades_API/crypto_bot/models/autonomy_state.json",
-    "asx_bot": "/workspaces/Capitol_Trades_API/asx_bot/models/autonomy_state.json",
-    "forex_bot": "/workspaces/Capitol_Trades_API/forex_bot/models/autonomy_state.json",
+    "trading_bot": f"{_WORKSPACE}/trading_bot/models/autonomy_state.json",
+    "crypto_bot": f"{_WORKSPACE}/crypto_bot/models/autonomy_state.json",
+    "asx_bot": f"{_WORKSPACE}/asx_bot/models/autonomy_state.json",
+    "forex_bot": f"{_WORKSPACE}/forex_bot/models/autonomy_state.json",
 }
 
 _AUTONOMY_THRESHOLDS = {
