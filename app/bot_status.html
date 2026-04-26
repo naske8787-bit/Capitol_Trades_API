@@ -484,6 +484,38 @@
             <div id="cryptoLog" class="mono" style="white-space:pre-wrap;font-size:0.84rem;line-height:1.42;max-height:280px;overflow-y:auto;background:#121a24;border:1px solid #2a3440;border-radius:8px;padding:10px;"></div>
         </div>
 
+        <div class="card full" id="panel-crypto-influencer" style="display:none;">
+            <div class="kpi-title">Crypto Influencer Monitor (Trading Dashboard)</div>
+            <div class="small" id="cryptoInfluencerSummary" style="margin-bottom:8px;">Loading influencer status...</div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Net Signal</th>
+                        <th>Manip Score</th>
+                        <th>Coordination</th>
+                        <th>Top Influencers</th>
+                    </tr>
+                </thead>
+                <tbody id="cryptoInfluencerRows"></tbody>
+            </table>
+
+            <div class="small" style="margin-top:10px;">Influencer-triggered Pump Trades</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Entry</th>
+                        <th>Exit</th>
+                        <th>PnL</th>
+                        <th>Influencer Actors</th>
+                    </tr>
+                </thead>
+                <tbody id="cryptoInfluencerTradesRows"></tbody>
+            </table>
+        </div>
+
         <div class="card half" id="panel-asx-metrics" style="display:none;">
             <div class="kpi-title">ASX Metrics</div>
             <div class="grid" style="gap:8px;grid-template-columns:repeat(2,minmax(0,1fr));">
@@ -648,6 +680,7 @@
             document.getElementById('panel-trading-metrics').style.display = showTrading ? '' : 'none';
             document.getElementById('panel-logs').style.display = showCrypto ? '' : 'none';
             document.getElementById('panel-crypto-metrics').style.display = showCrypto ? '' : 'none';
+            document.getElementById('panel-crypto-influencer').style.display = showCrypto ? '' : 'none';
             document.getElementById('panel-asx-metrics').style.display = showAsx ? '' : 'none';
             document.getElementById('panel-asx-trades').style.display = showAsx ? '' : 'none';
             document.getElementById('panel-forex-metrics').style.display = showForex ? '' : 'none';
@@ -1089,6 +1122,44 @@
             document.getElementById('cryptoHeartbeat').textContent = fmtHeartbeat(c.heartbeat || {});
             document.getElementById('cryptoTopHeartbeat').textContent = fmtHeartbeat(c.heartbeat || {});
             document.getElementById('cryptoLog').textContent = (c.recent_log_lines || []).join('\n') || '(no recent log lines)';
+
+            const influencer = c.influencer || {};
+            const snap = influencer.snapshot || {};
+            const global = snap.global || {};
+            const bySymbol = snap.by_symbol || {};
+            const symbolRows = Object.entries(bySymbol).sort((a, b) => Number(b[1]?.manipulation_score || 0) - Number(a[1]?.manipulation_score || 0));
+            const dominant = String(global.dominant_signal || 'neutral').toUpperCase();
+            const manipDetected = Boolean(global.manipulation_detected);
+            const actors = Number(global.influencer_count || 0);
+            const coord = Number(global.coordination_count || 0);
+            const avgNet = Number(global.avg_net_signal || 0);
+            const lastSeen = influencer.last_seen ? String(influencer.last_seen).replace('T', ' ').slice(0, 19) : '-';
+
+            document.getElementById('cryptoInfluencerSummary').textContent =
+                `Signal=${dominant} | manipulation=${manipDetected ? 'YES' : 'no'} | actors=${actors} | coordination=${coord} | avg_net=${avgNet.toFixed(2)} | updated=${lastSeen}`;
+
+            document.getElementById('cryptoInfluencerRows').innerHTML = symbolRows.length
+                ? symbolRows.slice(0, 12).map(([sym, s]) => `
+                    <tr>
+                        <td>${sym}</td>
+                        <td>${Number(s.net_signal || 0).toFixed(2)}</td>
+                        <td>${Number(s.manipulation_score || 0).toFixed(2)}</td>
+                        <td>${s.coordination ? 'Yes' : 'No'}</td>
+                        <td>${(s.top_influencers || []).join(', ') || '-'}</td>
+                    </tr>`).join('')
+                : '<tr><td colspan="5" class="small">No active influencer symbol signals in current window.</td></tr>';
+
+            const pumpTrades = influencer.pump_trades || [];
+            document.getElementById('cryptoInfluencerTradesRows').innerHTML = pumpTrades.length
+                ? pumpTrades.slice().reverse().slice(0, 12).map((r) => `
+                    <tr>
+                        <td>${r.symbol || ''}</td>
+                        <td class="mono">${(r.entry_time || '').replace('T', ' ').slice(0, 19) || '-'}</td>
+                        <td class="mono">${(r.exit_time || '').replace('T', ' ').slice(0, 19) || '-'}</td>
+                        <td>${money(r.pnl || 0)}</td>
+                        <td>${r.influencer_actors || '-'}</td>
+                    </tr>`).join('')
+                : '<tr><td colspan="5" class="small">No influencer-triggered pump trades logged yet.</td></tr>';
 
             document.getElementById('asxEquity').textContent = money(a.latest_equity);
             document.getElementById('asxOpen').textContent = String(a.open_positions ?? 0);

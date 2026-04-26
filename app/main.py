@@ -53,6 +53,8 @@ _BOT_CONFIG = {
 _TRADING_TRADE_LOG = f"{_WORKSPACE}/trading_bot/logs/trade_log.csv"
 _TRADING_EQUITY_LOG = f"{_WORKSPACE}/trading_bot/logs/equity_log.csv"
 _CRYPTO_TRADE_LOG = f"{_WORKSPACE}/crypto_bot/logs/trade_log.csv"
+_CRYPTO_INFLUENCER_LOG = f"{_WORKSPACE}/crypto_bot/logs/influencer_analysis.json"
+_CRYPTO_INFLUENCER_CACHE = f"{_WORKSPACE}/crypto_bot/models/influencer_cache.json"
 _ASX_STATE_FILE = f"{_WORKSPACE}/asx_bot/paper_state.json"
 _ASX_TRADE_LOG = f"{_WORKSPACE}/asx_bot/logs/trades_log.csv"
 _TECH_RESEARCH_SNAPSHOT_FILE = f"{_WORKSPACE}/tech_research_bot/output/latest_research.json"
@@ -483,6 +485,51 @@ def _summarize_crypto_bot():
             "strategy_notes": strategy_notes,
             "regime_line": regime_line,
         },
+        "influencer": _summarize_crypto_influencer(),
+    }
+
+
+def _summarize_crypto_influencer():
+    snapshot = {"by_symbol": {}, "global": {}}
+    snapshot_path = ""
+
+    for candidate in (_CRYPTO_INFLUENCER_LOG, _CRYPTO_INFLUENCER_CACHE):
+        if not os.path.exists(candidate):
+            continue
+        try:
+            with open(candidate, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            if isinstance(payload, dict):
+                snapshot = payload
+                snapshot_path = candidate
+                break
+        except Exception:
+            continue
+
+    pump_trades = []
+    for row in _read_csv_rows(_CRYPTO_TRADE_LOG, max_rows=2000):
+        raw_flag = str(row.get("pump_mode", "") or "").strip().lower()
+        if raw_flag not in {"true", "1", "yes", "y"}:
+            continue
+        pump_trades.append({
+            "symbol": str(row.get("symbol", "") or "").upper(),
+            "entry_time": str(row.get("entry_time", "") or ""),
+            "exit_time": str(row.get("exit_time", "") or ""),
+            "pnl": round(_f(row.get("pnl"), 0.0), 2),
+            "influencer_actors": str(row.get("influencer_actors", "") or ""),
+        })
+
+    last_seen = ""
+    if snapshot_path:
+        try:
+            last_seen = datetime.fromtimestamp(os.path.getmtime(snapshot_path), UTC).isoformat()
+        except Exception:
+            last_seen = ""
+
+    return {
+        "snapshot": snapshot,
+        "pump_trades": pump_trades[-20:],
+        "last_seen": last_seen,
     }
 
 
