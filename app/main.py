@@ -114,6 +114,11 @@ _AUTONOMY_THRESHOLDS = {
 
 _REGIME_CACHE = {}
 _REGIME_CACHE_TTL_SECONDS = 300
+_SCORECARD_CACHE = {
+    "ts": 0.0,
+    "value": None,
+}
+_SCORECARD_CACHE_TTL_SECONDS = 300
 
 
 def _read_json_body(environ):
@@ -2025,9 +2030,61 @@ def _bot_dashboard_payload():
             "strategy": _strategy_reference("tech_research_bot"),
         },
         "autonomy": autonomy,
+        "return_scorecard": _weekly_return_scorecard(target_return_pct=20.0),
         "investment": _build_investment_progress(max_points=240),
         "timestamp": datetime.now(UTC).isoformat(),
     }
+
+
+def _weekly_return_scorecard(target_return_pct=20.0):
+    now = time.time()
+    cached = _SCORECARD_CACHE.get("value")
+    if cached is not None and (now - float(_SCORECARD_CACHE.get("ts", 0.0))) < _SCORECARD_CACHE_TTL_SECONDS:
+        return cached
+
+    script_path = os.path.join(_WORKSPACE, "scripts", "weekly_return_scorecard.py")
+    fallback = {
+        "target_return_pct": float(target_return_pct),
+        "generated_at": None,
+        "trading_bot": {},
+        "crypto_bot": {},
+        "combined_probability_at_least_one_hits_target": None,
+        "error": "scorecard_unavailable",
+    }
+    if not os.path.exists(script_path):
+        _SCORECARD_CACHE["ts"] = now
+        _SCORECARD_CACHE["value"] = fallback
+        return fallback
+
+    try:
+        result = subprocess.run(
+            [
+                PYTHON_BIN,
+                script_path,
+                "--repo-root",
+                _WORKSPACE,
+                "--target-return",
+                str(float(target_return_pct)),
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=12,
+        )
+        payload = json.loads(result.stdout)
+        if not isinstance(payload, dict):
+            payload = dict(fallback)
+            payload["error"] = "scorecard_invalid_payload"
+        _SCORECARD_CACHE["ts"] = now
+        _SCORECARD_CACHE["value"] = payload
+        return payload
+    except Exception as e:
+        out = dict(cached or fallback)
+        out["error"] = f"scorecard_error: {e}"
+        _SCORECARD_CACHE["ts"] = now
+        _SCORECARD_CACHE["value"] = out
+        return out
 
 
 def _tmux_running(session):

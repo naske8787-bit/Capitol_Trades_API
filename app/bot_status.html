@@ -326,6 +326,27 @@
             </table>
         </div>
 
+        <div class="card full" id="panel-return-scorecard">
+            <div class="kpi-title">Target Return Probability Scorecard</div>
+            <div class="small" style="margin-bottom:8px;">
+                Target: <span id="scorecardTarget">20%</span> | Generated: <span id="scorecardGenerated">-</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bot</th>
+                        <th>Closed Trades (7d)</th>
+                        <th>Win Rate (7d)</th>
+                        <th>Profit Factor (7d)</th>
+                        <th>Estimated Return (7d)</th>
+                        <th>Data Quality</th>
+                        <th>Probability Hit Target</th>
+                    </tr>
+                </thead>
+                <tbody id="scorecardRows"></tbody>
+            </table>
+        </div>
+
         <div class="card full" id="panel-research">
             <div class="kpi-title">Search Research Activity (All Bots)</div>
             <table>
@@ -1036,6 +1057,7 @@
             const inv = d.investment || {};
             const auto = d.autonomy?.bots || {};
             const research = _researchMap();
+            const scorecard = d.return_scorecard || {};
             const fmtHeartbeat = (h) => {
                 const sig = (h?.last_signal || '-').toUpperCase();
                 const seen = h?.last_seen ? String(h.last_seen).replace('T', ' ').slice(0, 19) : '-';
@@ -1293,6 +1315,41 @@
                     </tr>`;
             });
             document.getElementById('autonomyLearningRows').innerHTML = learningRows.join('');
+
+            const scoreTarget = (scorecard.target_return_pct === null || scorecard.target_return_pct === undefined || Number.isNaN(Number(scorecard.target_return_pct)))
+                ? 20
+                : Number(scorecard.target_return_pct);
+            document.getElementById('scorecardTarget').textContent = `${scoreTarget.toFixed(0)}%`;
+            document.getElementById('scorecardGenerated').textContent = scorecard.generated_at
+                ? String(scorecard.generated_at).replace('T', ' ').slice(0, 19)
+                : '-';
+
+            const scoreRows = ['trading_bot', 'crypto_bot'].map(bot => {
+                const s = scorecard[bot] || {};
+                const win = (s.win_rate_7d === null || s.win_rate_7d === undefined || Number.isNaN(Number(s.win_rate_7d)))
+                    ? '-'
+                    : `${(Number(s.win_rate_7d) * 100).toFixed(1)}%`;
+                const pf = (s.profit_factor_7d === null || s.profit_factor_7d === undefined || Number.isNaN(Number(s.profit_factor_7d)))
+                    ? '-'
+                    : Number(s.profit_factor_7d).toFixed(2);
+                const est = (s.estimated_return_7d_pct === null || s.estimated_return_7d_pct === undefined || Number.isNaN(Number(s.estimated_return_7d_pct)))
+                    ? '-'
+                    : `${Number(s.estimated_return_7d_pct).toFixed(2)}%`;
+                const prob = (s.probability_target_hit === null || s.probability_target_hit === undefined || Number.isNaN(Number(s.probability_target_hit)))
+                    ? '-'
+                    : `${(Number(s.probability_target_hit) * 100).toFixed(1)}%`;
+                return `
+                    <tr>
+                        <td>${bot}</td>
+                        <td>${s.closed_trades_7d ?? '-'}</td>
+                        <td>${win}</td>
+                        <td>${pf}</td>
+                        <td>${est}</td>
+                        <td>${s.data_quality || '-'}</td>
+                        <td>${prob}</td>
+                    </tr>`;
+            });
+            document.getElementById('scorecardRows').innerHTML = scoreRows.join('');
 
             const researchRows = ['trading_bot', 'crypto_bot', 'asx_bot', 'forex_bot', 'tech_research_bot'].map(bot => {
                 const r = research[bot] || {};
