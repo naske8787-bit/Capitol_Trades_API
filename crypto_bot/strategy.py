@@ -37,8 +37,14 @@ from config import (
     CRYPTO_RESEARCH_ENTRY_GUARD_SCORE,
     CRYPTO_RESEARCH_HARD_BLOCK_SCORE,
     CRYPTO_RESEARCH_SOFT_BLOCK_SCORE,
+    INFLUENCER_PUMP_TRADE_SCORE,
+    INFLUENCER_DUMP_SELL_SCORE,
+    INFLUENCER_MANIPULATION_RIDE_SCORE,
+    INFLUENCER_MANIPULATION_DUMP_SCORE,
+    INFLUENCER_REQUIRE_TECHNICAL_CONFIRM,
 )
 from data_fetcher import fetch_crypto_data, preprocess_data, fetch_external_research_sentiment
+from influencer_monitor import get_symbol_signal
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), "shared"))
@@ -489,6 +495,16 @@ class TradingStrategy:
             risk_on_signal = float(topic_scores.get("etf_flows", 0.0)) + float(topic_scores.get("liquidity_rates", 0.0)) + float(topic_scores.get("stablecoin_liquidity", 0.0)) + float(topic_scores.get("onchain_activity", 0.0))
             risk_off_signal = float(topic_scores.get("regulation_policy", 0.0)) + float(topic_scores.get("exchange_security", 0.0)) + float(topic_scores.get("derivatives_leverage", 0.0))
 
+            # Influencer manipulation signal for this specific symbol
+            influencer_signals = external_research.get("influencer_signals", {})
+            inf_signal = get_symbol_signal(influencer_signals, symbol)
+            inf_net = float(inf_signal.get("net_signal", 0.0))
+            inf_manip_score = float(inf_signal.get("manipulation_score", 0.0))
+            inf_pump_flag = inf_manip_score >= INFLUENCER_MANIPULATION_RIDE_SCORE
+            inf_dump_flag = inf_manip_score <= INFLUENCER_MANIPULATION_DUMP_SCORE
+            inf_coordination = bool(inf_signal.get("coordination", False))
+            inf_top_influencers = inf_signal.get("top_influencers", [])
+
             blocked_union = set(profile.get("blocked_symbols", []) or set()) | set(self.blocked_symbols_by_improvement)
             if symbol in blocked_union:
                 return "HOLD"
@@ -517,10 +533,21 @@ class TradingStrategy:
                 "regime_confidence": regime_confidence,
                 "regime_entry_multiplier": regime_entry_multiplier,
                 "regime_risk_multiplier": regime_risk_multiplier,
+                # Influencer manipulation signals
+                "influencer_net_signal": round(inf_net, 2),
+                "influencer_manipulation_score": round(inf_manip_score, 2),
+                "influencer_pump_flag": inf_pump_flag,
+                "influencer_dump_flag": inf_dump_flag,
+                "influencer_coordination": inf_coordination,
+                "influencer_top_actors": inf_top_influencers,
+                "influencer_pump_mode": False,  # updated below if position has pump tag
             }
 
             if position:
                 entry_price = float(position["entry_price"])
+                pump_mode = bool(position.get("influencer_pump_mode", False))
+                self.last_analysis[symbol]["influencer_pump_mode"] = pump_mode
+
                 # ATR-based trailing stop: tighter of fixed % or ATR multiple
                 atr_stop = current_price - (CRYPTO_ATR_STOP_MULTIPLIER * atr)
                 fixed_stop = entry_price * (1 - CRYPTO_STOP_LOSS_PCT)
@@ -530,7 +557,14 @@ class TradingStrategy:
                 position["hwm"] = hwm
                 trailing_stop = hwm - (CRYPTO_ATR_STOP_MULTIPLIER * atr)
                 stop_loss_price = max(fixed_stop, trailing_stop)
-                take_profit_price = entry_price * (1 + CRYPTO_TAKE_PROFIT_PCT)
+
+                # Pump-ride mode: use tighter take-profit (60% of normal) so we
+                # exit before the inevitable influencer-triggered dump.
+                if pump_mode:
+                    take_profit_price = entry_price * (1 + CRYPTO_TAKE_PROFIT_PCT * 0.6)
+                else:
+                    take_profit_price = entry_price * (1 + CRYPTO_TAKE_PROFIT_PCT)
+
                 self.last_analysis[symbol].update(
                     {
                         "entry_price": entry_price,
@@ -539,6 +573,24 @@ class TradingStrategy:
                         "hwm": hwm,
                     }
                 )
+
+                # Influencer dump signal: exit immediately before macro stop hits
+                if inf_dump_flag:
+                    print(
+                        f"[INFLUENCER] Dump/FUD signal detected for {symbol} "
+                        f"(manip_score={inf_manip_score:.2f}, actors={inf_top_influencers}). "
+                        "Exiting position."
+                    )
+                    return "SELL"
+
+                # Pump-ride exit: if we rode the pump and influencer signal turns
+                # negative, exit before the coordinated dump arrives.
+                if pump_mode and inf_net < 0:
+                    print(
+                        f"[INFLUENCER] Pump reversed for {symbol}: inf_net={inf_net:.2f}. "
+                        "Exiting pump-ride position."
+                    )
+                    return "SELL"
 
                 if current_price <= stop_loss_price:
                     return "SELL"
@@ -590,6 +642,15 @@ class TradingStrategy:
             if risk_off_signal <= -2.5 and not oversold_rebound:
                 return "HOLD"
             if external_research_score <= CRYPTO_RESEARCH_SOFT_BLOCK_SCORE and not oversold_rebound:
+                return "HOLD"
+
+            # Influencer dump/FUD guard: block new entries when influencers are
+            # signalling a coordinated dump or spreading FUD for this symbol.
+            if inf_net <= INFLUENCER_DUMP_SELL_SCORE and not oversold_rebound:
+                print(
+                    f"[INFLUENCER] Blocking new entry for {symbol}: "
+                    f"dump signal inf_net={inf_net:.2f}, actors={inf_top_influencers}"
+                )
                 return "HOLD"
 
             # ── Proven historical pattern scoring ─────────────────────────────
@@ -672,6 +733,24 @@ class TradingStrategy:
                     return "HOLD"
                 return "BUY"
 
+            # Influencer pump-ride entry: buy early to capture a likely influencer-
+            # driven price move. Apply a tighter take-profit on exit (see position logic).
+            # Optionally require a basic technical confirmation (price not already
+            # overbought and momentum positive).
+            if has_capacity and inf_net >= INFLUENCER_PUMP_TRADE_SCORE and not inf_dump_flag:
+                if INFLUENCER_REQUIRE_TECHNICAL_CONFIRM:
+                    tech_ok = momentum_pct > 0 and rsi < 75 and not (ema_fast < ema_slow and rsi > 70)
+                    if not tech_ok:
+                        return "HOLD"
+                print(
+                    f"[INFLUENCER] Pump signal for {symbol}: "
+                    f"inf_net={inf_net:.2f}, manip_score={inf_manip_score:.2f}, "
+                    f"coordination={inf_coordination}, actors={inf_top_influencers}. "
+                    "Entering pump-ride trade."
+                )
+                self.last_analysis[symbol]["influencer_pump_mode"] = True
+                return "BUY"
+
             return "HOLD"
         except Exception as e:
             print(f"Error analyzing signal for {symbol}: {e}")
@@ -714,8 +793,16 @@ class TradingStrategy:
                     return None
 
                 broker.buy(symbol, qty)
-                self.positions[symbol] = {"entry_price": current_price, "qty": qty, "entry_ts": datetime.now(timezone.utc)}
-                print(f"BUY signal for {symbol}: {qty} units at ${current_price:.2f}")
+                self.positions[symbol] = {
+                    "entry_price": current_price,
+                    "qty": qty,
+                    "entry_ts": datetime.now(timezone.utc),
+                    "influencer_pump_mode": bool(
+                        self.last_analysis.get(symbol, {}).get("influencer_pump_mode", False)
+                    ),
+                }
+                pump_tag = " [PUMP-RIDE]" if self.positions[symbol]["influencer_pump_mode"] else ""
+                print(f"BUY signal for {symbol}: {qty} units at ${current_price:.2f}{pump_tag}")
                 return {"action": "BUY", "symbol": symbol, "qty": qty, "price": current_price}
 
             if signal == "SELL":

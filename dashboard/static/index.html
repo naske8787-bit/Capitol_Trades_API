@@ -375,6 +375,49 @@ input:focus, select:focus { outline: none; border-color: var(--accent); }
     <p id="investmentMeta" style="margin-top:8px;color:var(--muted);font-size:12px">Loading investment history…</p>
   </div>
 
+  <!-- Crypto Influencer Monitor panel -->
+  <div class="chart-card" id="influencerCard" style="margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <h4 style="margin:0">🔬 Crypto Influencer Manipulation Monitor</h4>
+      <button onclick="loadInfluencerData()" style="font-size:11px;padding:3px 10px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer">Refresh</button>
+    </div>
+
+    <!-- Global signal banner -->
+    <div id="infGlobalBanner" style="padding:8px 12px;border-radius:6px;margin-bottom:10px;font-size:13px;background:#161b22;border:1px solid var(--border)">
+      Loading influencer signals…
+    </div>
+
+    <!-- Per-symbol grid -->
+    <div id="infSymbolGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-bottom:12px"></div>
+
+    <!-- Pump-ride trades table -->
+    <div id="infPumpTradesSection" style="display:none">
+      <h5 style="color:var(--muted);font-size:12px;margin:8px 0 4px">Pump-Ride Trades (influencer-triggered)</h5>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px" id="infPumpTradesTable">
+          <thead>
+            <tr style="color:var(--muted);border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:4px 8px">Symbol</th>
+              <th style="text-align:left;padding:4px 8px">Entry</th>
+              <th style="text-align:left;padding:4px 8px">Exit</th>
+              <th style="text-align:right;padding:4px 8px">PnL</th>
+              <th style="text-align:left;padding:4px 8px">Actors</th>
+            </tr>
+          </thead>
+          <tbody id="infPumpTradesTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Research headlines -->
+    <div id="infResearchSection" style="display:none;margin-top:10px">
+      <h5 style="color:var(--muted);font-size:12px;margin:4px 0">Tech Research Headlines (high probability)</h5>
+      <ul id="infResearchList" style="list-style:none;padding:0;margin:0;font-size:12px"></ul>
+    </div>
+
+    <p id="infMeta" style="color:var(--muted);font-size:11px;margin-top:8px"></p>
+  </div>
+
   <!-- Single-crew rotation view -->
   <div class="view active" id="viewSingleCrew">
     <div id="chartsArea" style="display:none">
@@ -2188,9 +2231,112 @@ document.getElementById('modalOverlay').addEventListener('click', e => {
 _applyReadonly();
 loadInvestmentPerformance();
 loadShifts();
+loadInfluencerData();
 setInterval(() => {
   loadInvestmentPerformance();
 }, 120000);
+setInterval(() => {
+  loadInfluencerData();
+}, 300000); // refresh influencer data every 5 minutes
+
+// ── Crypto Influencer Monitor ─────────────────────────────────────────
+async function loadInfluencerData() {
+  const banner = document.getElementById('infGlobalBanner');
+  const grid   = document.getElementById('infSymbolGrid');
+  const meta   = document.getElementById('infMeta');
+  try {
+    const r = await fetch('/api/crypto-influencer');
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+
+    const g = d.influencer?.global || {};
+    const sig = g.dominant_signal || 'neutral';
+    const manip = g.manipulation_detected;
+    const coord = g.coordination_count || 0;
+
+    const sigColor = {pump:'#2ea043', dump:'#f85149', fud:'#d29922', neutral:'#8b949e'}[sig] || '#8b949e';
+    banner.style.borderColor = sigColor;
+    banner.innerHTML = `
+      <span style="color:${sigColor};font-weight:600;font-size:14px;text-transform:uppercase">${sig === 'pump' ? '📈 PUMP' : sig === 'dump' ? '📉 DUMP' : sig === 'fud' ? '⚠️ FUD' : '⚪ NEUTRAL'}</span>
+      &nbsp;&nbsp;
+      ${manip ? '<span style="background:#f85149;color:#fff;border-radius:3px;padding:1px 7px;font-size:11px">MANIPULATION DETECTED</span>' : ''}
+      ${coord > 0 ? `<span style="background:#d29922;color:#000;border-radius:3px;padding:1px 7px;font-size:11px;margin-left:4px">COORDINATED (${coord})</span>` : ''}
+      &nbsp; Influencers active: <strong>${g.influencer_count || 0}</strong>
+      &nbsp; Avg net signal: <strong style="color:${(g.avg_net_signal||0) > 0 ? '#2ea043' : (g.avg_net_signal||0) < 0 ? '#f85149' : '#8b949e'}">${(g.avg_net_signal||0).toFixed(2)}</strong>
+    `;
+
+    // per-symbol cards
+    const bySym = d.influencer?.by_symbol || {};
+    grid.innerHTML = '';
+    for (const [sym, s] of Object.entries(bySym)) {
+      const net = s.net_signal || 0;
+      const netColor = net > 0 ? '#2ea043' : net < 0 ? '#f85149' : '#8b949e';
+      const manipFlag = s.manipulation_flag ? `<span style="background:#f85149;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px">MANIP</span>` : '';
+      const coordFlag = s.coordination ? `<span style="background:#d29922;color:#000;padding:1px 5px;border-radius:3px;font-size:10px">COORD</span>` : '';
+      grid.insertAdjacentHTML('beforeend', `
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="font-size:13px">${sym}/USD</strong>
+            <span style="color:${netColor};font-weight:700;font-size:14px">${net > 0 ? '+' : ''}${net.toFixed(1)}</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">
+            Pump: <span style="color:#2ea043">${(s.pump_score||0).toFixed(1)}</span> &nbsp;
+            Dump: <span style="color:#f85149">${(s.dump_score||0).toFixed(1)}</span> &nbsp;
+            FUD: <span style="color:#d29922">${(s.fud_score||0).toFixed(1)}</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">
+            Manip score: <strong style="color:${(s.manipulation_score||0)>0?'#f85149':'#8b949e'}">${(s.manipulation_score||0).toFixed(2)}</strong>
+            &nbsp;${manipFlag}${coordFlag}
+          </div>
+          ${s.top_influencers?.length ? `<div style="font-size:10px;color:#8b949e">Actors: ${s.top_influencers.join(', ')}</div>` : ''}
+          ${s.sample_headlines?.length ? `<div style="font-size:10px;color:#8b949e;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${s.sample_headlines[0]}">"${s.sample_headlines[0].substring(0,80)}…"</div>` : ''}
+        </div>
+      `);
+    }
+    if (!Object.keys(bySym).length) {
+      grid.innerHTML = '<div style="color:var(--muted);font-size:12px">No active influencer signals detected in current search window.</div>';
+    }
+
+    // pump-ride trades
+    const pumps = d.pump_trades || [];
+    const pumpSec = document.getElementById('infPumpTradesSection');
+    if (pumps.length > 0) {
+      pumpSec.style.display = '';
+      const tbody = document.getElementById('infPumpTradesTbody');
+      tbody.innerHTML = pumps.slice(-10).reverse().map(t => {
+        const pnlColor = (t.pnl||0) >= 0 ? '#2ea043' : '#f85149';
+        return `<tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:4px 8px">${t.symbol}</td>
+          <td style="padding:4px 8px;color:var(--muted)">${(t.entry_time||'').substring(0,16)}</td>
+          <td style="padding:4px 8px;color:var(--muted)">${(t.exit_time||'').substring(0,16)}</td>
+          <td style="padding:4px 8px;text-align:right;color:${pnlColor}">${(t.pnl||0) >= 0 ? '+' : ''}$${(t.pnl||0).toFixed(2)}</td>
+          <td style="padding:4px 8px;color:var(--muted)">${t.influencer_actors||''}</td>
+        </tr>`;
+      }).join('');
+    } else {
+      pumpSec.style.display = 'none';
+    }
+
+    // research headlines
+    const headlines = d.research_headlines || [];
+    const rSec = document.getElementById('infResearchSection');
+    if (headlines.length > 0) {
+      rSec.style.display = '';
+      document.getElementById('infResearchList').innerHTML = headlines.map(h =>
+        `<li style="padding:3px 0;border-bottom:1px solid var(--border);color:#cdd9e5">
+          <span style="color:var(--accent);font-weight:600;min-width:40px;display:inline-block">${Math.round((h.probability||0)*100)}%</span>
+          ${h.title}
+        </li>`
+      ).join('');
+    } else {
+      rSec.style.display = 'none';
+    }
+
+    meta.textContent = `Last updated: ${new Date(d.as_of).toLocaleTimeString()}`;
+  } catch(e) {
+    banner.innerHTML = `<span style="color:var(--muted)">Influencer data unavailable (${e.message}). Bot may not have run yet.</span>`;
+  }
+}
 </script>
 <!-- ── Import Fault Log Modal ──────────────────────────────────────────── -->
 <div class="modal-overlay" id="importOverlay">

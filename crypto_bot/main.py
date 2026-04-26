@@ -1,10 +1,12 @@
 import time
 import os
 import sys
+import json
 
 from broker import Broker
-from config import AUTONOMOUS_EXECUTION_ENABLED, CRYPTO_LOOP_INTERVAL_SECONDS, CRYPTO_WATCHLIST
+from config import AUTONOMOUS_EXECUTION_ENABLED, CRYPTO_LOOP_INTERVAL_SECONDS, CRYPTO_WATCHLIST, INFLUENCER_MONITOR_ENABLED, SEARCH_API_KEY, INFLUENCER_MONITOR_CACHE_TTL_SECONDS
 from data_fetcher import fetch_external_research_sentiment
+from influencer_monitor import monitor_influencers
 from strategy import TradingStrategy
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -135,6 +137,28 @@ def main():
                 f"topics={dominant_topics}"
             )
             print(f"Research strategy notes: {strategy_notes}")
+
+            # Write influencer data to disk for the dashboard
+            if INFLUENCER_MONITOR_ENABLED and SEARCH_API_KEY:
+                try:
+                    inf_data = monitor_influencers(
+                        api_key=SEARCH_API_KEY,
+                        cache_ttl_seconds=INFLUENCER_MONITOR_CACHE_TTL_SECONDS,
+                    )
+                    _inf_log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
+                    os.makedirs(_inf_log_dir, exist_ok=True)
+                    _inf_path = os.path.join(_inf_log_dir, "influencer_analysis.json")
+                    with open(_inf_path, "w", encoding="utf-8") as _f:
+                        json.dump(inf_data, _f, indent=2)
+                    g = inf_data.get("global", {})
+                    print(
+                        f"Influencer monitor: signal={g.get('dominant_signal','?')} "
+                        f"manip={g.get('manipulation_detected',False)} "
+                        f"coordination={g.get('coordination_count',0)} "
+                        f"actors={g.get('influencer_count',0)}"
+                    )
+                except Exception as _ie:
+                    print(f"Influencer monitor write failed: {_ie}")
 
         for symbol in CRYPTO_WATCHLIST:
             try:

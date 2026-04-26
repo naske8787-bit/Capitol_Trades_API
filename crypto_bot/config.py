@@ -141,3 +141,24 @@ AUTO_IMPROVEMENT_MIN_TRADES_PER_SYMBOL = int(os.getenv("AUTO_IMPROVEMENT_MIN_TRA
 MARKET_REGIME_SYMBOL = os.getenv("MARKET_REGIME_SYMBOL", "BTC/USD")
 MARKET_REGIME_SHORT_WINDOW = int(os.getenv("MARKET_REGIME_SHORT_WINDOW", "20"))
 MARKET_REGIME_LONG_WINDOW = int(os.getenv("MARKET_REGIME_LONG_WINDOW", "50"))
+
+# Crypto Influencer Monitor
+# Tracks public statements from known market-moving influencers via Brave Search
+# and generates manipulation signals that feed into entry/exit decisions.
+INFLUENCER_MONITOR_ENABLED = _parse_bool(os.getenv("INFLUENCER_MONITOR_ENABLED"), True)
+# How often to refresh influencer search results (seconds).  Default 15 min.
+INFLUENCER_MONITOR_CACHE_TTL_SECONDS = int(os.getenv("INFLUENCER_MONITOR_CACHE_TTL_SECONDS", "900"))
+# net_signal threshold above which the bot treats this as a pump and boosts entries.
+INFLUENCER_PUMP_TRADE_SCORE = float(os.getenv("INFLUENCER_PUMP_TRADE_SCORE", "3.0"))
+# net_signal threshold below which the bot treats this as a dump and forces exits.
+INFLUENCER_DUMP_SELL_SCORE = float(os.getenv("INFLUENCER_DUMP_SELL_SCORE", "-3.0"))
+# manipulation_score above this causes the bot to switch to a tighter take-profit
+# "pump-ride" mode (exit sooner before the inevitable dump).
+INFLUENCER_MANIPULATION_RIDE_SCORE = float(os.getenv("INFLUENCER_MANIPULATION_RIDE_SCORE", "5.0"))
+# manipulation_score below this forces an immediate sell of any open position.
+INFLUENCER_MANIPULATION_DUMP_SCORE = float(os.getenv("INFLUENCER_MANIPULATION_DUMP_SCORE", "-5.0"))
+# When coordination is detected (2+ influencers same direction) and this flag
+# is True, apply an extra confirmation check before buying into the pump.
+INFLUENCER_REQUIRE_TECHNICAL_CONFIRM = _parse_bool(
+    os.getenv("INFLUENCER_REQUIRE_TECHNICAL_CONFIRM"), True
+)

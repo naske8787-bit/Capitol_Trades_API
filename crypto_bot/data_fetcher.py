@@ -11,10 +11,13 @@ from config import (
     CRYPTO_SLOW_EMA_WINDOW,
     EXTERNAL_RESEARCH_CACHE_TTL_SECONDS,
     EXTERNAL_RESEARCH_ENABLED,
+    INFLUENCER_MONITOR_ENABLED,
+    INFLUENCER_MONITOR_CACHE_TTL_SECONDS,
     SEARCH_API_KEY,
     SEARCH_ENGINE,
     SEARCH_PROVIDER,
 )
+from influencer_monitor import monitor_influencers
 
 _GLOBAL_NEWS_CACHE = None
 _GLOBAL_NEWS_CACHE_TS = 0.0
@@ -188,6 +191,33 @@ def fetch_external_research_sentiment():
         "confidence": round(confidence, 4),
         "source_count": source_count,
     }
+
+    # Attach influencer manipulation signals if enabled
+    if INFLUENCER_MONITOR_ENABLED and SEARCH_API_KEY:
+        try:
+            influencer_data = monitor_influencers(
+                api_key=SEARCH_API_KEY,
+                cache_ttl_seconds=INFLUENCER_MONITOR_CACHE_TTL_SECONDS,
+            )
+            _GLOBAL_NEWS_CACHE["influencer_signals"] = influencer_data
+
+            # Adjust the global research score based on influencer signal
+            global_inf = influencer_data.get("global", {})
+            avg_inf_signal = float(global_inf.get("avg_net_signal", 0.0))
+            # Weight influencer signal at 30% vs 70% existing macro signal
+            blended_score = _GLOBAL_NEWS_CACHE["score"] * 0.70 + avg_inf_signal * 0.30
+            blended_score = max(-cap_magnitude, min(cap_magnitude, blended_score))
+            _GLOBAL_NEWS_CACHE["score"] = blended_score
+            _GLOBAL_NEWS_CACHE["weighted_score"] = blended_score
+            _GLOBAL_NEWS_CACHE["influencer_dominant_signal"] = global_inf.get("dominant_signal", "neutral")
+            _GLOBAL_NEWS_CACHE["influencer_manipulation_detected"] = bool(
+                global_inf.get("manipulation_detected", False)
+            )
+        except Exception:
+            _GLOBAL_NEWS_CACHE["influencer_signals"] = {"by_symbol": {}, "global": {}}
+    else:
+        _GLOBAL_NEWS_CACHE["influencer_signals"] = {"by_symbol": {}, "global": {}}
+
     _GLOBAL_NEWS_CACHE_TS = now
     return _GLOBAL_NEWS_CACHE
 

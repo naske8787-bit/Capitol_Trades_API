@@ -448,6 +448,79 @@ def investment_performance():
     })
 
 
+@app.route('/api/crypto-influencer')
+def crypto_influencer():
+    """
+    Return the latest influencer manipulation signals from the crypto bot's
+    research snapshot, plus recent trade log entries tagged as pump-ride.
+    Reads the cached research file written by data_fetcher — no live search
+    call is made from the dashboard.
+    """
+    import json as _json
+
+    _RESEARCH_SNAPSHOT = os.path.join(
+        _REPO_ROOT, 'tech_research_bot', 'output', 'latest_research.json'
+    )
+    _CRYPTO_BOT_DIR = os.path.join(_REPO_ROOT, 'crypto_bot')
+
+    # ── influencer snapshot from crypto_bot models cache ──────────────────
+    influencer_cache_path = os.path.join(
+        _CRYPTO_BOT_DIR, 'models', 'influencer_cache.json'
+    )
+    # Also try the analysis output written by the bot loop
+    bot_analysis_path = os.path.join(
+        _CRYPTO_BOT_DIR, 'logs', 'influencer_analysis.json'
+    )
+
+    influencer_data = {"by_symbol": {}, "global": {}}
+    for candidate in (bot_analysis_path, influencer_cache_path):
+        if os.path.exists(candidate):
+            try:
+                with open(candidate, 'r', encoding='utf-8') as f:
+                    influencer_data = _json.load(f)
+                break
+            except Exception:
+                pass
+
+    # ── pump-ride trades from trade log ───────────────────────────────────
+    pump_trades = []
+    if os.path.exists(_CRYPTO_TRADE_LOG):
+        try:
+            import csv as _csv
+            with open(_CRYPTO_TRADE_LOG, 'r', encoding='utf-8', newline='') as f:
+                for row in _csv.DictReader(f):
+                    if str(row.get('pump_mode', '') or '').lower() in ('true', '1', 'yes'):
+                        pump_trades.append({
+                            'symbol': row.get('symbol', ''),
+                            'entry_time': row.get('entry_time', ''),
+                            'exit_time': row.get('exit_time', ''),
+                            'pnl': float(row.get('pnl', 0) or 0),
+                            'influencer_actors': row.get('influencer_actors', ''),
+                        })
+        except Exception:
+            pass
+
+    # ── tech research highlights ──────────────────────────────────────────
+    research_headlines = []
+    if os.path.exists(_RESEARCH_SNAPSHOT):
+        try:
+            with open(_RESEARCH_SNAPSHOT, 'r', encoding='utf-8') as f:
+                snap = _json.load(f)
+            research_headlines = [
+                {'title': item.get('title', ''), 'probability': item.get('probability', 0.0)}
+                for item in (snap if isinstance(snap, list) else snap.get('items', []))[:10]
+            ]
+        except Exception:
+            pass
+
+    return jsonify({
+        'influencer': influencer_data,
+        'pump_trades': pump_trades[-20:],
+        'research_headlines': research_headlines,
+        'as_of': datetime.utcnow().isoformat() + 'Z',
+    })
+
+
 
 # ── Shift allocation from timestamp ─────────────────────────────────────
 # DS = Day Shift  06:00 (inclusive) → 18:00 (exclusive)
