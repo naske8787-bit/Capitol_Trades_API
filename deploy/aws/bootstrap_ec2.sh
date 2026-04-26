@@ -110,6 +110,7 @@ sudo -u "$APP_USER" bash -lc "
   pip install -r trading_bot/requirements.txt
   pip install -r crypto_bot/requirements.txt
   pip install -r asx_bot/requirements.txt
+  pip install -r forex_bot/requirements.txt
   pip install -r dashboard/requirements.txt
 "
 
@@ -132,4 +133,4 @@ bash "$APP_DIR/deploy/aws/install_systemd_units.sh" \
 
 echo "Bootstrap complete."
 echo "Next: edit /etc/capitol-trades/capitol-trades.env and set your secrets."
-echo "Then: sudo systemctl restart capitol-api capitol-dashboard capitol-trading-bot capitol-crypto-bot capitol-asx-bot"
+echo "Then: sudo systemctl restart capitol-api capitol-dashboard capitol-trading-bot capitol-crypto-bot capitol-asx-bot capitol-forex-bot capitol-tech-research-bot"

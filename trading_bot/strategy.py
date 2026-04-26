@@ -42,6 +42,15 @@ from config import (
     TECH_RESEARCH_FORCE_BUY_MAX_SIGNAL_AGE_HOURS,
     TECH_RESEARCH_FORCE_BUY_MAX_CANDIDATES,
     TECH_RESEARCH_FORCE_BUY_RISK_MULTIPLIER,
+    FUNDAMENTALS_GATE_ENABLED,
+    FUNDAMENTALS_MIN_SCORE,
+    FUNDAMENTALS_MIN_MARKET_CAP_BILLION,
+    FUNDAMENTALS_MAX_DEBT_TO_EQUITY,
+    FUNDAMENTALS_REQUIRE_POSITIVE_FCF,
+    LONG_TERM_MIN_HOLD_HOURS,
+    LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT,
+    LONG_TERM_MAX_TOTAL_EXPOSURE_PCT,
+    LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT,
 )
 from data_fetcher import fetch_capitol_trades, fetch_stock_data, preprocess_data, fetch_vix_level, fetch_news_sentiment, fetch_sector_momentum
 from data_fetcher import fetch_global_macro_sentiment
@@ -55,6 +64,8 @@ _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abs
 from proven_patterns import score_conditions_against_patterns, build_equity_conditions
 from setup_validator import evaluate_equity_setup
 from regime_detector import detect_equity_regime
+from fundamentals import evaluate_company_fundamentals
+from long_term_policy import LongTermPolicy
 
 
 class TradingStrategy:
@@ -116,6 +127,12 @@ class TradingStrategy:
             learning_rate=ADAPTIVE_POLICY_LEARNING_RATE,
             decay=ADAPTIVE_POLICY_DECAY,
             max_adjustment_abs=ADAPTIVE_POLICY_MAX_ADJUSTMENT_PCT / 100.0,
+        )
+        self.long_term_policy = LongTermPolicy(
+            bot_name="trading_bot",
+            max_total_exposure_pct=LONG_TERM_MAX_TOTAL_EXPOSURE_PCT,
+            max_symbol_exposure_pct=LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT,
+            max_drawdown_pct=LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT,
         )
 
     def apply_autonomy_profile(self, profile):
@@ -735,6 +752,9 @@ class TradingStrategy:
                 entry_price = float(position.get("entry_price") or current_price)
                 if entry_price <= 0:
                     entry_price = current_price
+                entry_ts = float(position.get("entry_ts") or 0.0)
+                hold_hours = ((time.time() - entry_ts) / 3600.0) if entry_ts > 0 else LONG_TERM_MIN_HOLD_HOURS
+                min_hold_reached = hold_hours >= max(0, LONG_TERM_MIN_HOLD_HOURS)
                 is_etf = symbol in ETF_SYMBOLS
                 sl_pct = STOP_LOSS_PCT * 0.6 if is_etf else STOP_LOSS_PCT
                 tp_pct = TAKE_PROFIT_PCT * 0.5 if is_etf else TAKE_PROFIT_PCT
@@ -745,11 +765,14 @@ class TradingStrategy:
                         "entry_price": entry_price,
                         "stop_loss_price": stop_loss_price,
                         "take_profit_price": take_profit_price,
+                        "hold_hours": hold_hours,
                     }
                 )
 
                 if current_price <= stop_loss_price:
                     return "SELL"
+                if not min_hold_reached:
+                    return "HOLD"
                 if current_price >= take_profit_price and (
                     effective_predicted_change <= BUY_THRESHOLD_PCT or sentiment <= 0 or trend_strength < 0
                 ):
@@ -827,6 +850,24 @@ class TradingStrategy:
                     "setup_sample_size": int(setup_validation.get("sample_size", 0)),
                 }
             )
+
+            if self.long_term_policy.drawdown_blocked():
+                self.last_analysis[symbol]["autonomy_block_reason"] = "long_term_drawdown_guard"
+                return "HOLD"
+
+            fundamentals = {"passed": True, "score": 1.0}
+            if FUNDAMENTALS_GATE_ENABLED and not is_etf:
+                fundamentals = evaluate_company_fundamentals(
+                    symbol=symbol,
+                    min_score=FUNDAMENTALS_MIN_SCORE,
+                    min_market_cap_billion=FUNDAMENTALS_MIN_MARKET_CAP_BILLION,
+                    max_debt_to_equity=FUNDAMENTALS_MAX_DEBT_TO_EQUITY,
+                    require_positive_fcf=FUNDAMENTALS_REQUIRE_POSITIVE_FCF,
+                )
+                self.last_analysis[symbol]["fundamentals"] = fundamentals
+                if not bool(fundamentals.get("passed", False)) and not force_signal.get("triggered", False):
+                    self.last_analysis[symbol]["autonomy_block_reason"] = "fundamentals_gate_failed"
+                    return "HOLD"
 
             # --- Global macro filters on new entries ---
             # Block all new entries when VIX signals extreme fear (market panic)
@@ -920,6 +961,15 @@ class TradingStrategy:
                 if current_price <= 0 or capital <= 0:
                     print(f"Skipping BUY for {symbol}: invalid capital or price.")
                     return None
+                portfolio_value = broker.get_portfolio_value()
+                if portfolio_value > 0:
+                    policy_state = self.long_term_policy.record_portfolio_value(portfolio_value)
+                    if policy_state.get("drawdown", 0.0) >= LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT:
+                        print(
+                            f"Skipping BUY for {symbol}: long-term drawdown guard active "
+                            f"({policy_state.get('drawdown', 0.0):.1%})."
+                        )
+                        return None
 
                 entry_analysis = self.last_analysis.get(symbol, {})
                 effective_risk_per_trade = RISK_PER_TRADE * float(profile.get("risk_multiplier", 1.0))
@@ -934,6 +984,18 @@ class TradingStrategy:
                 qty = min(max_affordable_qty, max(1, target_qty)) if max_affordable_qty > 0 else 0
                 if qty <= 0:
                     print(f"Skipping BUY for {symbol}: insufficient buying power for one share.")
+                    return None
+
+                proposed_notional = float(qty) * float(current_price)
+                open_notional = broker.get_open_notional() if hasattr(broker, "get_open_notional") else 0.0
+                allowed, reason = self.long_term_policy.can_open_position(
+                    symbol=symbol,
+                    proposed_notional=proposed_notional,
+                    portfolio_value=portfolio_value if portfolio_value > 0 else capital,
+                    open_notional=open_notional,
+                )
+                if not allowed:
+                    print(f"Skipping BUY for {symbol}: {reason}.")
                     return None
 
                 broker.buy(symbol, qty)

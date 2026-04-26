@@ -96,6 +96,16 @@ class AlpacaBroker:
             print(f"[Alpaca] Unable to fetch open positions: {e}")
             return 0
 
+    def get_open_notional(self):
+        try:
+            total = 0.0
+            for pos in self.api.get_all_positions():
+                total += abs(float(getattr(pos, "market_value", 0.0) or 0.0))
+            return total
+        except Exception as e:
+            print(f"[Alpaca] Unable to fetch open notional: {e}")
+            return 0.0
+
 
 # ── IBKR broker (international markets) ────────────────────────────────────
 
@@ -183,6 +193,15 @@ class IBKRBroker:
     def get_open_positions_count(self):
         return len(self.ib.positions())
 
+    def get_open_notional(self):
+        total = 0.0
+        for pos in self.ib.positions():
+            try:
+                total += abs(float(pos.position) * float(pos.avgCost))
+            except Exception:
+                continue
+        return total
+
     def disconnect(self):
         self.ib.disconnect()
 
@@ -246,3 +265,9 @@ class Broker:
         if self._ibkr:
             count += self._ibkr.get_open_positions_count()
         return count
+
+    def get_open_notional(self):
+        total = self._alpaca.get_open_notional()
+        if self._ibkr:
+            total += self._ibkr.get_open_notional()
+        return total

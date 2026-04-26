@@ -12,6 +12,7 @@ This folder contains scripts to bootstrap a fresh Ubuntu EC2 host for this repos
   - `trading_bot/requirements.txt`
   - `crypto_bot/requirements.txt`
   - `asx_bot/requirements.txt`
+  - `forex_bot/requirements.txt`
   - `dashboard/requirements.txt`
 - systemd units:
   - `capitol-api`
@@ -19,6 +20,8 @@ This folder contains scripts to bootstrap a fresh Ubuntu EC2 host for this repos
   - `capitol-trading-bot`
   - `capitol-crypto-bot`
   - `capitol-asx-bot`
+  - `capitol-forex-bot`
+  - `capitol-tech-research-bot`
 
 ## Quick start (on EC2)
 
@@ -67,6 +70,7 @@ Then restart services:
 
 ```bash
 sudo systemctl restart capitol-api capitol-dashboard capitol-trading-bot capitol-crypto-bot capitol-asx-bot
+sudo systemctl restart capitol-forex-bot capitol-tech-research-bot
 ```
 
 ## Health checks
@@ -77,6 +81,8 @@ sudo systemctl status capitol-dashboard --no-pager
 sudo systemctl status capitol-trading-bot --no-pager
 sudo systemctl status capitol-crypto-bot --no-pager
 sudo systemctl status capitol-asx-bot --no-pager
+sudo systemctl status capitol-forex-bot --no-pager
+sudo systemctl status capitol-tech-research-bot --no-pager
 
 curl -I http://127.0.0.1:8000/health
 ss -tulpen | grep -E '8000|5051'
@@ -153,6 +159,8 @@ sudo journalctl -u capitol-dashboard -f
 sudo journalctl -u capitol-trading-bot -f
 sudo journalctl -u capitol-crypto-bot -f
 sudo journalctl -u capitol-asx-bot -f
+sudo journalctl -u capitol-forex-bot -f
+sudo journalctl -u capitol-tech-research-bot -f
 
 # existing app logs
 tail -f /opt/Capitol_Trades_API/api_server.log
@@ -160,6 +168,8 @@ tail -f /tmp/dashboard.log
 tail -f /opt/Capitol_Trades_API/trading_bot/bot.log
 tail -f /opt/Capitol_Trades_API/crypto_bot/bot.log
 tail -f /opt/Capitol_Trades_API/asx_bot/output.log
+tail -f /opt/Capitol_Trades_API/forex_bot/output.log
+tail -f /opt/Capitol_Trades_API/tech_research_bot/bot.log
 ```
 
 ## Notes

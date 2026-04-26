@@ -147,3 +147,29 @@ class Broker:
             return len(self.api.get_all_positions())
         except Exception:
             return 0
+
+    def get_open_notional(self):
+        try:
+            total = 0.0
+            for pos in self.api.get_all_positions():
+                total += abs(float(getattr(pos, "market_value", 0.0) or 0.0))
+            return total
+        except Exception:
+            return 0.0
+
+    def get_account_details(self):
+        try:
+            account = self._fetch_account_with_retry()
+            return {
+                "cash": float(getattr(account, "cash", 0.0) or 0.0),
+                "buying_power": float(getattr(account, "buying_power", 0.0) or 0.0),
+                "portfolio_value": float(getattr(account, "portfolio_value", 0.0) or 0.0),
+                "status": str(getattr(account, "status", "unknown")),
+            }
+        except Exception:
+            return {
+                "cash": float(self._last_account_snapshot.get("cash", 0.0) or 0.0),
+                "buying_power": float(self._last_account_snapshot.get("buying_power", 0.0) or 0.0),
+                "portfolio_value": float(self._last_account_snapshot.get("portfolio_value", 0.0) or 0.0),
+                "status": "error",
+            }

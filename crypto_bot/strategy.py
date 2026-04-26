@@ -42,6 +42,10 @@ from config import (
     INFLUENCER_MANIPULATION_RIDE_SCORE,
     INFLUENCER_MANIPULATION_DUMP_SCORE,
     INFLUENCER_REQUIRE_TECHNICAL_CONFIRM,
+    LONG_TERM_MIN_HOLD_HOURS,
+    LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT,
+    LONG_TERM_MAX_TOTAL_EXPOSURE_PCT,
+    LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT,
 )
 from data_fetcher import fetch_crypto_data, preprocess_data, fetch_external_research_sentiment
 from influencer_monitor import get_symbol_signal
@@ -51,6 +55,7 @@ _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abs
 from proven_patterns import score_conditions_against_patterns, build_crypto_conditions
 from setup_validator import evaluate_crypto_setup
 from regime_detector import detect_crypto_regime
+from long_term_policy import LongTermPolicy
 
 
 class TradingStrategy:
@@ -87,6 +92,12 @@ class TradingStrategy:
                 "capital_preservation": {"wins": 0, "losses": 0, "pnl_sum": 0.0},
             },
         }
+        self.long_term_policy = LongTermPolicy(
+            bot_name="crypto_bot",
+            max_total_exposure_pct=LONG_TERM_MAX_TOTAL_EXPOSURE_PCT,
+            max_symbol_exposure_pct=LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT,
+            max_drawdown_pct=LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT,
+        )
         self._load_autonomy_state()
 
     def _load_autonomy_state(self):
@@ -547,6 +558,11 @@ class TradingStrategy:
                 entry_price = float(position["entry_price"])
                 pump_mode = bool(position.get("influencer_pump_mode", False))
                 self.last_analysis[symbol]["influencer_pump_mode"] = pump_mode
+                entry_ts = position.get("entry_ts")
+                hold_hours = LONG_TERM_MIN_HOLD_HOURS
+                if isinstance(entry_ts, datetime):
+                    hold_hours = max(0.0, (datetime.now(timezone.utc) - entry_ts).total_seconds() / 3600.0)
+                min_hold_reached = hold_hours >= max(0, LONG_TERM_MIN_HOLD_HOURS)
 
                 # ATR-based trailing stop: tighter of fixed % or ATR multiple
                 atr_stop = current_price - (CRYPTO_ATR_STOP_MULTIPLIER * atr)
@@ -594,6 +610,8 @@ class TradingStrategy:
 
                 if current_price <= stop_loss_price:
                     return "SELL"
+                if not min_hold_reached:
+                    return "HOLD"
                 if current_price >= take_profit_price and rsi >= CRYPTO_RSI_SELL_THRESHOLD:
                     return "SELL"
                 # MACD bearish crossover exit
@@ -610,6 +628,8 @@ class TradingStrategy:
                 return "HOLD"
 
             if not bool(profile.get("allow_new_entries", True)):
+                return "HOLD"
+            if self.long_term_policy.drawdown_blocked():
                 return "HOLD"
             if not regime_allow_new_entries and not oversold_rebound:
                 return "HOLD"
@@ -777,6 +797,15 @@ class TradingStrategy:
                     print(f"Skipping BUY for {symbol}: insufficient account balance (balance={capital:.2f}, cash={cash}, buying_power={buying_power}, status={status})")
                     return None
                 current_price = broker.get_current_price(symbol)
+                portfolio_value = broker.get_portfolio_value()
+                if portfolio_value > 0:
+                    policy_state = self.long_term_policy.record_portfolio_value(portfolio_value)
+                    if policy_state.get("drawdown", 0.0) >= LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT:
+                        print(
+                            f"Skipping BUY for {symbol}: long-term drawdown guard active "
+                            f"({policy_state.get('drawdown', 0.0):.1%})."
+                        )
+                        return None
                 effective_risk = CRYPTO_RISK_PER_TRADE * float(profile.get("risk_multiplier", 1.0))
                 regime_risk = float(self.last_analysis.get(symbol, {}).get("regime_risk_multiplier", 1.0) or 1.0)
                 effective_risk *= regime_risk
@@ -790,6 +819,17 @@ class TradingStrategy:
                 qty = round(notional / current_price, 6)
                 if qty <= 0:
                     print(f"Skipping BUY for {symbol}: quantity rounded to zero.")
+                    return None
+
+                open_notional = broker.get_open_notional() if hasattr(broker, "get_open_notional") else 0.0
+                allowed, reason = self.long_term_policy.can_open_position(
+                    symbol=symbol,
+                    proposed_notional=notional,
+                    portfolio_value=portfolio_value if portfolio_value > 0 else capital,
+                    open_notional=open_notional,
+                )
+                if not allowed:
+                    print(f"Skipping BUY for {symbol}: {reason}.")
                     return None
 
                 broker.buy(symbol, qty)

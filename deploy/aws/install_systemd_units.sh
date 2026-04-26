@@ -150,8 +150,57 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
+cat >/etc/systemd/system/capitol-forex-bot.service <<EOF
+[Unit]
+Description=Capitol Forex Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$APP_USER
+WorkingDirectory=$APP_DIR/forex_bot
+EnvironmentFile=$ENV_FILE
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHON_BIN=$APP_DIR/.venv/bin/python
+ExecStart=/bin/bash -lc 'exec $APP_DIR/.venv/bin/python -u main.py'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat >/etc/systemd/system/capitol-tech-research-bot.service <<EOF
+[Unit]
+Description=Capitol Tech Research Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$APP_USER
+WorkingDirectory=$APP_DIR/tech_research_bot
+EnvironmentFile=$ENV_FILE
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHON_BIN=$APP_DIR/.venv/bin/python
+ExecStart=/bin/bash -lc 'exec ./supervise_bot.sh'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 systemctl daemon-reload
-systemctl enable capitol-api capitol-dashboard capitol-trading-bot capitol-crypto-bot capitol-asx-bot
+systemctl enable \
+  capitol-api \
+  capitol-dashboard \
+  capitol-trading-bot \
+  capitol-crypto-bot \
+  capitol-asx-bot \
+  capitol-forex-bot \
+  capitol-tech-research-bot
 
 echo "Installed and enabled systemd units:"
 echo "  - capitol-api"
@@ -159,3 +208,5 @@ echo "  - capitol-dashboard"
 echo "  - capitol-trading-bot"
 echo "  - capitol-crypto-bot"
 echo "  - capitol-asx-bot"
+echo "  - capitol-forex-bot"
+echo "  - capitol-tech-research-bot"

@@ -37,7 +37,7 @@ write_files:
         --app-user "$APP_USER"
 
       # Start services after bootstrap + env file creation.
-      systemctl restart capitol-api capitol-dashboard capitol-trading-bot capitol-crypto-bot capitol-asx-bot || true
+      systemctl restart capitol-api capitol-dashboard capitol-trading-bot capitol-crypto-bot capitol-asx-bot capitol-forex-bot capitol-tech-research-bot || true
 
 runcmd:
   - [bash, -lc, /usr/local/bin/capitol-firstboot.sh]
