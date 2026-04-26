@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 import json
 import os
 import re
+import shutil
 import subprocess
 import time
 from urllib.parse import parse_qs
@@ -18,7 +19,14 @@ from app.utils.helpers import error_response, json_response
 # across Codespaces (/workspaces/...) and EC2 (/opt/...).
 _DEFAULT_WORKSPACE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 _WORKSPACE = os.environ.get("BOT_WORKSPACE", _DEFAULT_WORKSPACE)
-PYTHON_BIN = os.environ.get("PYTHON_BIN", "/home/codespace/.python/current/bin/python")
+if os.environ.get("PYTHON_BIN"):
+    PYTHON_BIN = os.environ["PYTHON_BIN"]
+else:
+    _python_candidates = [
+        f"{_WORKSPACE}/.venv/bin/python",
+        "/home/codespace/.python/current/bin/python",
+    ]
+    PYTHON_BIN = next((p for p in _python_candidates if os.path.exists(p)), shutil.which("python3") or "python3")
 
 _BOT_CONFIG = {
     "trading_bot": {
@@ -2052,6 +2060,27 @@ def _bot_running(bot_id):
     return _tmux_running(session) or _systemd_running(service)
 
 
+def _systemd_control(service, action):
+    if not service:
+        return False, ""
+
+    # Try direct systemctl first, then non-interactive sudo for hosts that require elevation.
+    commands = [
+        ["systemctl", action, service],
+        ["sudo", "-n", "systemctl", action, service],
+    ]
+    last_error = ""
+    for cmd in commands:
+        try:
+            subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            return True, ""
+        except subprocess.CalledProcessError as e:
+            last_error = (e.stderr or b"").decode().strip() or str(e)
+        except Exception as e:
+            last_error = str(e)
+    return False, last_error
+
+
 def _last_log_lines(path, n=8):
     try:
         r = subprocess.run(["tail", f"-{n}", path],
@@ -2103,9 +2132,15 @@ def _bot_control(bot_id, action):
     if not cfg:
         return False, f"Unknown bot: {bot_id}"
     session = cfg["session"]
+    service = cfg.get("service")
     if action == "start":
-        if _tmux_running(session):
+        if _bot_running(bot_id):
             return True, f"{bot_id} is already running."
+
+        ok, err = _systemd_control(service, "start")
+        if ok:
+            return True, f"{bot_id} started."
+
         try:
             subprocess.run(
                 ["tmux", "new-session", "-d", "-s", session,
@@ -2114,17 +2149,33 @@ def _bot_control(bot_id, action):
             )
             return True, f"{bot_id} started."
         except subprocess.CalledProcessError as e:
-            return False, f"Failed to start {bot_id}: {e.stderr.decode().strip()}"
+            tmux_err = e.stderr.decode().strip()
+            detail = f" systemd={err};" if err else ""
+            return False, f"Failed to start {bot_id}:{detail} tmux={tmux_err}"
     elif action == "stop":
-        if not _tmux_running(session):
+        if not _bot_running(bot_id):
             return True, f"{bot_id} is not running."
+
+        ok, err = _systemd_control(service, "stop")
+        if ok:
+            return True, f"{bot_id} stopped."
+
+        if not _tmux_running(session):
+            return False, f"Failed to stop {bot_id} via systemd: {err}"
+
         try:
             subprocess.run(["tmux", "kill-session", "-t", session],
                            check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             return True, f"{bot_id} stopped."
         except subprocess.CalledProcessError as e:
-            return False, f"Failed to stop {bot_id}: {e.stderr.decode().strip()}"
+            tmux_err = e.stderr.decode().strip()
+            detail = f" systemd={err};" if err else ""
+            return False, f"Failed to stop {bot_id}:{detail} tmux={tmux_err}"
     elif action == "restart":
+        ok, err = _systemd_control(service, "restart")
+        if ok:
+            return True, f"{bot_id} restarted."
+
         try:
             if _tmux_running(session):
                 subprocess.run(["tmux", "kill-session", "-t", session],
@@ -2136,7 +2187,9 @@ def _bot_control(bot_id, action):
             )
             return True, f"{bot_id} restarted."
         except subprocess.CalledProcessError as e:
-            return False, f"Failed to restart {bot_id}: {e.stderr.decode().strip()}"
+            tmux_err = e.stderr.decode().strip()
+            detail = f" systemd={err};" if err else ""
+            return False, f"Failed to restart {bot_id}:{detail} tmux={tmux_err}"
     elif action == "reset_faults":
         try:
             state_path = _AUTONOMY_STATE_FILES.get(bot_id)
