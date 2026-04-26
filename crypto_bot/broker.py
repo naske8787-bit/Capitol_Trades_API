@@ -4,17 +4,19 @@ from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.requests import MarketOrderRequest
 import math
+import os
 
-from config import ALPACA_API_KEY, ALPACA_API_SECRET, CRYPTO_PAPER_ONLY
+import config as cfg
 from data_fetcher import fetch_crypto_data, to_alpaca_symbol
 
 
 class Broker:
     def __init__(self):
-        if not ALPACA_API_KEY or not ALPACA_API_SECRET:
-            raise RuntimeError("Missing ALPACA_API_KEY or ALPACA_API_SECRET in the environment.")
-        self.api = TradingClient(ALPACA_API_KEY, ALPACA_API_SECRET, paper=CRYPTO_PAPER_ONLY)
-        self._data_client = CryptoHistoricalDataClient(ALPACA_API_KEY, ALPACA_API_SECRET)
+        self._api_key = ""
+        self._api_secret = ""
+        self._set_credentials_from_env()
+        self.api = TradingClient(self._api_key, self._api_secret, paper=cfg.CRYPTO_PAPER_ONLY)
+        self._data_client = CryptoHistoricalDataClient(self._api_key, self._api_secret)
         self._last_account_snapshot = {
             "cash": 0.0,
             "buying_power": 0.0,
@@ -22,13 +24,43 @@ class Broker:
         }
 
     @staticmethod
+    def _pick_first_nonempty(names):
+        for name in names:
+            value = (os.getenv(name) or "").strip()
+            if value:
+                return value
+        return ""
+
+    def _set_credentials_from_env(self):
+        # Support common Alpaca key names used across different deploy setups.
+        key = self._pick_first_nonempty([
+            "ALPACA_API_KEY",
+            "APCA_API_KEY_ID",
+            "ALPACA_PAPER_API_KEY",
+        ]) or (cfg.ALPACA_API_KEY or "").strip()
+        secret = self._pick_first_nonempty([
+            "ALPACA_API_SECRET",
+            "APCA_API_SECRET_KEY",
+            "ALPACA_PAPER_API_SECRET",
+        ]) or (cfg.ALPACA_API_SECRET or "").strip()
+
+        if not key or not secret:
+            raise RuntimeError(
+                "Missing Alpaca credentials. Set ALPACA_API_KEY/ALPACA_API_SECRET "
+                "or APCA_API_KEY_ID/APCA_API_SECRET_KEY."
+            )
+        self._api_key = key
+        self._api_secret = secret
+
+    @staticmethod
     def _is_auth_error(exc):
         text = str(exc).lower()
         return "unauthorized" in text or "forbidden" in text or " 401" in text or " 403" in text
 
     def _refresh_clients(self):
-        self.api = TradingClient(ALPACA_API_KEY, ALPACA_API_SECRET, paper=CRYPTO_PAPER_ONLY)
-        self._data_client = CryptoHistoricalDataClient(ALPACA_API_KEY, ALPACA_API_SECRET)
+        self._set_credentials_from_env()
+        self.api = TradingClient(self._api_key, self._api_secret, paper=cfg.CRYPTO_PAPER_ONLY)
+        self._data_client = CryptoHistoricalDataClient(self._api_key, self._api_secret)
 
     def _fetch_account_with_retry(self):
         try:
