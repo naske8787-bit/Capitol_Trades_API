@@ -14,36 +14,44 @@ from shared.regime_detector import detect_equity_regime, detect_crypto_regime
 from app.routes import ROUTES
 from app.utils.helpers import error_response, json_response
 
-_WORKSPACE = os.environ.get("BOT_WORKSPACE", "/workspaces/Capitol_Trades_API")
+# Prefer explicit override, then infer from this file location for portability
+# across Codespaces (/workspaces/...) and EC2 (/opt/...).
+_DEFAULT_WORKSPACE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+_WORKSPACE = os.environ.get("BOT_WORKSPACE", _DEFAULT_WORKSPACE)
 PYTHON_BIN = os.environ.get("PYTHON_BIN", "/home/codespace/.python/current/bin/python")
 
 _BOT_CONFIG = {
     "trading_bot": {
         "session": "trading_bot",
+        "service": "capitol-trading-bot.service",
         "cwd": f"{_WORKSPACE}/trading_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./supervise_bot.sh",
         "log": f"{_WORKSPACE}/trading_bot/bot.log",
     },
     "crypto_bot": {
         "session": "crypto_bot",
+        "service": "capitol-crypto-bot.service",
         "cwd": f"{_WORKSPACE}/crypto_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./supervise_bot.sh",
         "log": f"{_WORKSPACE}/crypto_bot/bot.log",
     },
     "asx_bot": {
         "session": "asx_bot",
+        "service": "capitol-asx-bot.service",
         "cwd": f"{_WORKSPACE}/asx_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./run_tmux.sh",
         "log": f"{_WORKSPACE}/asx_bot/output.log",
     },
     "forex_bot": {
         "session": "forex_bot",
+        "service": "capitol-forex-bot.service",
         "cwd": f"{_WORKSPACE}/forex_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./run_tmux.sh",
         "log": f"{_WORKSPACE}/forex_bot/output.log",
     },
     "tech_research_bot": {
         "session": "tech_research_bot",
+        "service": "capitol-tech-research-bot.service",
         "cwd": f"{_WORKSPACE}/tech_research_bot",
         "cmd": f"PYTHON_BIN={PYTHON_BIN} bash ./supervise_bot.sh",
         "log": f"{_WORKSPACE}/tech_research_bot/bot.log",
@@ -2023,6 +2031,27 @@ def _tmux_running(session):
         return False
 
 
+def _systemd_running(service):
+    if not service:
+        return False
+    try:
+        r = subprocess.run(
+            ["systemctl", "is-active", "--quiet", service],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return r.returncode == 0
+    except Exception:
+        return False
+
+
+def _bot_running(bot_id):
+    cfg = _BOT_CONFIG.get(bot_id) or {}
+    session = cfg.get("session")
+    service = cfg.get("service")
+    return _tmux_running(session) or _systemd_running(service)
+
+
 def _last_log_lines(path, n=8):
     try:
         r = subprocess.run(["tail", f"-{n}", path],
@@ -2033,11 +2062,11 @@ def _last_log_lines(path, n=8):
 
 
 def _check_bot_status():
-    trading_running = _tmux_running("trading_bot")
-    crypto_running = _tmux_running("crypto_bot")
-    asx_running = _tmux_running("asx_bot")
-    forex_running = _tmux_running("forex_bot")
-    tech_research_running = _tmux_running("tech_research_bot")
+    trading_running = _bot_running("trading_bot")
+    crypto_running = _bot_running("crypto_bot")
+    asx_running = _bot_running("asx_bot")
+    forex_running = _bot_running("forex_bot")
+    tech_research_running = _bot_running("tech_research_bot")
     return {
         "trading_bot": {
             "running": trading_running,
