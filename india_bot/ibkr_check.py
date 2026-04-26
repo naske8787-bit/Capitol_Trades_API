@@ -16,9 +16,17 @@ from ib_insync import IB, Stock
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
+
+def _int_env(env_key, default):
+    raw = str(os.getenv(env_key, str(default))).split("#", 1)[0].strip()
+    try:
+        return int(raw)
+    except Exception:
+        return int(default)
+
 HOST = os.getenv("IBKR_HOST", "127.0.0.1")
-PORT = int(os.getenv("IBKR_PORT", "7497"))
-CLIENT_ID = int(os.getenv("IBKR_CLIENT_ID", "1"))
+PORT = _int_env("IBKR_PORT", 7497)
+CLIENT_ID = _int_env("IBKR_CLIENT_ID", 1)
 CURRENCY = os.getenv("IBKR_CURRENCY", "INR")
 EXCHANGE = os.getenv("DEFAULT_EXCHANGE", "NSE")
 

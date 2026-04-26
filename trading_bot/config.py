@@ -60,6 +60,14 @@ def _parse_int_list(value, default):
     return parsed
 
 
+def _int_env(env_key, default):
+    raw = str(os.getenv(env_key, str(default))).split("#", 1)[0].strip()
+    try:
+        return int(raw)
+    except Exception:
+        return int(default)
+
+
 # API Keys
 CAPITOL_TRADES_API_URL = os.getenv("CAPITOL_TRADES_API_URL", "https://www.capitoltrades.com")
 CAPITOL_TRADES_MAX_PAGES = int(os.getenv("CAPITOL_TRADES_MAX_PAGES", "5"))
@@ -73,8 +81,8 @@ ALPACA_DATA_FEED = os.getenv("ALPACA_DATA_FEED", "iex")  # "iex" (free) or "sip"
 
 # IBKR settings (used for international symbols)
 IBKR_HOST = os.getenv("IBKR_HOST", "127.0.0.1")
-IBKR_PORT = int(os.getenv("IBKR_PORT", "4002"))          # 4002=IB Gateway paper, 4001=live, 7497=TWS paper
-IBKR_CLIENT_ID = int(os.getenv("IBKR_CLIENT_ID", "1"))
+IBKR_PORT = _int_env("IBKR_PORT", 4002)          # 4002=IB Gateway paper, 4001=live, 7497=TWS paper
+IBKR_CLIENT_ID = _int_env("IBKR_CLIENT_ID", 1)
 IBKR_ENABLED = os.getenv("IBKR_ENABLED", "false").lower() == "true"
 
 # Trading settings

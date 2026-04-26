@@ -61,6 +61,14 @@ def _int_list(env_key: str, default: str) -> list[int]:
     return out
 
 
+def _int_env(env_key: str, default: int) -> int:
+    raw = str(os.getenv(env_key, str(default))).split("#", 1)[0].strip()
+    try:
+        return int(raw)
+    except Exception:
+        return int(default)
+
+
 # ── Watchlist ────────────────────────────────────────────────────────────────
 # Liquid ASX stocks suitable for day trading (yfinance .AX suffix)
 WATCHLIST: list[str] = _list(
@@ -77,8 +85,8 @@ ALLOW_BROKER_FALLBACK = os.getenv("ALLOW_BROKER_FALLBACK", "true").strip().lower
 
 # IBKR connection settings (used when BROKER_MODE=ibkr)
 IBKR_HOST       = os.getenv("IBKR_HOST", "127.0.0.1")
-IBKR_PORT       = int(os.getenv("IBKR_PORT", "7497"))    # paper: 7497, live: 7496
-IBKR_CLIENT_ID  = int(os.getenv("IBKR_CLIENT_ID", "7"))
+IBKR_PORT       = _int_env("IBKR_PORT", 7497)    # paper: 7497, live: 7496
+IBKR_CLIENT_ID  = _int_env("IBKR_CLIENT_ID", 7)
 IBKR_ACCOUNT    = os.getenv("IBKR_ACCOUNT", "").strip()   # optional; auto-detect if blank
 IBKR_EXCHANGE   = os.getenv("IBKR_EXCHANGE", "ASX")
 IBKR_CURRENCY   = os.getenv("IBKR_CURRENCY", "AUD")

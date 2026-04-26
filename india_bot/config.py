@@ -26,12 +26,20 @@ def _parse_int_list(value, default):
     return out
 
 
+def _int_env(env_key, default):
+    raw = str(os.getenv(env_key, str(default))).split("#", 1)[0].strip()
+    try:
+        return int(raw)
+    except Exception:
+        return int(default)
+
+
 # Interactive Brokers (IBKR) connection settings
 # IBKR uses TWS (Trader Workstation) or IB Gateway running locally.
 # No API key needed — the bot connects via socket to your running TWS/Gateway.
 IBKR_HOST = os.getenv("IBKR_HOST", "127.0.0.1")
-IBKR_PORT = int(os.getenv("IBKR_PORT", "7497"))   # 7497 = TWS paper, 7496 = TWS live, 4002 = Gateway live
-IBKR_CLIENT_ID = int(os.getenv("IBKR_CLIENT_ID", "1"))
+IBKR_PORT = _int_env("IBKR_PORT", 7497)   # 7497 = TWS paper, 7496 = TWS live, 4002 = Gateway live
+IBKR_CLIENT_ID = _int_env("IBKR_CLIENT_ID", 1)
 IBKR_ACCOUNT = os.getenv("IBKR_ACCOUNT", "")      # Leave blank to use default account
 
 # Paper trading mode — uses IBKR paper account (port 7497) and no real orders
@@ -55,8 +63,8 @@ WATCHLIST = _parse_symbol_list(
 
 # Market regime symbol (NIFTY 50 index in yfinance)
 MARKET_REGIME_SYMBOL = os.getenv("MARKET_REGIME_SYMBOL", "^NSEI")
-MARKET_REGIME_SHORT_WINDOW = int(os.getenv("MARKET_REGIME_SHORT_WINDOW", "50"))
-MARKET_REGIME_LONG_WINDOW = int(os.getenv("MARKET_REGIME_LONG_WINDOW", "200"))
+MARKET_REGIME_SHORT_WINDOW = _int_env("MARKET_REGIME_SHORT_WINDOW", 50)
+MARKET_REGIME_LONG_WINDOW = _int_env("MARKET_REGIME_LONG_WINDOW", 200)
 
 # Market hours (IST) — NSE/BSE: 9:15 AM – 3:30 PM
 MARKET_OPEN_TIME = os.getenv("MARKET_OPEN_TIME", "09:15")
