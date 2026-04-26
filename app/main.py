@@ -8,7 +8,10 @@ import time
 from urllib.parse import parse_qs
 from collections import Counter
 
-import yfinance as yf
+try:
+    import yfinance as yf
+except Exception:
+    yf = None
 
 from shared.regime_detector import detect_equity_regime, detect_crypto_regime
 
@@ -170,6 +173,15 @@ def _live_regime_snapshot(bot_id):
     }
 
     try:
+        if yf is None:
+            result = {
+                "label": "unavailable",
+                "confidence": None,
+                "reason": "yfinance_not_installed",
+            }
+            _REGIME_CACHE[bot_id] = {"ts": now, "value": result}
+            return result
+
         if bot_id == "trading_bot":
             env = _read_bot_env("trading_bot")
             symbol = str(env.get("MARKET_REGIME_SYMBOL") or "SPY").strip().upper()
