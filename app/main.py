@@ -2042,15 +2042,18 @@ def _tmux_running(session):
 def _systemd_running(service):
     if not service:
         return False
-    try:
-        r = subprocess.run(
-            ["systemctl", "is-active", "--quiet", service],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        return r.returncode == 0
-    except Exception:
-        return False
+    commands = [
+        ["systemctl", "is-active", "--quiet", service],
+        ["systemctl", "--user", "is-active", "--quiet", service],
+    ]
+    for cmd in commands:
+        try:
+            r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if r.returncode == 0:
+                return True
+        except Exception:
+            continue
+    return False
 
 
 def _bot_running(bot_id):
@@ -2064,9 +2067,10 @@ def _systemd_control(service, action):
     if not service:
         return False, ""
 
-    # Try direct systemctl first, then non-interactive sudo for hosts that require elevation.
+    # Try system service, then user service, then non-interactive sudo.
     commands = [
         ["systemctl", action, service],
+        ["systemctl", "--user", action, service],
         ["sudo", "-n", "systemctl", action, service],
     ]
     last_error = ""
@@ -2078,6 +2082,13 @@ def _systemd_control(service, action):
             last_error = (e.stderr or b"").decode().strip() or str(e)
         except Exception as e:
             last_error = str(e)
+
+    lowered = last_error.lower()
+    if "interactive authentication required" in lowered or "a password is required" in lowered:
+        return False, (
+            "permission denied for systemd control; configure sudoers for API user "
+            "to manage capitol-* services"
+        )
     return False, last_error
 
 
