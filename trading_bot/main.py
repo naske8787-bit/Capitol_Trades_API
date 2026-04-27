@@ -13,6 +13,9 @@ from config import (
     EVENT_INFLUENCE_REPORT_SYMBOLS,
     EVENT_INFLUENCE_REPORT_TOPICS,
     IBKR_WATCHLIST,
+    MARKET_OVERLAY_ENABLED,
+    MARKET_OVERLAY_LOOKBACK_DAYS,
+    MARKET_OVERLAY_REFRESH_SECONDS,
     WATCHLIST,
 )
 from performance_tracker import PerformanceTracker
@@ -25,6 +28,7 @@ from data_fetcher import fetch_external_research_sentiment
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
+from market_overlay import MarketOverlay
 
 
 def _rank_multipliers(rows):
@@ -155,6 +159,13 @@ def main():
     last_influence_report_ts = 0.0
     last_setup_scorecard_ts = 0.0
     setup_expectancy_window = deque(maxlen=30)
+    market_overlay = None
+    if MARKET_OVERLAY_ENABLED:
+        market_overlay = MarketOverlay(
+            asset_class="equity",
+            refresh_seconds=MARKET_OVERLAY_REFRESH_SECONDS,
+            lookback_days=MARKET_OVERLAY_LOOKBACK_DAYS,
+        )
 
     print("Trading bot started. Press Ctrl+C to stop.")
     startup_snapshot = tracker.record_equity_snapshot(broker, note="startup")
@@ -199,6 +210,39 @@ def main():
         if AUTONOMOUS_EXECUTION_ENABLED:
             research = fetch_external_research_sentiment()
             auto_profile = autonomy.evaluate(research_payload=research)
+
+            overlay = None
+            if market_overlay is not None:
+                overlay = market_overlay.get()
+                auto_profile["allow_new_entries"] = bool(auto_profile.get("allow_new_entries", True)) and bool(
+                    overlay.get("allow_new_entries", True)
+                )
+                auto_profile["risk_multiplier"] = max(
+                    0.0,
+                    min(
+                        1.5,
+                        float(auto_profile.get("risk_multiplier", 1.0))
+                        * float(overlay.get("risk_multiplier", 1.0)),
+                    ),
+                )
+                auto_profile["buy_threshold_multiplier"] = max(
+                    0.7,
+                    min(
+                        2.5,
+                        float(auto_profile.get("buy_threshold_multiplier", 1.0))
+                        * float(overlay.get("entry_threshold_multiplier", 1.0)),
+                    ),
+                )
+                auto_profile["max_positions_multiplier"] = max(
+                    0.5,
+                    min(
+                        1.5,
+                        float(auto_profile.get("max_positions_multiplier", 1.0))
+                        * float(overlay.get("max_positions_multiplier", 1.0)),
+                    ),
+                )
+                auto_profile["market_overlay"] = overlay
+
             strategy.apply_autonomy_profile(auto_profile)
             metrics = auto_profile.get("metrics", {})
             print(
@@ -216,6 +260,16 @@ def main():
                 f"dd_7d={float(metrics.get('max_drawdown_7d', 0.0)):.2%} "
                 f"research_score={float(metrics.get('research_score', 0.0)):.2f}"
             )
+            if overlay is not None:
+                print(
+                    "Market overlay: "
+                    f"label={overlay.get('label')} "
+                    f"score={float(overlay.get('score', 0.0)):.2f} "
+                    f"allow_entries={overlay.get('allow_new_entries')} "
+                    f"risk_mult={float(overlay.get('risk_multiplier', 1.0)):.2f} "
+                    f"entry_mult={float(overlay.get('entry_threshold_multiplier', 1.0)):.2f} "
+                    f"confidence={float(overlay.get('confidence', 0.0)):.2f}"
+                )
 
             # Live drift kill-switch: stop new entries if realized quality degrades.
             closed_7d = int(metrics.get("closed_trades_7d", 0) or 0)

@@ -4,7 +4,17 @@ import sys
 import json
 
 from broker import Broker
-from config import AUTONOMOUS_EXECUTION_ENABLED, CRYPTO_LOOP_INTERVAL_SECONDS, CRYPTO_WATCHLIST, INFLUENCER_MONITOR_ENABLED, SEARCH_API_KEY, INFLUENCER_MONITOR_CACHE_TTL_SECONDS
+from config import (
+    AUTONOMOUS_EXECUTION_ENABLED,
+    CRYPTO_LOOP_INTERVAL_SECONDS,
+    CRYPTO_WATCHLIST,
+    INFLUENCER_MONITOR_ENABLED,
+    INFLUENCER_MONITOR_CACHE_TTL_SECONDS,
+    MARKET_OVERLAY_ENABLED,
+    MARKET_OVERLAY_LOOKBACK_DAYS,
+    MARKET_OVERLAY_REFRESH_SECONDS,
+    SEARCH_API_KEY,
+)
 from data_fetcher import fetch_external_research_sentiment
 from influencer_monitor import monitor_influencers
 from strategy import TradingStrategy
@@ -12,6 +22,7 @@ from strategy import TradingStrategy
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
+from market_overlay import MarketOverlay
 
 
 def _rank_multipliers(rows):
@@ -59,6 +70,13 @@ def main():
     broker = wait_for_account_ready()
     strategy = TradingStrategy()
     last_setup_scorecard_ts = 0.0
+    market_overlay = None
+    if MARKET_OVERLAY_ENABLED:
+        market_overlay = MarketOverlay(
+            asset_class="crypto",
+            refresh_seconds=MARKET_OVERLAY_REFRESH_SECONDS,
+            lookback_days=MARKET_OVERLAY_LOOKBACK_DAYS,
+        )
 
     print("Crypto bot started in paper-trading mode. Press Ctrl+C to stop.")
     print(f"Watching: {', '.join(CRYPTO_WATCHLIST)}")
@@ -99,6 +117,39 @@ def main():
         if AUTONOMOUS_EXECUTION_ENABLED:
             research = fetch_external_research_sentiment()
             profile = strategy.evaluate_autonomy_profile(research_payload=research)
+
+            overlay = None
+            if market_overlay is not None:
+                overlay = market_overlay.get()
+                profile["allow_new_entries"] = bool(profile.get("allow_new_entries", True)) and bool(
+                    overlay.get("allow_new_entries", True)
+                )
+                profile["risk_multiplier"] = max(
+                    0.0,
+                    min(
+                        1.7,
+                        float(profile.get("risk_multiplier", 1.0))
+                        * float(overlay.get("risk_multiplier", 1.0)),
+                    ),
+                )
+                profile["buy_threshold_multiplier"] = max(
+                    0.7,
+                    min(
+                        2.8,
+                        float(profile.get("buy_threshold_multiplier", 1.0))
+                        * float(overlay.get("entry_threshold_multiplier", 1.0)),
+                    ),
+                )
+                profile["max_positions_multiplier"] = max(
+                    0.5,
+                    min(
+                        1.6,
+                        float(profile.get("max_positions_multiplier", 1.0))
+                        * float(overlay.get("max_positions_multiplier", 1.0)),
+                    ),
+                )
+                profile["market_overlay"] = overlay
+
             strategy.apply_autonomy_profile(profile)
             for line in strategy.auto_apply_improvements():
                 print(line)
@@ -112,6 +163,16 @@ def main():
                 f"pf_7d={float(metrics.get('profit_factor_7d', 0.0)):.2f} pnl_7d={float(metrics.get('realized_pnl_7d', 0.0)):.2f} "
                 f"dd_7d={float(metrics.get('max_drawdown_7d', 0.0)):.2%}"
             )
+            if overlay is not None:
+                print(
+                    "Market overlay: "
+                    f"label={overlay.get('label')} "
+                    f"score={float(overlay.get('score', 0.0)):.2f} "
+                    f"allow_entries={overlay.get('allow_new_entries')} "
+                    f"risk_mult={float(overlay.get('risk_multiplier', 1.0)):.2f} "
+                    f"entry_mult={float(overlay.get('entry_threshold_multiplier', 1.0)):.2f} "
+                    f"confidence={float(overlay.get('confidence', 0.0)):.2f}"
+                )
 
             # Live drift kill-switch: pause new entries when quality degrades.
             closed_7d = int(metrics.get("closed_trades_7d", 0) or 0)
