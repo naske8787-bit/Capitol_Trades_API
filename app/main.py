@@ -13,6 +13,11 @@ try:
 except Exception:
     yf = None
 
+try:
+    from alpaca.trading.client import TradingClient
+except Exception:
+    TradingClient = None
+
 from shared.regime_detector import detect_equity_regime, detect_crypto_regime
 
 from app.routes import ROUTES
@@ -122,6 +127,11 @@ _SCORECARD_CACHE = {
     "value": None,
 }
 _SCORECARD_CACHE_TTL_SECONDS = 300
+_LIVE_ACCOUNT_CACHE = {
+    "ts": 0.0,
+    "value": None,
+}
+_LIVE_ACCOUNT_CACHE_TTL_SECONDS = 45
 
 
 def _read_json_body(environ):
@@ -188,6 +198,40 @@ def _latest_valid_equity_row(equity_rows):
     if not sanitized:
         return None
     return sanitized[-1]
+
+
+def _fetch_live_trading_account_snapshot():
+    now = time.time()
+    if _LIVE_ACCOUNT_CACHE.get("value") and (now - float(_LIVE_ACCOUNT_CACHE.get("ts", 0.0))) < _LIVE_ACCOUNT_CACHE_TTL_SECONDS:
+        return dict(_LIVE_ACCOUNT_CACHE.get("value") or {})
+
+    if TradingClient is None:
+        return {}
+
+    env = _read_bot_env("trading_bot")
+    api_key = str(env.get("ALPACA_API_KEY") or "").strip()
+    api_secret = str(env.get("ALPACA_API_SECRET") or "").strip()
+    base_url = str(env.get("ALPACA_BASE_URL") or "https://paper-api.alpaca.markets").strip()
+    if not api_key or not api_secret:
+        return {}
+
+    try:
+        is_paper = "paper" in base_url.lower()
+        client = TradingClient(api_key, api_secret, paper=is_paper, url_override=base_url)
+        account = client.get_account()
+        snapshot = {
+            "portfolio_value": _f(getattr(account, "portfolio_value", 0.0), 0.0),
+            "cash_balance": _f(getattr(account, "cash", 0.0), 0.0),
+            "buying_power": _f(getattr(account, "buying_power", 0.0), 0.0),
+            "timestamp": datetime.now(UTC).isoformat(),
+        }
+        if snapshot["portfolio_value"] > 0.0 or snapshot["cash_balance"] > 0.0:
+            _LIVE_ACCOUNT_CACHE["ts"] = now
+            _LIVE_ACCOUNT_CACHE["value"] = dict(snapshot)
+            return snapshot
+    except Exception:
+        return {}
+    return {}
 
 
 def _live_regime_snapshot(bot_id):
@@ -438,6 +482,7 @@ def _summarize_trading_bot():
     trades = _read_csv_rows(_TRADING_TRADE_LOG, max_rows=2000)
     equity = _read_csv_rows(_TRADING_EQUITY_LOG, max_rows=2000)
     latest_equity_row = _latest_valid_equity_row(equity)
+    live_snapshot = _fetch_live_trading_account_snapshot()
     lines = _last_log_lines(_BOT_CONFIG["trading_bot"]["log"], n=260)
 
     buy_count = sum(1 for r in trades if str(r.get("action", "")).upper() == "BUY")
@@ -459,6 +504,10 @@ def _summarize_trading_bot():
     latest_equity = _f(latest_equity_row.get("portfolio_value"), 0.0) if latest_equity_row else 0.0
     latest_cash = _f(latest_equity_row.get("cash_balance"), 0.0) if latest_equity_row else 0.0
     open_positions = int(_f(latest_equity_row.get("open_positions"), 0.0)) if latest_equity_row else 0
+
+    if latest_equity <= 0.0 and latest_cash <= 0.0 and live_snapshot:
+        latest_equity = _f(live_snapshot.get("portfolio_value"), 0.0)
+        latest_cash = _f(live_snapshot.get("cash_balance"), 0.0)
 
     symbol_counts = Counter(str(r.get("symbol", "")).upper() for r in trades if r.get("symbol"))
     top_symbols = [{"symbol": s, "count": c} for s, c in symbol_counts.most_common(5)]
@@ -836,6 +885,24 @@ def _build_investment_progress(max_points=240):
             "t": ts,
             "v": round(_f(row.get("cash_balance"), 0.0), 2),
         })
+
+    live_snapshot = _fetch_live_trading_account_snapshot()
+    latest_portfolio = portfolio[-1]["v"] if portfolio else 0.0
+    latest_cash = cash[-1]["v"] if cash else 0.0
+    if (latest_portfolio <= 0.0 and latest_cash <= 0.0) and live_snapshot:
+        ts = str(live_snapshot.get("timestamp") or datetime.now(UTC).isoformat())
+        portfolio.append({"t": ts, "v": round(_f(live_snapshot.get("portfolio_value"), 0.0), 2)})
+        cash.append({"t": ts, "v": round(_f(live_snapshot.get("cash_balance"), 0.0), 2)})
+    elif live_snapshot:
+        # Keep chart anchored to current account value without waiting for next log flush.
+        ts = str(live_snapshot.get("timestamp") or datetime.now(UTC).isoformat())
+        portfolio.append({"t": ts, "v": round(_f(live_snapshot.get("portfolio_value"), latest_portfolio), 2)})
+        cash.append({"t": ts, "v": round(_f(live_snapshot.get("cash_balance"), latest_cash), 2)})
+
+    if max_points and len(portfolio) > max_points:
+        portfolio = portfolio[-max_points:]
+    if max_points and len(cash) > max_points:
+        cash = cash[-max_points:]
 
     crypto_pnl = []
     running_pnl = 0.0
