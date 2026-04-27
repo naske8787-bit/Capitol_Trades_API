@@ -255,7 +255,7 @@
         </div>
 
         <div class="card third">
-            <div class="kpi-title">All Bots</div>
+            <div class="kpi-title">Combined (3 Bots)</div>
             <div id="allStatus" class="status-pill">Checking...</div>
             <div id="allResearchStatus" class="research-pill bad">Research: Checking...</div>
             <div class="small" style="margin-top:8px;">Heartbeat: <span id="allTopHeartbeat">-</span></div>
@@ -275,7 +275,7 @@
             <div class="small" style="margin-top:8px;">Heartbeat: <span id="forexTopHeartbeat">-</span></div>
         </div>
 
-        <div class="card third" style="display:none;">
+        <div class="card third">
             <div class="kpi-title">Research Bot</div>
             <div id="techStatus" class="status-pill">Checking...</div>
             <div id="techResearchStatus" class="research-pill bad">Research: Checking...</div>
@@ -1194,9 +1194,9 @@
         function _updateResearchLogPanel() {
             if (!dashboardData) return;
             const research = _researchMap();
-            const bots = ['trading_bot', 'crypto_bot', 'asx_bot', 'forex_bot', 'tech_research_bot'];
+            const bots = ['trading_bot', 'crypto_bot', 'tech_research_bot'];
             const targetBots = activeTab === 'both' ? bots : [activeTab];
-            const title = activeTab === 'both' ? 'Recent Research Log (All Bots)' : `Recent Research Log (${activeTab})`;
+            const title = activeTab === 'both' ? 'Recent Research Log (Combined: Trading/Crypto/Research)' : `Recent Research Log (${activeTab})`;
             const out = [];
 
             for (const bot of targetBots) {
@@ -1234,7 +1234,13 @@
 
             statusPill(document.getElementById('tradingStatus'), !!s.trading_bot?.running, s.trading_bot?.running ? 'Running' : 'Stopped');
             statusPill(document.getElementById('cryptoStatus'), !!s.crypto_bot?.running, s.crypto_bot?.running ? 'Running' : 'Stopped');
-            statusPill(document.getElementById('allStatus'), !!s.all_running, s.all_running ? 'All Running' : 'Partial/Stopped');
+            const combinedRunning = [s.trading_bot?.running, s.crypto_bot?.running, s.tech_research_bot?.running].every(Boolean);
+            const combinedRunningCount = [s.trading_bot?.running, s.crypto_bot?.running, s.tech_research_bot?.running].filter(Boolean).length;
+            statusPill(
+                document.getElementById('allStatus'),
+                combinedRunning,
+                combinedRunning ? '3/3 Running' : `${combinedRunningCount}/3 Running`
+            );
             statusPill(document.getElementById('asxStatus'), !!s.asx_bot?.running, s.asx_bot?.running ? 'Running' : 'Stopped');
             statusPill(document.getElementById('forexStatus'), !!s.forex_bot?.running, s.forex_bot?.running ? 'Running' : 'Stopped');
             statusPill(document.getElementById('techStatus'), !!s.tech_research_bot?.running, s.tech_research_bot?.running ? 'Running' : 'Stopped');
@@ -1245,7 +1251,7 @@
             const rAsx = research.asx_bot || {};
             const rForex = research.forex_bot || {};
             const rTech = research.tech_research_bot || {};
-            const activeCount = [rTrading, rCrypto, rAsx, rForex, rTech].filter(researchActive).length;
+            const activeCount = [rTrading, rCrypto, rTech].filter(researchActive).length;
 
             researchPill(
                 document.getElementById('tradingResearchStatus'),
@@ -1275,7 +1281,7 @@
             researchPill(
                 document.getElementById('allResearchStatus'),
                 activeCount > 0,
-                activeCount > 0 ? `Research: ${activeCount}/5 Active` : 'Research: Idle'
+                activeCount > 0 ? `Research: ${activeCount}/3 Active` : 'Research: Idle'
             );
 
             document.getElementById('tradingEquity').textContent = money(t.latest_equity);
@@ -1400,8 +1406,8 @@
                 </tr>`).join('') : '<tr><td colspan="6" class="small">No ranked emerging technology candidates yet</td></tr>';
             document.getElementById('techResearchLog').textContent = (tr.recent_log_lines || []).join('\n') || '(no recent log lines)';
 
-            const seenValues = [t.heartbeat?.last_seen, c.heartbeat?.last_seen, a.heartbeat?.last_seen, f.heartbeat?.last_seen, tr.heartbeat?.last_seen].filter(Boolean);
-            document.getElementById('allTopHeartbeat').textContent = seenValues.length ? `seen ${seenValues.length}/5 bots` : '-';
+            const seenValues = [t.heartbeat?.last_seen, c.heartbeat?.last_seen, tr.heartbeat?.last_seen].filter(Boolean);
+            document.getElementById('allTopHeartbeat').textContent = seenValues.length ? `seen ${seenValues.length}/3 bots` : '-';
 
             const fmtPct = (v) => (v === null || v === undefined || Number.isNaN(Number(v))) ? '-' : `${(Number(v) * 100).toFixed(1)}%`;
             const fmtNum = (v) => (v === null || v === undefined || Number.isNaN(Number(v))) ? '-' : Number(v).toFixed(2);
@@ -1519,7 +1525,7 @@
             });
             document.getElementById('scorecardRows').innerHTML = scoreRows.join('');
 
-            const researchRows = ['trading_bot', 'crypto_bot'].map(bot => {
+            const researchRows = ['trading_bot', 'crypto_bot', 'tech_research_bot'].map(bot => {
                 const r = research[bot] || {};
                 const providerEngine = `${r.provider || '-'} / ${r.engine || '-'}`;
                 const enabled = r.enabled ? 'Yes' : 'No';
