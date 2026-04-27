@@ -228,7 +228,10 @@
 </head>
 <body>
     <h1>Trading + Crypto Compounding Dashboard</h1>
-    <div class="sub" id="lastUpdated">Loading bot dashboard...</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div class="sub" id="lastUpdated" style="margin-bottom:14px;">Loading bot dashboard...</div>
+        <a href="/dashboard_logout" class="small" style="margin-bottom:14px;color:#9ed0ff;text-decoration:none;">Log out</a>
+    </div>
 
     <div class="tabs">
         <button class="tab active" id="tab-trading" onclick="setTab('trading_bot')">Trading Bot</button>

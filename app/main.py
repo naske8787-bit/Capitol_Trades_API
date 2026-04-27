@@ -1,4 +1,7 @@
 from datetime import UTC, datetime
+from http.cookies import SimpleCookie
+import hmac
+import hashlib
 import json
 import os
 import re
@@ -131,6 +134,15 @@ _SCORECARD_CACHE = {
 _SCORECARD_CACHE_TTL_SECONDS = 300
 _DASHBOARD_LLM_TIMEOUT_SECONDS = int(os.environ.get("DASHBOARD_LLM_TIMEOUT_SECONDS", "20"))
 _DASHBOARD_ACTION_MODE_ENABLED = str(os.environ.get("DASHBOARD_ACTION_MODE_ENABLED", "false")).strip().lower() in {"1", "true", "yes", "on"}
+_DASHBOARD_USERNAME = str(os.environ.get("DASHBOARD_USERNAME", "")).strip()
+_DASHBOARD_PASSWORD = str(os.environ.get("DASHBOARD_PASSWORD", "")).strip()
+_DASHBOARD_AUTH_ENABLED = str(os.environ.get("DASHBOARD_AUTH_ENABLED", "")).strip().lower() in {"1", "true", "yes", "on"}
+if not _DASHBOARD_AUTH_ENABLED and _DASHBOARD_USERNAME and _DASHBOARD_PASSWORD:
+    _DASHBOARD_AUTH_ENABLED = True
+_DASHBOARD_SESSION_COOKIE = "dashboard_session"
+_DASHBOARD_SESSION_TTL_SECONDS = int(os.environ.get("DASHBOARD_SESSION_TTL_SECONDS", "43200"))
+_DASHBOARD_SESSION_SECRET = str(os.environ.get("DASHBOARD_SESSION_SECRET", "")).strip() or f"{_WORKSPACE}-dashboard-session"
+_DASHBOARD_COOKIE_SECURE = str(os.environ.get("DASHBOARD_COOKIE_SECURE", "false")).strip().lower() in {"1", "true", "yes", "on"}
 _LIVE_ACCOUNT_CACHE = {
     "ts": 0.0,
     "value": None,
@@ -152,6 +164,134 @@ def _read_json_body(environ):
         return json.loads(raw.decode("utf-8"))
     except Exception:
         return {}
+
+
+def _read_form_body(environ):
+    try:
+        length = int(environ.get("CONTENT_LENGTH") or "0")
+    except ValueError:
+        length = 0
+    if length <= 0:
+        return {}
+    raw = environ["wsgi.input"].read(length)
+    if not raw:
+        return {}
+    try:
+        decoded = raw.decode("utf-8", errors="ignore")
+    except Exception:
+        return {}
+    parsed = parse_qs(decoded, keep_blank_values=True)
+    return {k: (v[0] if isinstance(v, list) and v else "") for k, v in parsed.items()}
+
+
+def _dashboard_login_html(error_message=""):
+    err = f"<div style='margin-top:10px;color:#ff7b72;font-size:0.9rem;'>{error_message}</div>" if error_message else ""
+    return f"""<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Dashboard Login</title>
+  <style>
+    body {{ margin:0; min-height:100vh; display:grid; place-items:center; background:#0b1117; color:#d7e0ea; font-family:Segoe UI,Arial,sans-serif; }}
+    .card {{ width:min(92vw,420px); background:#121a24; border:1px solid #2a3440; border-radius:12px; padding:18px; box-shadow:0 8px 24px rgba(0,0,0,0.35); }}
+    h1 {{ margin:0 0 8px 0; font-size:1.1rem; }}
+    p {{ margin:0 0 14px 0; color:#93a4b7; font-size:0.92rem; }}
+    label {{ display:block; margin:10px 0 6px; font-size:0.85rem; color:#9bb0c5; }}
+    input {{ width:100%; box-sizing:border-box; background:#0f1620; color:#d7e0ea; border:1px solid #2d3947; border-radius:8px; padding:10px; }}
+    button {{ width:100%; margin-top:14px; padding:10px; border-radius:8px; border:1px solid #2d3947; background:#49a5ff; color:#04101a; font-weight:600; cursor:pointer; }}
+  </style>
+</head>
+<body>
+  <form class='card' method='post' action='/dashboard_login'>
+    <h1>Dashboard Login</h1>
+    <p>Sign in to access bot status and control features.</p>
+    <label for='username'>Username</label>
+    <input id='username' name='username' autocomplete='username' required />
+    <label for='password'>Password</label>
+    <input id='password' type='password' name='password' autocomplete='current-password' required />
+    <button type='submit'>Sign In</button>
+    {err}
+  </form>
+</body>
+</html>"""
+
+
+def _dashboard_session_signature(username, expires_at):
+    msg = f"{username}|{expires_at}".encode("utf-8")
+    return hmac.new(_DASHBOARD_SESSION_SECRET.encode("utf-8"), msg, hashlib.sha256).hexdigest()
+
+
+def _dashboard_session_token(username):
+    expires_at = int(time.time()) + max(60, _DASHBOARD_SESSION_TTL_SECONDS)
+    sig = _dashboard_session_signature(username, expires_at)
+    return f"{username}|{expires_at}|{sig}"
+
+
+def _parse_cookies(environ):
+    raw_cookie = environ.get("HTTP_COOKIE") or ""
+    if not raw_cookie:
+        return {}
+    c = SimpleCookie()
+    try:
+        c.load(raw_cookie)
+    except Exception:
+        return {}
+    out = {}
+    for k in c.keys():
+        try:
+            out[k] = c[k].value
+        except Exception:
+            continue
+    return out
+
+
+def _dashboard_is_authenticated(environ):
+    if not _DASHBOARD_AUTH_ENABLED:
+        return True
+    token = (_parse_cookies(environ).get(_DASHBOARD_SESSION_COOKIE) or "").strip()
+    parts = token.split("|")
+    if len(parts) != 3:
+        return False
+    username, expires_text, sig = parts
+    if not username or not expires_text or not sig:
+        return False
+    try:
+        expires_at = int(expires_text)
+    except ValueError:
+        return False
+    if expires_at < int(time.time()):
+        return False
+    if _DASHBOARD_USERNAME and username != _DASHBOARD_USERNAME:
+        return False
+    expected = _dashboard_session_signature(username, expires_at)
+    return hmac.compare_digest(expected, sig)
+
+
+def _dashboard_protected_path(path):
+    protected = {
+        "/bot_status",
+        "/bot_dashboard_data",
+        "/bot_copilot_chat",
+        "/bot_control",
+        "/copilot_action",
+        "/bot_status_page",
+    }
+    return path in protected
+
+
+def _dashboard_auth_required_response(start_response, path):
+    if path == "/bot_status_page":
+        start_response("302 Found", [("Location", "/dashboard_login")])
+        return [b""]
+    start_response("401 Unauthorized", [
+        ("Content-Type", "application/json"),
+        ("Access-Control-Allow-Origin", "*"),
+    ])
+    return [json.dumps({
+        "ok": False,
+        "message": "Authentication required. Sign in at /dashboard_login.",
+    }).encode("utf-8")]
 
 
 def _read_csv_rows(path, max_rows=500):
@@ -2779,6 +2919,50 @@ def app(environ, start_response):
     method = environ.get("REQUEST_METHOD", "GET").upper()
     path = environ.get("PATH_INFO", "/")
 
+    if method == "GET" and path == "/dashboard_login":
+        html = _dashboard_login_html()
+        start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
+        return [html.encode("utf-8")]
+
+    if method == "POST" and path == "/dashboard_login":
+        form = _read_form_body(environ)
+        username = str(form.get("username") or "").strip()
+        password = str(form.get("password") or "")
+
+        if not _DASHBOARD_AUTH_ENABLED:
+            start_response("302 Found", [("Location", "/bot_status_page")])
+            return [b""]
+
+        ok_user = bool(_DASHBOARD_USERNAME) and hmac.compare_digest(username, _DASHBOARD_USERNAME)
+        ok_pass = bool(_DASHBOARD_PASSWORD) and hmac.compare_digest(password, _DASHBOARD_PASSWORD)
+        if ok_user and ok_pass:
+            token = _dashboard_session_token(username)
+            cookie_flags = f"{_DASHBOARD_SESSION_COOKIE}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age={max(60, _DASHBOARD_SESSION_TTL_SECONDS)}"
+            if _DASHBOARD_COOKIE_SECURE:
+                cookie_flags += "; Secure"
+            start_response("302 Found", [
+                ("Location", "/bot_status_page"),
+                ("Set-Cookie", cookie_flags),
+            ])
+            return [b""]
+
+        html = _dashboard_login_html("Invalid username or password.")
+        start_response("401 Unauthorized", [("Content-Type", "text/html; charset=utf-8")])
+        return [html.encode("utf-8")]
+
+    if method == "GET" and path == "/dashboard_logout":
+        expire_cookie = f"{_DASHBOARD_SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+        if _DASHBOARD_COOKIE_SECURE:
+            expire_cookie += "; Secure"
+        start_response("302 Found", [
+            ("Location", "/dashboard_login"),
+            ("Set-Cookie", expire_cookie),
+        ])
+        return [b""]
+
+    if _dashboard_protected_path(path) and not _dashboard_is_authenticated(environ):
+        return _dashboard_auth_required_response(start_response, path)
+
     if method == "GET" and path == "/bot_status":
         return json_response(start_response, _check_bot_status())
 
@@ -2875,7 +3059,8 @@ def app(environ, start_response):
             "status": "ok",
             "routes": ["/health", "/trades", "/politicians", "/sectors", "/news",
                        "/bot_status", "/bot_status_page", "/bot_control",
-                       "/bot_dashboard_data", "/bot_copilot_chat", "/copilot_action"],
+                       "/bot_dashboard_data", "/bot_copilot_chat", "/copilot_action",
+                       "/dashboard_login", "/dashboard_logout"],
         })
 
     if method == "GET" and path == "/health":
