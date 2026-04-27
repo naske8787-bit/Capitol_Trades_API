@@ -2681,9 +2681,57 @@ def _git_pull_current_branch():
     }
 
 
+def _copilot_action_plan(action, payload):
+    action = str(action or "").strip().lower()
+    bot_id = str(payload.get("bot") or "").strip()
+    bot_action = str(payload.get("bot_action") or "").strip()
+    plans = {
+        "health_check": [
+            "Check bot status via _check_bot_status()",
+            "Inspect port 8000 listeners (lsof)",
+            "Read current git branch and HEAD",
+        ],
+        "git_pull": [
+            "git rev-parse --abbrev-ref HEAD",
+            "git fetch origin",
+            "git pull origin <current-branch>",
+            "git rev-parse HEAD",
+        ],
+        "restart_api": [
+            "tmux kill-session -t api_server",
+            "pkill -f supervise_api.sh",
+            "pkill -f python.*run.py",
+            "tmux new-session -d -s api_server '... bash supervise_api.sh'",
+            "tmux capture-pane -pt api_server | tail -n 30",
+        ],
+        "restart_dashboard": [
+            "tmux kill-session -t mining_dashboard",
+            "tmux new-session -d -s mining_dashboard '... bash supervise_dashboard.sh'",
+            "tmux capture-pane -pt mining_dashboard | tail -n 30",
+        ],
+        "bot_control": [
+            f"Invoke _bot_control(bot={bot_id or '<bot>'}, action={bot_action or '<bot_action>'})",
+            "Fallback through systemd/tmux according to existing bot control logic",
+        ],
+    }
+    return {
+        "action": action,
+        "plan": plans.get(action, ["Unknown action; no execution plan available."]),
+        "requires_confirm": action in {"git_pull", "restart_api", "restart_dashboard", "bot_control"},
+    }
+
+
 def _copilot_action(action, payload):
     action = str(action or "").strip().lower()
     confirm = bool(payload.get("confirm", False))
+    dry_run = bool(payload.get("dry_run", False))
+
+    if dry_run:
+        return True, {
+            "message": f"Dry run only. No commands executed for action '{action}'.",
+            "dry_run": True,
+            "preview": _copilot_action_plan(action, payload),
+        }
 
     if action == "health_check":
         health = _api_process_health()

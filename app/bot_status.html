@@ -716,6 +716,7 @@
                 </div>
                 <div>
                     <button class="ctl-btn" style="padding:8px 10px;font-size:0.82rem;" onclick="runCopilotAction()">Run Action</button>
+                    <button class="ctl-btn" style="padding:8px 10px;font-size:0.82rem;margin-left:6px;" onclick="runCopilotAction(true)">Preview (Dry Run)</button>
                 </div>
             </div>
             <div id="actionStatus" class="ctl-status" style="margin-top:8px;">Ready. Use health_check first, then confirmed actions.</div>
@@ -1662,7 +1663,7 @@
             if (el) el.textContent = actionHistoryItems.length ? actionHistoryItems.join('\n\n') : '(no actions yet)';
         }
 
-        async function runCopilotAction() {
+        async function runCopilotAction(dryRun = false) {
             const actionType = document.getElementById('actionType')?.value || 'health_check';
             const bot = document.getElementById('actionBot')?.value || '';
             const botAction = document.getElementById('actionBotAction')?.value || '';
@@ -1670,12 +1671,12 @@
             const statusEl = document.getElementById('actionStatus');
 
             const isStateChange = actionType !== 'health_check';
-            if (isStateChange && !confirmTicked) {
+            if (!dryRun && isStateChange && !confirmTicked) {
                 if (statusEl) statusEl.textContent = 'State-changing actions require the Confirm checkbox.';
                 return;
             }
 
-            if (isStateChange) {
+            if (!dryRun && isStateChange) {
                 const label = actionType === 'bot_control' ? `${actionType} (${bot}/${botAction})` : actionType;
                 const ok = window.confirm(`Run confirmed action: ${label}?`);
                 if (!ok) {
@@ -1686,14 +1687,15 @@
 
             const payload = {
                 action: actionType,
-                confirm: isStateChange,
+                confirm: !dryRun && isStateChange,
+                dry_run: !!dryRun,
             };
             if (actionType === 'bot_control') {
                 payload.bot = bot;
                 payload.bot_action = botAction;
             }
 
-            if (statusEl) statusEl.textContent = `Running ${actionType}...`;
+            if (statusEl) statusEl.textContent = `${dryRun ? 'Previewing' : 'Running'} ${actionType}...`;
             try {
                 const res = await fetch('/copilot_action', {
                     method: 'POST',
@@ -1704,15 +1706,19 @@
                 const ok = !!data?.ok;
                 const msg = data?.result?.message || data?.message || 'No message';
                 if (statusEl) statusEl.textContent = ok ? `OK: ${msg}` : `Failed: ${msg}`;
-                const summary = actionType === 'bot_control'
+                let summary = actionType === 'bot_control'
                     ? `${actionType} ${bot}/${botAction} -> ${ok ? 'ok' : 'fail'} | ${msg}`
                     : `${actionType} -> ${ok ? 'ok' : 'fail'} | ${msg}`;
+                if (dryRun) {
+                    const planned = (data?.result?.preview?.plan || []).join(' ; ');
+                    summary = `[dry-run] ${summary}${planned ? ` | plan: ${planned}` : ''}`;
+                }
                 pushActionHistory(summary);
-                refreshDashboard();
+                if (!dryRun) refreshDashboard();
             } catch (e) {
                 const err = `Action error: ${e}`;
                 if (statusEl) statusEl.textContent = err;
-                pushActionHistory(`${actionType} -> fail | ${err}`);
+                pushActionHistory(`${dryRun ? '[dry-run] ' : ''}${actionType} -> fail | ${err}`);
             }
         }
 
