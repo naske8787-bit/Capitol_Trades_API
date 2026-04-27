@@ -5,6 +5,8 @@ import re
 import shutil
 import subprocess
 import time
+import urllib.error
+import urllib.request
 from urllib.parse import parse_qs
 from collections import Counter
 
@@ -127,6 +129,7 @@ _SCORECARD_CACHE = {
     "value": None,
 }
 _SCORECARD_CACHE_TTL_SECONDS = 300
+_DASHBOARD_LLM_TIMEOUT_SECONDS = int(os.environ.get("DASHBOARD_LLM_TIMEOUT_SECONDS", "20"))
 _LIVE_ACCOUNT_CACHE = {
     "ts": 0.0,
     "value": None,
@@ -1749,6 +1752,126 @@ def _human_report_combined(status, trading, crypto, asx, forex):
     )
 
 
+def _dashboard_copilot_config():
+    mode = str(os.environ.get("DASHBOARD_COPILOT_MODE", "local")).strip().lower()
+    if mode not in {"local", "hybrid", "llm"}:
+        mode = "local"
+    return {
+        "mode": mode,
+        "api_key": str(os.environ.get("DASHBOARD_LLM_API_KEY", "")).strip(),
+        "model": str(os.environ.get("DASHBOARD_LLM_MODEL", "gpt-4o-mini")).strip() or "gpt-4o-mini",
+        "url": str(os.environ.get("DASHBOARD_LLM_BASE_URL", "https://api.openai.com/v1/chat/completions")).strip() or "https://api.openai.com/v1/chat/completions",
+        "timeout": _DASHBOARD_LLM_TIMEOUT_SECONDS,
+    }
+
+
+def _build_dashboard_copilot_context(bot_id):
+    payload = _bot_dashboard_payload()
+    status = payload.get("status") or {}
+    trading = (payload.get("trading_bot") or {}).get("metrics") or {}
+    crypto = (payload.get("crypto_bot") or {}).get("metrics") or {}
+    research = (payload.get("tech_research_bot") or {}).get("metrics") or {}
+    investment = payload.get("investment") or {}
+    latest = investment.get("latest") or {}
+    projection = investment.get("projection") or {}
+    return {
+        "bot": bot_id,
+        "timestamp": payload.get("timestamp"),
+        "running": {
+            "trading_bot": bool((status.get("trading_bot") or {}).get("running")),
+            "crypto_bot": bool((status.get("crypto_bot") or {}).get("running")),
+            "tech_research_bot": bool((status.get("tech_research_bot") or {}).get("running")),
+        },
+        "trading": {
+            "latest_equity": trading.get("latest_equity"),
+            "latest_cash": trading.get("latest_cash"),
+            "open_positions": trading.get("open_positions"),
+            "buy_count": trading.get("buy_count"),
+            "sell_count": trading.get("sell_count"),
+            "heartbeat": (trading.get("heartbeat") or {}).get("last_seen"),
+            "research": trading.get("research") or {},
+        },
+        "crypto": {
+            "signal_mentions": crypto.get("signal_mentions") or {},
+            "has_error": crypto.get("has_error"),
+            "heartbeat": (crypto.get("heartbeat") or {}).get("last_seen"),
+            "research": crypto.get("research") or {},
+        },
+        "research_bot": {
+            "candidate_count": research.get("candidate_count"),
+            "avg_probability": research.get("avg_probability"),
+            "generated_at": research.get("generated_at"),
+            "top_themes": research.get("top_themes") or [],
+        },
+        "investment": {
+            "latest": latest,
+            "projection": {
+                "annualized_return": projection.get("annualized_return"),
+                "window_days": projection.get("window_days"),
+                "base_liquidated_value": projection.get("base_liquidated_value"),
+            },
+        },
+    }
+
+
+def _llm_dashboard_answer(bot_id, message):
+    cfg = _dashboard_copilot_config()
+    if cfg.get("mode") == "local":
+        return None
+    if not cfg.get("api_key"):
+        return None
+
+    context = _build_dashboard_copilot_context(bot_id)
+    system_prompt = (
+        "You are a dashboard copilot for live trading operations. "
+        "Be concise, practical, and risk-aware. Prioritize reliability, execution quality, and monitoring. "
+        "Do not suggest strategy-logic changes unless the user explicitly asks for strategy changes."
+    )
+    user_prompt = (
+        "User message:\n"
+        f"{message}\n\n"
+        "Current dashboard context JSON:\n"
+        f"{json.dumps(context, ensure_ascii=True)}"
+    )
+
+    request_body = {
+        "model": cfg["model"],
+        "temperature": 0.2,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+    }
+    data = json.dumps(request_body).encode("utf-8")
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {cfg['api_key']}",
+    }
+
+    try:
+        req = urllib.request.Request(cfg["url"], data=data, headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=cfg["timeout"]) as resp:
+            raw = resp.read().decode("utf-8", errors="replace")
+        payload = json.loads(raw)
+        choices = payload.get("choices") or []
+        if not choices:
+            return None
+        message_obj = choices[0].get("message") or {}
+        content = message_obj.get("content")
+        if isinstance(content, str):
+            return content.strip() or None
+        if isinstance(content, list):
+            parts = []
+            for item in content:
+                if isinstance(item, dict) and item.get("type") == "text":
+                    parts.append(str(item.get("text") or ""))
+            text = "\n".join([p for p in parts if p]).strip()
+            return text or None
+        return None
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, ValueError, json.JSONDecodeError):
+        return None
+
+
 def _bot_copilot_answer(bot_id, message):
     q = (message or "").strip().lower()
     status = _check_bot_status()
@@ -2463,10 +2586,29 @@ def app(environ, start_response):
                 "message is required",
                 status="400 Bad Request",
             )
-        answer = _bot_copilot_answer(bot_id, message)
+        cfg = _dashboard_copilot_config()
+        source = "local"
+        answer = None
+
+        llm_answer = _llm_dashboard_answer(bot_id, message)
+        if llm_answer:
+            answer = llm_answer
+            source = "llm"
+        elif cfg.get("mode") == "llm":
+            answer = (
+                "Dashboard LLM mode is enabled but no provider response was returned. "
+                "Check DASHBOARD_LLM_API_KEY / DASHBOARD_LLM_BASE_URL / DASHBOARD_LLM_MODEL and try again."
+            )
+            source = "llm-error"
+        else:
+            answer = _bot_copilot_answer(bot_id, message)
+            source = "local"
+
         return json_response(start_response, {
             "answer": answer,
             "bot": bot_id,
+            "source": source,
+            "mode": cfg.get("mode"),
             "timestamp": datetime.now(UTC).isoformat(),
         })
 
