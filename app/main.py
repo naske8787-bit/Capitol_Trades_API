@@ -161,6 +161,35 @@ def _f(value, default=0.0):
         return default
 
 
+def _is_valid_equity_snapshot(portfolio_value, cash_balance):
+    # Some bot runs can emit transient 0/0 snapshots when account reads fail.
+    # Treat those as invalid if we have seen any non-zero equity rows.
+    return (portfolio_value > 0.0) or (cash_balance > 0.0)
+
+
+def _sanitize_equity_rows(equity_rows):
+    parsed = []
+    seen_non_zero = False
+    for row in equity_rows:
+        pv = _f(row.get("portfolio_value"), 0.0)
+        cb = _f(row.get("cash_balance"), 0.0)
+        parsed.append((row, pv, cb))
+        if _is_valid_equity_snapshot(pv, cb):
+            seen_non_zero = True
+
+    if not seen_non_zero:
+        return equity_rows
+
+    return [row for (row, pv, cb) in parsed if _is_valid_equity_snapshot(pv, cb)]
+
+
+def _latest_valid_equity_row(equity_rows):
+    sanitized = _sanitize_equity_rows(equity_rows)
+    if not sanitized:
+        return None
+    return sanitized[-1]
+
+
 def _live_regime_snapshot(bot_id):
     now = time.time()
     cached = _REGIME_CACHE.get(bot_id)
@@ -408,6 +437,7 @@ def _summarize_research_force_buy(lines):
 def _summarize_trading_bot():
     trades = _read_csv_rows(_TRADING_TRADE_LOG, max_rows=2000)
     equity = _read_csv_rows(_TRADING_EQUITY_LOG, max_rows=2000)
+    latest_equity_row = _latest_valid_equity_row(equity)
     lines = _last_log_lines(_BOT_CONFIG["trading_bot"]["log"], n=260)
 
     buy_count = sum(1 for r in trades if str(r.get("action", "")).upper() == "BUY")
@@ -426,9 +456,9 @@ def _summarize_trading_bot():
             except Exception:
                 pass
 
-    latest_equity = _f(equity[-1].get("portfolio_value"), 0.0) if equity else 0.0
-    latest_cash = _f(equity[-1].get("cash_balance"), 0.0) if equity else 0.0
-    open_positions = int(_f(equity[-1].get("open_positions"), 0.0)) if equity else 0
+    latest_equity = _f(latest_equity_row.get("portfolio_value"), 0.0) if latest_equity_row else 0.0
+    latest_cash = _f(latest_equity_row.get("cash_balance"), 0.0) if latest_equity_row else 0.0
+    open_positions = int(_f(latest_equity_row.get("open_positions"), 0.0)) if latest_equity_row else 0
 
     symbol_counts = Counter(str(r.get("symbol", "")).upper() for r in trades if r.get("symbol"))
     top_symbols = [{"symbol": s, "count": c} for s, c in symbol_counts.most_common(5)]
@@ -786,6 +816,8 @@ def _build_investment_progress(max_points=240):
     trading_rows = _read_csv_rows(_TRADING_TRADE_LOG, max_rows=4000)
     equity_rows = _read_csv_rows(_TRADING_EQUITY_LOG, max_rows=4000)
     crypto_rows = _read_csv_rows(_CRYPTO_TRADE_LOG, max_rows=4000)
+
+    equity_rows = _sanitize_equity_rows(equity_rows)
 
     if max_points and len(equity_rows) > max_points:
         equity_rows = equity_rows[-max_points:]
