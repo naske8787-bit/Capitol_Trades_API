@@ -51,6 +51,10 @@ from config import (
     LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT,
     LONG_TERM_MAX_TOTAL_EXPOSURE_PCT,
     LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT,
+    LONG_HORIZON_CASH_BUFFER_PCT,
+    LONG_HORIZON_ENABLED,
+    LONG_HORIZON_MAX_RISK_PER_TRADE,
+    LONG_HORIZON_MONTHLY_CONTRIBUTION,
 )
 from data_fetcher import fetch_capitol_trades, fetch_stock_data, preprocess_data, fetch_vix_level, fetch_news_sentiment, fetch_sector_momentum
 from data_fetcher import fetch_global_macro_sentiment
@@ -988,8 +992,12 @@ class TradingStrategy:
                 effective_risk_per_trade *= float(self.setup_rank_multipliers.get(symbol, 1.0))
                 if bool(entry_analysis.get("research_force_buy_triggered", False)):
                     effective_risk_per_trade *= max(0.05, min(1.0, float(TECH_RESEARCH_FORCE_BUY_RISK_MULTIPLIER)))
-                target_qty = int((capital * effective_risk_per_trade) / current_price)
-                max_affordable_qty = int(capital // current_price)
+                deployable_capital = capital
+                if LONG_HORIZON_ENABLED:
+                    deployable_capital = max(0.0, capital * max(0.0, 1.0 - LONG_HORIZON_CASH_BUFFER_PCT))
+                    effective_risk_per_trade = min(effective_risk_per_trade, float(LONG_HORIZON_MAX_RISK_PER_TRADE))
+                target_qty = int((deployable_capital * effective_risk_per_trade) / current_price)
+                max_affordable_qty = int(deployable_capital // current_price)
                 qty = min(max_affordable_qty, max(1, target_qty)) if max_affordable_qty > 0 else 0
                 if qty <= 0:
                     print(
@@ -1038,6 +1046,11 @@ class TradingStrategy:
                     )
                 else:
                     print(f"BUY signal for {symbol}: {qty} shares at ${current_price:.2f}")
+                if LONG_HORIZON_ENABLED:
+                    print(
+                        f"Long-horizon sizing active: monthly_contribution=${LONG_HORIZON_MONTHLY_CONTRIBUTION:.2f}, "
+                        f"cash_buffer={LONG_HORIZON_CASH_BUFFER_PCT:.0%}, risk_cap={LONG_HORIZON_MAX_RISK_PER_TRADE:.2%}"
+                    )
                 return {"action": "BUY", "symbol": symbol, "qty": qty, "price": current_price}
 
             if signal == "SELL":

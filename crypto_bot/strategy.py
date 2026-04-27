@@ -46,6 +46,10 @@ from config import (
     LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT,
     LONG_TERM_MAX_TOTAL_EXPOSURE_PCT,
     LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT,
+    LONG_HORIZON_CASH_BUFFER_PCT,
+    LONG_HORIZON_ENABLED,
+    LONG_HORIZON_MAX_RISK_PER_TRADE,
+    LONG_HORIZON_MONTHLY_CONTRIBUTION,
 )
 from data_fetcher import fetch_crypto_data, preprocess_data, fetch_external_research_sentiment
 from influencer_monitor import get_symbol_signal
@@ -811,7 +815,11 @@ class TradingStrategy:
                 effective_risk *= regime_risk
                 effective_risk *= float(self.symbol_risk_multipliers.get(symbol, 1.0))
                 effective_risk *= float(self.setup_rank_multipliers.get(symbol, 1.0))
-                notional = capital * effective_risk
+                deployable_capital = capital
+                if LONG_HORIZON_ENABLED:
+                    deployable_capital = max(0.0, capital * max(0.0, 1.0 - LONG_HORIZON_CASH_BUFFER_PCT))
+                    effective_risk = min(effective_risk, float(LONG_HORIZON_MAX_RISK_PER_TRADE))
+                notional = deployable_capital * effective_risk
                 if current_price <= 0 or notional < CRYPTO_MIN_NOTIONAL_PER_TRADE:
                     print(f"Skipping BUY for {symbol}: notional={notional:.2f} < min={CRYPTO_MIN_NOTIONAL_PER_TRADE} or price invalid (capital={capital:.2f}, risk={effective_risk:.2%}, price={current_price:.2f})")
                     return None
@@ -843,6 +851,11 @@ class TradingStrategy:
                 }
                 pump_tag = " [PUMP-RIDE]" if self.positions[symbol]["influencer_pump_mode"] else ""
                 print(f"BUY signal for {symbol}: {qty} units at ${current_price:.2f}{pump_tag}")
+                if LONG_HORIZON_ENABLED:
+                    print(
+                        f"Long-horizon sizing active: monthly_contribution=${LONG_HORIZON_MONTHLY_CONTRIBUTION:.2f}, "
+                        f"cash_buffer={LONG_HORIZON_CASH_BUFFER_PCT:.0%}, risk_cap={LONG_HORIZON_MAX_RISK_PER_TRADE:.2%}"
+                    )
                 return {"action": "BUY", "symbol": symbol, "qty": qty, "price": current_price}
 
             if signal == "SELL":

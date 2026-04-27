@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trading + Crypto + ASX + Forex + Research Dashboard</title>
+    <title>Trading + Crypto Compounding Dashboard</title>
     <style>
         :root {
             --bg: #0f141a;
@@ -227,15 +227,15 @@
     </style>
 </head>
 <body>
-    <h1>Trading + Crypto + ASX + Forex + Research Dashboard</h1>
+    <h1>Trading + Crypto Compounding Dashboard</h1>
     <div class="sub" id="lastUpdated">Loading bot dashboard...</div>
 
     <div class="tabs">
         <button class="tab active" id="tab-trading" onclick="setTab('trading_bot')">Trading Bot</button>
         <button class="tab" id="tab-crypto" onclick="setTab('crypto_bot')">Crypto Bot</button>
-        <button class="tab" id="tab-asx" onclick="setTab('asx_bot')">ASX Bot</button>
-        <button class="tab" id="tab-forex" onclick="setTab('forex_bot')">Forex Bot</button>
-        <button class="tab" id="tab-tech" onclick="setTab('tech_research_bot')">Research Bot</button>
+        <button class="tab" id="tab-asx" onclick="setTab('asx_bot')" style="display:none;">ASX Bot</button>
+        <button class="tab" id="tab-forex" onclick="setTab('forex_bot')" style="display:none;">Forex Bot</button>
+        <button class="tab" id="tab-tech" onclick="setTab('tech_research_bot')" style="display:none;">Research Bot</button>
         <button class="tab" id="tab-both" onclick="setTab('both')">Combined</button>
     </div>
 
@@ -261,21 +261,21 @@
             <div class="small" style="margin-top:8px;">Heartbeat: <span id="allTopHeartbeat">-</span></div>
         </div>
 
-        <div class="card third">
+        <div class="card third" style="display:none;">
             <div class="kpi-title">ASX Bot</div>
             <div id="asxStatus" class="status-pill">Checking...</div>
             <div id="asxResearchStatus" class="research-pill bad">Research: Checking...</div>
             <div class="small" style="margin-top:8px;">Heartbeat: <span id="asxTopHeartbeat">-</span></div>
         </div>
 
-        <div class="card third">
+        <div class="card third" style="display:none;">
             <div class="kpi-title">Forex Bot</div>
             <div id="forexStatus" class="status-pill">Checking...</div>
             <div id="forexResearchStatus" class="research-pill bad">Research: Checking...</div>
             <div class="small" style="margin-top:8px;">Heartbeat: <span id="forexTopHeartbeat">-</span></div>
         </div>
 
-        <div class="card third">
+        <div class="card third" style="display:none;">
             <div class="kpi-title">Research Bot</div>
             <div id="techStatus" class="status-pill">Checking...</div>
             <div id="techResearchStatus" class="research-pill bad">Research: Checking...</div>
@@ -1244,7 +1244,7 @@
                     <button class="ctl-btn" onclick="controlBot('${bot}', 'restart')">Restart</button>
                     <button class="ctl-btn" onclick="controlBot('${bot}', 'reset_faults')">Reset Faults</button>
                 </div>`;
-            const autonomyRows = ['trading_bot', 'crypto_bot', 'asx_bot', 'forex_bot'].map(bot => {
+            const autonomyRows = ['trading_bot', 'crypto_bot'].map(bot => {
                 const x = auto[bot] || {};
                 const m = x.metrics || {};
                 const imp = x.improvement || {};
@@ -1295,7 +1295,7 @@
             });
             document.getElementById('autonomyRows').innerHTML = autonomyRows.join('');
 
-            const learningRows = ['trading_bot', 'crypto_bot', 'asx_bot', 'forex_bot'].map(bot => {
+            const learningRows = ['trading_bot', 'crypto_bot'].map(bot => {
                 const x = auto[bot] || {};
                 const l = x.learning || {};
                 const modeStats = l.mode_stats || {};
@@ -1351,7 +1351,7 @@
             });
             document.getElementById('scorecardRows').innerHTML = scoreRows.join('');
 
-            const researchRows = ['trading_bot', 'crypto_bot', 'asx_bot', 'forex_bot', 'tech_research_bot'].map(bot => {
+            const researchRows = ['trading_bot', 'crypto_bot'].map(bot => {
                 const r = research[bot] || {};
                 const providerEngine = `${r.provider || '-'} / ${r.engine || '-'}`;
                 const enabled = r.enabled ? 'Yes' : 'No';
