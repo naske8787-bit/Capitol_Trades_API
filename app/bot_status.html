@@ -916,11 +916,12 @@
             document.getElementById('combinedRealizedPnl').textContent = _money2(latest.estimated_combined_realized_pnl);
         }
 
-        function renderProjectionChart(investment) {
-                    function renderCompoundingChart() {
-                        const svg = document.getElementById('compoundingSvg');
-                        const tooltip = document.getElementById('compoundingTooltip');
-                        if (!svg) return;
+        function renderCompoundingChart() {
+            const svg = document.getElementById('compoundingSvg');
+            const tooltip = document.getElementById('compoundingTooltip');
+            if (!svg) return;
+
+            try {
 
                         const scenarios = [
                             { rate: 0.08, color: '#93a4b7', label: '8% (index)' },
@@ -944,8 +945,8 @@
                             return { ...s, points };
                         });
 
-                        const allValues = data.flatMap(d => d.points);
-                        const maxV = Math.max(...allValues);
+                        const allValues = data.reduce((acc, d) => acc.concat(d.points), []);
+                        const maxV = Math.max(1, ...allValues);
 
                         const width = 1000;
                         const height = 280;
@@ -1061,9 +1062,13 @@
                             el.addEventListener('mouseleave', hide);
                         });
                         svg.addEventListener('mouseleave', hide);
-                    }
+            } catch (err) {
+                svg.innerHTML = '<text x="50%" y="50%" fill="#93a4b7" text-anchor="middle" dominant-baseline="middle" font-size="14">Compounding projection unavailable</text>';
+                if (tooltip) tooltip.style.display = 'none';
+            }
+        }
 
-                    function renderProjectionChart(investment) {
+                function renderProjectionChart(investment) {
             const svg = document.getElementById('projectionSvg');
             const tooltip = document.getElementById('projectionTooltip');
             const meta = document.getElementById('projectionMeta');
