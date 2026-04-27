@@ -7,6 +7,12 @@
 
 # Local secrets and generated bot artifacts
 trading_bot/.env
+crypto_bot/.env
+asx_bot/.env
+forex_bot/.env
+india_bot/.env
+*.env.bak*
+*.env.backup
 trading_bot/bot.log
 trading_bot/output.log
 trading_bot/supervisor.log
