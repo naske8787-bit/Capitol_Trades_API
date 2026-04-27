@@ -130,6 +130,7 @@ _SCORECARD_CACHE = {
 }
 _SCORECARD_CACHE_TTL_SECONDS = 300
 _DASHBOARD_LLM_TIMEOUT_SECONDS = int(os.environ.get("DASHBOARD_LLM_TIMEOUT_SECONDS", "20"))
+_DASHBOARD_ACTION_MODE_ENABLED = str(os.environ.get("DASHBOARD_ACTION_MODE_ENABLED", "false")).strip().lower() in {"1", "true", "yes", "on"}
 _LIVE_ACCOUNT_CACHE = {
     "ts": 0.0,
     "value": None,
@@ -2565,6 +2566,166 @@ def _bot_control(bot_id, action):
     return False, f"Unknown action: {action}"
 
 
+def _safe_run(cmd, cwd=None, timeout=20):
+    try:
+        res = subprocess.run(
+            cmd,
+            cwd=cwd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+        return {
+            "ok": res.returncode == 0,
+            "code": res.returncode,
+            "stdout": (res.stdout or "").strip(),
+            "stderr": (res.stderr or "").strip(),
+            "cmd": " ".join(cmd),
+        }
+    except Exception as e:
+        return {
+            "ok": False,
+            "code": -1,
+            "stdout": "",
+            "stderr": str(e),
+            "cmd": " ".join(cmd),
+        }
+
+
+def _api_process_health():
+    status = _check_bot_status()
+    port_probe = _safe_run(["bash", "-lc", "lsof -nP -iTCP:8000 -sTCP:LISTEN || true"], cwd=_WORKSPACE, timeout=8)
+    branch = _safe_run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=_WORKSPACE, timeout=8)
+    head = _safe_run(["git", "rev-parse", "HEAD"], cwd=_WORKSPACE, timeout=8)
+    return {
+        "bot_status": status,
+        "port_8000_listeners": port_probe.get("stdout") or "",
+        "git_branch": (branch.get("stdout") or "").strip(),
+        "git_head": (head.get("stdout") or "").strip(),
+    }
+
+
+def _restart_api_server():
+    steps = []
+    steps.append(_safe_run(["tmux", "kill-session", "-t", "api_server"], cwd=_WORKSPACE, timeout=8))
+    steps.append(_safe_run(["pkill", "-f", "supervise_api.sh"], cwd=_WORKSPACE, timeout=8))
+    steps.append(_safe_run(["pkill", "-f", "python.*run.py"], cwd=_WORKSPACE, timeout=8))
+
+    pybin = os.path.join(_WORKSPACE, ".venv", "bin", "python")
+    if not os.path.exists(pybin):
+        pybin = shutil.which("python3") or "python3"
+
+    launch_cmd = (
+        f"cd {_WORKSPACE} && "
+        f"BOT_WORKSPACE={_WORKSPACE} "
+        f"PYTHON_BIN={pybin} "
+        "bash supervise_api.sh"
+    )
+    steps.append(_safe_run(["tmux", "new-session", "-d", "-s", "api_server", launch_cmd], cwd=_WORKSPACE, timeout=10))
+    steps.append(_safe_run(["bash", "-lc", "tmux capture-pane -pt api_server | tail -n 30"], cwd=_WORKSPACE, timeout=8))
+
+    ok = bool(steps[-1].get("ok"))
+    return ok, {
+        "steps": steps,
+        "message": "API server restart sequence executed.",
+    }
+
+
+def _restart_dashboard_server():
+    steps = []
+    steps.append(_safe_run(["tmux", "kill-session", "-t", "mining_dashboard"], cwd=_WORKSPACE, timeout=8))
+
+    pybin = os.path.join(_WORKSPACE, ".venv", "bin", "python")
+    if not os.path.exists(pybin):
+        pybin = shutil.which("python3") or "python3"
+
+    launch_cmd = (
+        f"cd {_WORKSPACE} && "
+        f"BOT_WORKSPACE={_WORKSPACE} "
+        f"PYTHON_BIN={pybin} "
+        "bash supervise_dashboard.sh"
+    )
+    steps.append(_safe_run(["tmux", "new-session", "-d", "-s", "mining_dashboard", launch_cmd], cwd=_WORKSPACE, timeout=10))
+    steps.append(_safe_run(["bash", "-lc", "tmux capture-pane -pt mining_dashboard | tail -n 30"], cwd=_WORKSPACE, timeout=8))
+
+    ok = bool(steps[-1].get("ok"))
+    return ok, {
+        "steps": steps,
+        "message": "Dashboard server restart sequence executed.",
+    }
+
+
+def _git_pull_current_branch():
+    branch_res = _safe_run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=_WORKSPACE, timeout=8)
+    branch = (branch_res.get("stdout") or "").strip()
+    if not branch:
+        return False, {
+            "message": "Could not determine current git branch.",
+            "steps": [branch_res],
+        }
+
+    steps = [
+        branch_res,
+        _safe_run(["git", "fetch", "origin"], cwd=_WORKSPACE, timeout=30),
+        _safe_run(["git", "pull", "origin", branch], cwd=_WORKSPACE, timeout=30),
+        _safe_run(["git", "rev-parse", "HEAD"], cwd=_WORKSPACE, timeout=8),
+    ]
+    ok = bool(steps[1].get("ok")) and bool(steps[2].get("ok")) and bool(steps[3].get("ok"))
+    return ok, {
+        "branch": branch,
+        "new_head": (steps[3].get("stdout") or "").strip(),
+        "steps": steps,
+        "message": f"Git pull completed for branch {branch}." if ok else f"Git pull failed for branch {branch}.",
+    }
+
+
+def _copilot_action(action, payload):
+    action = str(action or "").strip().lower()
+    confirm = bool(payload.get("confirm", False))
+
+    if action == "health_check":
+        health = _api_process_health()
+        return True, {
+            "message": "Health check completed.",
+            "health": health,
+        }
+
+    if not _DASHBOARD_ACTION_MODE_ENABLED:
+        return False, {
+            "message": "Action mode is disabled. Set DASHBOARD_ACTION_MODE_ENABLED=true to enable state-changing actions.",
+        }
+
+    if action in {"git_pull", "restart_api", "restart_dashboard", "bot_control"} and not confirm:
+        return False, {
+            "message": f"Action '{action}' requires confirmation. Retry with confirm=true.",
+            "requires_confirm": True,
+        }
+
+    if action == "git_pull":
+        return _git_pull_current_branch()
+
+    if action == "restart_api":
+        return _restart_api_server()
+
+    if action == "restart_dashboard":
+        return _restart_dashboard_server()
+
+    if action == "bot_control":
+        bot_id = str(payload.get("bot") or "").strip()
+        bot_action = str(payload.get("bot_action") or "").strip()
+        if not bot_id or not bot_action:
+            return False, {"message": "bot_control action requires bot and bot_action fields."}
+        ok, msg = _bot_control(bot_id, bot_action)
+        return ok, {"message": msg, "bot": bot_id, "bot_action": bot_action}
+
+    return False, {
+        "message": f"Unknown action: {action}",
+        "allowed_actions": ["health_check", "git_pull", "restart_api", "restart_dashboard", "bot_control"],
+    }
+
+
 def app(environ, start_response):
     """WSGI application for the Capitol Trades API workspace."""
     method = environ.get("REQUEST_METHOD", "GET").upper()
@@ -2628,6 +2789,28 @@ def app(environ, start_response):
             "timestamp": datetime.now(UTC).isoformat(),
         }).encode()]
 
+    if method == "POST" and path == "/copilot_action":
+        payload = _read_json_body(environ)
+        action = str(payload.get("action") or "").strip()
+        if not action:
+            return error_response(
+                start_response,
+                "action is required",
+                status="400 Bad Request",
+            )
+        ok, result = _copilot_action(action, payload)
+        status_code = "200 OK" if ok else "400 Bad Request"
+        start_response(status_code, [
+            ("Content-Type", "application/json"),
+            ("Access-Control-Allow-Origin", "*"),
+        ])
+        return [json.dumps({
+            "ok": ok,
+            "action": action,
+            "result": result,
+            "timestamp": datetime.now(UTC).isoformat(),
+        }).encode()]
+
     if method == "GET" and path == "/bot_status_page":
         try:
             with open("app/bot_status.html", "rb") as f:
@@ -2644,7 +2827,7 @@ def app(environ, start_response):
             "status": "ok",
             "routes": ["/health", "/trades", "/politicians", "/sectors", "/news",
                        "/bot_status", "/bot_status_page", "/bot_control",
-                       "/bot_dashboard_data", "/bot_copilot_chat"],
+                       "/bot_dashboard_data", "/bot_copilot_chat", "/copilot_action"],
         })
 
     if method == "GET" and path == "/health":
