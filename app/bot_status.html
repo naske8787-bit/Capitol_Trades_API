@@ -678,11 +678,56 @@
                 <button onclick="sendCopilot()">Ask</button>
             </div>
         </div>
+
+        <div class="card full" id="panel-action-center" style="display:none;">
+            <div class="kpi-title">Copilot Action Center (Safe Ops)</div>
+            <div class="grid" style="gap:8px;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;">
+                <div>
+                    <div class="small">Action</div>
+                    <select id="actionType" style="width:100%;background:#0f1620;color:#d7e0ea;border:1px solid #2d3947;border-radius:6px;padding:7px;" onchange="onActionTypeChange()">
+                        <option value="health_check">health_check</option>
+                        <option value="git_pull">git_pull</option>
+                        <option value="restart_api">restart_api</option>
+                        <option value="restart_dashboard">restart_dashboard</option>
+                        <option value="bot_control">bot_control</option>
+                    </select>
+                </div>
+                <div id="actionBotWrap" style="display:none;">
+                    <div class="small">Bot</div>
+                    <select id="actionBot" style="width:100%;background:#0f1620;color:#d7e0ea;border:1px solid #2d3947;border-radius:6px;padding:7px;">
+                        <option value="trading_bot">trading_bot</option>
+                        <option value="crypto_bot">crypto_bot</option>
+                        <option value="tech_research_bot">tech_research_bot</option>
+                    </select>
+                </div>
+                <div id="actionBotActionWrap" style="display:none;">
+                    <div class="small">Bot Action</div>
+                    <select id="actionBotAction" style="width:100%;background:#0f1620;color:#d7e0ea;border:1px solid #2d3947;border-radius:6px;padding:7px;">
+                        <option value="start">start</option>
+                        <option value="stop">stop</option>
+                        <option value="restart">restart</option>
+                        <option value="reset_faults">reset_faults</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="small" style="display:flex;gap:7px;align-items:center;">
+                        <input type="checkbox" id="actionConfirm"> Confirm state change
+                    </label>
+                </div>
+                <div>
+                    <button class="ctl-btn" style="padding:8px 10px;font-size:0.82rem;" onclick="runCopilotAction()">Run Action</button>
+                </div>
+            </div>
+            <div id="actionStatus" class="ctl-status" style="margin-top:8px;">Ready. Use health_check first, then confirmed actions.</div>
+            <div class="small" style="margin-top:8px;margin-bottom:6px;">Action History</div>
+            <div id="actionHistory" class="mono" style="white-space:pre-wrap;font-size:0.82rem;line-height:1.4;max-height:220px;overflow-y:auto;background:#121a24;border:1px solid #2a3440;border-radius:8px;padding:10px;">(no actions yet)</div>
+        </div>
     </div>
 
     <script>
         let activeTab = 'trading_bot';
         let dashboardData = null;
+        let actionHistoryItems = [];
 
         function statusPill(el, ok, label) {
             el.textContent = label;
@@ -728,7 +773,8 @@
             document.getElementById('panel-investment').style.display = tab === 'both' ? '' : 'none';
             document.getElementById('panel-investment-summary').style.display = tab === 'both' ? '' : 'none';
             document.getElementById('panel-projection').style.display = tab === 'both' ? '' : 'none';
-                document.getElementById('panel-compounding').style.display = tab === 'both' ? '' : 'none';
+            document.getElementById('panel-compounding').style.display = tab === 'both' ? '' : 'none';
+            document.getElementById('panel-action-center').style.display = tab === 'both' ? '' : 'none';
             _updateResearchLogPanel();
         }
 
@@ -1601,6 +1647,75 @@
             }
         }
 
+        function onActionTypeChange() {
+            const actionType = document.getElementById('actionType')?.value || 'health_check';
+            const showBot = actionType === 'bot_control';
+            document.getElementById('actionBotWrap').style.display = showBot ? '' : 'none';
+            document.getElementById('actionBotActionWrap').style.display = showBot ? '' : 'none';
+        }
+
+        function pushActionHistory(text) {
+            const ts = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            actionHistoryItems.unshift(`[${ts}] ${text}`);
+            if (actionHistoryItems.length > 30) actionHistoryItems = actionHistoryItems.slice(0, 30);
+            const el = document.getElementById('actionHistory');
+            if (el) el.textContent = actionHistoryItems.length ? actionHistoryItems.join('\n\n') : '(no actions yet)';
+        }
+
+        async function runCopilotAction() {
+            const actionType = document.getElementById('actionType')?.value || 'health_check';
+            const bot = document.getElementById('actionBot')?.value || '';
+            const botAction = document.getElementById('actionBotAction')?.value || '';
+            const confirmTicked = !!document.getElementById('actionConfirm')?.checked;
+            const statusEl = document.getElementById('actionStatus');
+
+            const isStateChange = actionType !== 'health_check';
+            if (isStateChange && !confirmTicked) {
+                if (statusEl) statusEl.textContent = 'State-changing actions require the Confirm checkbox.';
+                return;
+            }
+
+            if (isStateChange) {
+                const label = actionType === 'bot_control' ? `${actionType} (${bot}/${botAction})` : actionType;
+                const ok = window.confirm(`Run confirmed action: ${label}?`);
+                if (!ok) {
+                    if (statusEl) statusEl.textContent = 'Action canceled.';
+                    return;
+                }
+            }
+
+            const payload = {
+                action: actionType,
+                confirm: isStateChange,
+            };
+            if (actionType === 'bot_control') {
+                payload.bot = bot;
+                payload.bot_action = botAction;
+            }
+
+            if (statusEl) statusEl.textContent = `Running ${actionType}...`;
+            try {
+                const res = await fetch('/copilot_action', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                const data = await res.json();
+                const ok = !!data?.ok;
+                const msg = data?.result?.message || data?.message || 'No message';
+                if (statusEl) statusEl.textContent = ok ? `OK: ${msg}` : `Failed: ${msg}`;
+                const summary = actionType === 'bot_control'
+                    ? `${actionType} ${bot}/${botAction} -> ${ok ? 'ok' : 'fail'} | ${msg}`
+                    : `${actionType} -> ${ok ? 'ok' : 'fail'} | ${msg}`;
+                pushActionHistory(summary);
+                refreshDashboard();
+            } catch (e) {
+                const err = `Action error: ${e}`;
+                if (statusEl) statusEl.textContent = err;
+                pushActionHistory(`${actionType} -> fail | ${err}`);
+            }
+        }
+
         async function refreshDashboard() {
             try {
                 const res = await fetch('/bot_dashboard_data');
@@ -1632,6 +1747,7 @@
         }
 
         appendMsg('bot', 'Ask me what the trading, crypto, ASX, forex, or research bot has learned, what strategy each is using, and how returns can improve.');
+        onActionTypeChange();
         setTab('trading_bot');
         refreshDashboard();
         setInterval(refreshDashboard, 15000);
