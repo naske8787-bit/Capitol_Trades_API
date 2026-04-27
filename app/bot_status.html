@@ -435,6 +435,7 @@
                 <span><span class="legend-dot" style="background:#49a5ff;"></span>12% — Conservative</span>
                 <span><span class="legend-dot" style="background:#f59f00;"></span>15% — Moderate</span>
                 <span><span class="legend-dot" style="background:#3ecf8e;"></span>20% — Bot Target</span>
+                <span id="observedBotLegend" style="display:none;"><span class="legend-dot" style="background:#ff7b72;"></span>Observed Bot Rate</span>
             </div>
             <div class="small" style="margin-top:8px;" id="compoundingMeta">$240,000 total invested over 20 years at $1,000/month from $0. Hover to see year-by-year values.</div>
         </div>
@@ -916,9 +917,11 @@
             document.getElementById('combinedRealizedPnl').textContent = _money2(latest.estimated_combined_realized_pnl);
         }
 
-        function renderCompoundingChart() {
+        function renderCompoundingChart(investment) {
             const svg = document.getElementById('compoundingSvg');
             const tooltip = document.getElementById('compoundingTooltip');
+            const meta = document.getElementById('compoundingMeta');
+            const observedLegend = document.getElementById('observedBotLegend');
             if (!svg) return;
 
             try {
@@ -929,6 +932,22 @@
                             { rate: 0.15, color: '#f59f00', label: '15% (moderate)' },
                             { rate: 0.20, color: '#3ecf8e', label: '20% (target)' },
                         ];
+
+                        const observedAnnualized = Number(investment?.projection?.annualized_return);
+                        const observedWindowDays = Number(investment?.projection?.window_days || 0);
+                        const observedAvailable = Number.isFinite(observedAnnualized) && observedAnnualized > -0.95;
+                        if (observedAvailable) {
+                            scenarios.push({
+                                rate: observedAnnualized,
+                                color: '#ff7b72',
+                                label: `Observed (${(observedAnnualized * 100).toFixed(1)}%)`,
+                                observed: true,
+                            });
+                        }
+                        if (observedLegend) {
+                            observedLegend.style.display = observedAvailable ? '' : 'none';
+                            observedLegend.innerHTML = `<span class="legend-dot" style="background:#ff7b72;"></span>Observed Bot Rate (${observedAvailable ? (observedAnnualized * 100).toFixed(1) : '-'}%)`;
+                        }
 
                         const monthlyContrib = 1000;
                         const years = 20;
@@ -1065,6 +1084,15 @@
             } catch (err) {
                 svg.innerHTML = '<text x="50%" y="50%" fill="#93a4b7" text-anchor="middle" dominant-baseline="middle" font-size="14">Compounding projection unavailable</text>';
                 if (tooltip) tooltip.style.display = 'none';
+            }
+
+            if (meta) {
+                const annualized = Number(investment?.projection?.annualized_return);
+                const windowDays = Number(investment?.projection?.window_days || 0);
+                const observedTxt = (Number.isFinite(annualized) && annualized > -0.95)
+                    ? ` | Observed bot rate: ${(annualized * 100).toFixed(2)}% over ${windowDays.toFixed(1)} days`
+                    : '';
+                meta.textContent = `$240,000 total invested over 20 years at $1,000/month from $0. Hover to see year-by-year values.${observedTxt}`;
             }
         }
 
@@ -1551,6 +1579,7 @@
             renderInvestmentChart(inv);
             renderInvestmentSummary(inv);
             renderProjectionChart(inv);
+            renderCompoundingChart(inv);
 
             document.getElementById('lastUpdated').textContent = `Last updated: ${(d.timestamp || '').replace('T', ' ').slice(0, 19)} UTC`;
         }
@@ -1606,7 +1635,7 @@
         setTab('trading_bot');
         refreshDashboard();
         setInterval(refreshDashboard, 15000);
-            renderCompoundingChart();
+        renderCompoundingChart();
     </script>
 </body>
 </html>
