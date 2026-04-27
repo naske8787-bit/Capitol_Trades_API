@@ -200,12 +200,57 @@ def _latest_valid_equity_row(equity_rows):
     return sanitized[-1]
 
 
+def _fetch_trading_account_snapshot_from_log():
+    log_path = (_BOT_CONFIG.get("trading_bot") or {}).get("log")
+    if not log_path or not os.path.exists(log_path):
+        return {}
+
+    lines = _last_log_lines(log_path, n=400)
+    if not lines:
+        return {}
+
+    # Prefer explicit account-ready lines first.
+    for line in reversed(lines):
+        m = re.search(r"cash=\$([0-9,]+(?:\.[0-9]+)?)\s*,\s*portfolio=\$([0-9,]+(?:\.[0-9]+)?)", line)
+        if m:
+            cash = _f(m.group(1).replace(",", ""), 0.0)
+            portfolio = _f(m.group(2).replace(",", ""), 0.0)
+            if portfolio > 0.0 or cash > 0.0:
+                return {
+                    "portfolio_value": portfolio,
+                    "cash_balance": cash,
+                    "buying_power": None,
+                    "timestamp": _extract_line_timestamp(line) or datetime.now(UTC).isoformat(),
+                }
+
+    # Fallback to portfolio snapshot lines.
+    for line in reversed(lines):
+        m = re.search(r"value=\$([0-9,]+(?:\.[0-9]+)?)\s*,\s*cash=\$([0-9,]+(?:\.[0-9]+)?)", line)
+        if m:
+            portfolio = _f(m.group(1).replace(",", ""), 0.0)
+            cash = _f(m.group(2).replace(",", ""), 0.0)
+            if portfolio > 0.0 or cash > 0.0:
+                return {
+                    "portfolio_value": portfolio,
+                    "cash_balance": cash,
+                    "buying_power": None,
+                    "timestamp": _extract_line_timestamp(line) or datetime.now(UTC).isoformat(),
+                }
+
+    return {}
+
+
 def _fetch_live_trading_account_snapshot():
     now = time.time()
     if _LIVE_ACCOUNT_CACHE.get("value") and (now - float(_LIVE_ACCOUNT_CACHE.get("ts", 0.0))) < _LIVE_ACCOUNT_CACHE_TTL_SECONDS:
         return dict(_LIVE_ACCOUNT_CACHE.get("value") or {})
 
     if TradingClient is None:
+        fallback = _fetch_trading_account_snapshot_from_log()
+        if fallback:
+            _LIVE_ACCOUNT_CACHE["ts"] = now
+            _LIVE_ACCOUNT_CACHE["value"] = dict(fallback)
+            return fallback
         return {}
 
     env = _read_bot_env("trading_bot")
@@ -213,6 +258,11 @@ def _fetch_live_trading_account_snapshot():
     api_secret = str(env.get("ALPACA_API_SECRET") or "").strip()
     base_url = str(env.get("ALPACA_BASE_URL") or "https://paper-api.alpaca.markets").strip()
     if not api_key or not api_secret:
+        fallback = _fetch_trading_account_snapshot_from_log()
+        if fallback:
+            _LIVE_ACCOUNT_CACHE["ts"] = now
+            _LIVE_ACCOUNT_CACHE["value"] = dict(fallback)
+            return fallback
         return {}
 
     try:
@@ -230,7 +280,18 @@ def _fetch_live_trading_account_snapshot():
             _LIVE_ACCOUNT_CACHE["value"] = dict(snapshot)
             return snapshot
     except Exception:
+        fallback = _fetch_trading_account_snapshot_from_log()
+        if fallback:
+            _LIVE_ACCOUNT_CACHE["ts"] = now
+            _LIVE_ACCOUNT_CACHE["value"] = dict(fallback)
+            return fallback
         return {}
+
+    fallback = _fetch_trading_account_snapshot_from_log()
+    if fallback:
+        _LIVE_ACCOUNT_CACHE["ts"] = now
+        _LIVE_ACCOUNT_CACHE["value"] = dict(fallback)
+        return fallback
     return {}
 
 
