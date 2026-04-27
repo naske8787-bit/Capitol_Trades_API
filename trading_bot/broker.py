@@ -9,11 +9,29 @@ from config import (
 from data_fetcher import fetch_realtime_price
 
 
+_OPEN_BUY_ORDER_STATUSES = {
+    "new",
+    "accepted",
+    "pending_new",
+    "accepted_for_bidding",
+    "partially_filled",
+    "held",
+}
+
+
 # ── Alpaca broker (US markets) ──────────────────────────────────────────────
 
 class AlpacaBroker:
     def __init__(self):
         self.api = TradingClient(ALPACA_API_KEY, ALPACA_API_SECRET, paper=True)
+
+    @staticmethod
+    def _is_open_buy_order(order, symbol):
+        return (
+            str(getattr(order, "symbol", "")).upper() == symbol
+            and str(getattr(order, "side", "")).lower() == "buy"
+            and str(getattr(order, "status", "")).lower() in _OPEN_BUY_ORDER_STATUSES
+        )
 
     def get_account_balance(self):
         """Return buying_power — the amount Alpaca will actually allow us to use.
@@ -105,6 +123,24 @@ class AlpacaBroker:
         except Exception as e:
             print(f"[Alpaca] Unable to fetch open notional: {e}")
             return 0.0
+
+    def is_market_open(self):
+        try:
+            clock = self.api.get_clock()
+            return bool(getattr(clock, "is_open", False))
+        except Exception as e:
+            print(f"[Alpaca] Unable to fetch market clock: {e}")
+            return False
+
+    def has_pending_buy_order(self, symbol):
+        symbol = str(symbol).upper()
+        try:
+            for order in self.api.get_orders():
+                if self._is_open_buy_order(order, symbol):
+                    return True
+        except Exception as e:
+            print(f"[Alpaca] Unable to fetch open orders for {symbol}: {e}")
+        return False
 
 
 # ── IBKR broker (international markets) ────────────────────────────────────
@@ -202,6 +238,12 @@ class IBKRBroker:
                 continue
         return total
 
+    def is_market_open(self):
+        return True
+
+    def has_pending_buy_order(self, symbol):
+        return False
+
     def disconnect(self):
         self.ib.disconnect()
 
@@ -271,3 +313,15 @@ class Broker:
         if self._ibkr:
             total += self._ibkr.get_open_notional()
         return total
+
+    def is_market_open(self, symbol):
+        route = self._route(symbol)
+        if hasattr(route, "is_market_open"):
+            return bool(route.is_market_open())
+        return True
+
+    def has_pending_buy_order(self, symbol):
+        route = self._route(symbol)
+        if hasattr(route, "has_pending_buy_order"):
+            return bool(route.has_pending_buy_order(symbol))
+        return False

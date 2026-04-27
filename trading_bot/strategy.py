@@ -955,6 +955,12 @@ class TradingStrategy:
                 if broker.get_open_positions_count() >= effective_max_positions:
                     print(f"Skipping BUY for {symbol}: already at max positions.")
                     return None
+                if hasattr(broker, "has_pending_buy_order") and broker.has_pending_buy_order(symbol):
+                    print(f"Skipping BUY for {symbol}: pending buy order already exists.")
+                    return None
+                if hasattr(broker, "is_market_open") and not broker.is_market_open(symbol):
+                    print(f"Skipping BUY for {symbol}: regular market is closed for market orders.")
+                    return None
 
                 capital = broker.get_account_balance()
                 current_price = broker.get_current_price(symbol)
