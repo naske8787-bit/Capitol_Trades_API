@@ -720,7 +720,10 @@
                 </div>
             </div>
             <div id="actionStatus" class="ctl-status" style="margin-top:8px;">Ready. Use health_check first, then confirmed actions.</div>
-            <div class="small" style="margin-top:8px;margin-bottom:6px;">Action History</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;margin-bottom:6px;">
+                <div class="small">Action History</div>
+                <button id="copyDryRunPlanBtn" class="ctl-btn" style="padding:6px 9px;font-size:0.78rem;opacity:0.55;" onclick="copyLastDryRunPlan()" disabled>Copy Last Dry-Run Plan</button>
+            </div>
             <div id="actionHistory" class="mono" style="white-space:pre-wrap;font-size:0.82rem;line-height:1.4;max-height:220px;overflow-y:auto;background:#121a24;border:1px solid #2a3440;border-radius:8px;padding:10px;">(no actions yet)</div>
         </div>
     </div>
@@ -729,6 +732,7 @@
         let activeTab = 'trading_bot';
         let dashboardData = null;
         let actionHistoryItems = [];
+        let latestDryRunPlanText = '';
 
         function statusPill(el, ok, label) {
             el.textContent = label;
@@ -1663,6 +1667,54 @@
             if (el) el.textContent = actionHistoryItems.length ? actionHistoryItems.join('\n\n') : '(no actions yet)';
         }
 
+        function _setCopyDryRunButtonEnabled(enabled) {
+            const btn = document.getElementById('copyDryRunPlanBtn');
+            if (!btn) return;
+            btn.disabled = !enabled;
+            btn.style.opacity = enabled ? '1' : '0.55';
+        }
+
+        async function _copyTextToClipboard(text) {
+            if (!text) return false;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(text);
+                return true;
+            }
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            ta.style.pointerEvents = 'none';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            let ok = false;
+            try {
+                ok = document.execCommand('copy');
+            } catch (_) {
+                ok = false;
+            }
+            document.body.removeChild(ta);
+            return ok;
+        }
+
+        async function copyLastDryRunPlan() {
+            const statusEl = document.getElementById('actionStatus');
+            if (!latestDryRunPlanText) {
+                if (statusEl) statusEl.textContent = 'No dry-run plan available yet. Run Preview (Dry Run) first.';
+                return;
+            }
+            try {
+                const ok = await _copyTextToClipboard(latestDryRunPlanText);
+                if (statusEl) statusEl.textContent = ok
+                    ? 'Copied last dry-run command bundle to clipboard.'
+                    : 'Unable to copy automatically. Clipboard permission may be blocked.';
+            } catch (e) {
+                if (statusEl) statusEl.textContent = `Copy failed: ${e}`;
+            }
+        }
+
         async function runCopilotAction(dryRun = false) {
             const actionType = document.getElementById('actionType')?.value || 'health_check';
             const bot = document.getElementById('actionBot')?.value || '';
@@ -1710,7 +1762,12 @@
                     ? `${actionType} ${bot}/${botAction} -> ${ok ? 'ok' : 'fail'} | ${msg}`
                     : `${actionType} -> ${ok ? 'ok' : 'fail'} | ${msg}`;
                 if (dryRun) {
-                    const planned = (data?.result?.preview?.plan || []).join(' ; ');
+                    const planItems = (data?.result?.preview?.plan || []).map(x => String(x || '').trim()).filter(Boolean);
+                    const planned = planItems.join(' ; ');
+                    if (planItems.length) {
+                        latestDryRunPlanText = ['# Copilot dry-run plan', ...planItems].join('\n');
+                        _setCopyDryRunButtonEnabled(true);
+                    }
                     summary = `[dry-run] ${summary}${planned ? ` | plan: ${planned}` : ''}`;
                 }
                 pushActionHistory(summary);
