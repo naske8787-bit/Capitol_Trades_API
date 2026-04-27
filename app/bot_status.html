@@ -425,6 +425,23 @@
         </div>
 
         <div class="card half" id="panel-trading-metrics">
+
+            <div class="card full" id="panel-compounding">
+                <div class="kpi-title">20-Year Compounding Projection — $1,000/month from $0</div>
+                <div class="chart-wrap" style="height:280px;">
+                    <svg id="compoundingSvg" class="chart-svg" viewBox="0 0 1000 280" preserveAspectRatio="none" aria-label="20-year compounding projection"></svg>
+                    <div id="compoundingTooltip" class="chart-tooltip"></div>
+                </div>
+                <div class="chart-legend" style="margin-top:10px;">
+                    <span><span class="legend-dot" style="background:#93a4b7;"></span>8% — Index (passive)</span>
+                    <span><span class="legend-dot" style="background:#49a5ff;"></span>12% — Conservative</span>
+                    <span><span class="legend-dot" style="background:#f59f00;"></span>15% — Moderate</span>
+                    <span><span class="legend-dot" style="background:#3ecf8e;"></span>20% — Bot Target</span>
+                </div>
+                <div class="small" style="margin-top:8px;" id="compoundingMeta">$240,000 total invested over 20 years at $1,000/month from $0. Hover to see year-by-year values.</div>
+            </div>
+
+            <div class="card half" id="panel-trading-metrics">
             <div class="kpi-title">Trading Metrics</div>
             <div class="grid" style="gap:8px;grid-template-columns:repeat(2,minmax(0,1fr));">
                 <div>
@@ -712,6 +729,7 @@
             document.getElementById('panel-investment').style.display = tab === 'both' ? '' : 'none';
             document.getElementById('panel-investment-summary').style.display = tab === 'both' ? '' : 'none';
             document.getElementById('panel-projection').style.display = tab === 'both' ? '' : 'none';
+                document.getElementById('panel-compounding').style.display = tab === 'both' ? '' : 'none';
             _updateResearchLogPanel();
         }
 
@@ -901,6 +919,153 @@
         }
 
         function renderProjectionChart(investment) {
+                    function renderCompoundingChart() {
+                        const svg = document.getElementById('compoundingSvg');
+                        const tooltip = document.getElementById('compoundingTooltip');
+                        if (!svg) return;
+
+                        const scenarios = [
+                            { rate: 0.08, color: '#93a4b7', label: '8% (index)' },
+                            { rate: 0.12, color: '#49a5ff', label: '12% (conservative)' },
+                            { rate: 0.15, color: '#f59f00', label: '15% (moderate)' },
+                            { rate: 0.20, color: '#3ecf8e', label: '20% (target)' },
+                        ];
+
+                        const monthlyContrib = 1000;
+                        const years = 20;
+                        const months = years * 12;
+
+                        const data = scenarios.map(s => {
+                            const monthlyRate = Math.pow(1 + s.rate, 1 / 12) - 1;
+                            const points = [0];
+                            let value = 0;
+                            for (let m = 1; m <= months; m++) {
+                                value = value * (1 + monthlyRate) + monthlyContrib;
+                                if (m % 12 === 0) points.push(value);
+                            }
+                            return { ...s, points };
+                        });
+
+                        const allValues = data.flatMap(d => d.points);
+                        const maxV = Math.max(...allValues);
+
+                        const width = 1000;
+                        const height = 280;
+                        const padLeft = 60;
+                        const padRight = 16;
+                        const padTop = 16;
+                        const padBottom = 34;
+                        const innerW = width - padLeft - padRight;
+                        const innerH = height - padTop - padBottom;
+
+                        const xFor = yr => padLeft + (yr / years) * innerW;
+                        const yFor = v => padTop + (1 - v / maxV) * innerH;
+
+                        const yTicks = [0, 0.25, 0.5, 0.75, 1.0];
+                        let gridLines = '';
+                        let yLabels = '';
+                        yTicks.forEach(t => {
+                            const y = padTop + (1 - t) * innerH;
+                            const v = t * maxV;
+                            gridLines += `<line x1="${padLeft}" y1="${y.toFixed(1)}" x2="${width - padRight}" y2="${y.toFixed(1)}" stroke="#243140" stroke-width="1" stroke-dasharray="${t > 0 ? '3,4' : ''}"/>`;
+                            const label = v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(0) + 'k' : v.toFixed(0);
+                            yLabels += `<text x="${(padLeft - 4).toFixed(1)}" y="${(y + 4).toFixed(1)}" fill="#93a4b7" font-size="10" text-anchor="end">$${label}</text>`;
+                        });
+
+                        let xLabels = '';
+                        for (let yr = 0; yr <= years; yr += 5) {
+                            xLabels += `<text x="${xFor(yr).toFixed(1)}" y="${(height - 8).toFixed(1)}" fill="#93a4b7" font-size="11" text-anchor="middle">yr ${yr}</text>`;
+                        }
+
+                        let lines = '';
+                        data.forEach(d => {
+                            const pts = d.points.map((v, i) => `${xFor(i).toFixed(1)},${yFor(v).toFixed(1)}`).join(' ');
+                            lines += `<polyline fill="none" stroke="${d.color}" stroke-width="2.5" points="${pts}" opacity="0.9"/>`;
+                        });
+
+                        let dots = '';
+                        data.forEach(d => {
+                            const finalV = d.points[years];
+                            dots += `<circle cx="${xFor(years).toFixed(1)}" cy="${yFor(finalV).toFixed(1)}" r="5" fill="${d.color}"/>`;
+                            const label = _money2(finalV);
+                            const labelX = (xFor(years) - 6).toFixed(1);
+                            const labelY = (yFor(finalV) - 9).toFixed(1);
+                            dots += `<text x="${labelX}" y="${labelY}" fill="${d.color}" font-size="10" text-anchor="end">${label}</text>`;
+                        });
+
+                        let overlays = '';
+                        for (let yr = 0; yr <= years; yr++) {
+                            const x1 = xFor(yr - 0.5);
+                            const x2 = xFor(yr + 0.5);
+                            const safeX1 = Math.max(padLeft, x1);
+                            const safeX2 = Math.min(width - padRight, x2);
+                            overlays += `<rect class="comp-hover" data-yr="${yr}" x="${safeX1.toFixed(1)}" y="${padTop}" width="${(safeX2 - safeX1).toFixed(1)}" height="${innerH}" fill="transparent" style="cursor:crosshair;"/>`;
+                        }
+
+                        svg.innerHTML = `
+                            ${gridLines}
+                            ${yLabels}
+                            ${xLabels}
+                            ${lines}
+                            ${dots}
+                            ${overlays}
+                            <line x1="${padLeft}" y1="${padTop + innerH}" x2="${width - padRight}" y2="${padTop + innerH}" stroke="#2d3947" stroke-width="1"/>
+                            <line x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + innerH}" stroke="#2d3947" stroke-width="1"/>
+                        `;
+
+                        const cursorLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        cursorLine.setAttribute('stroke', '#49a5ff');
+                        cursorLine.setAttribute('stroke-width', '1');
+                        cursorLine.setAttribute('stroke-dasharray', '4,3');
+                        cursorLine.setAttribute('opacity', '0.5');
+                        cursorLine.style.display = 'none';
+                        svg.appendChild(cursorLine);
+
+                        const hide = () => {
+                            if (tooltip) tooltip.style.display = 'none';
+                            cursorLine.style.display = 'none';
+                        };
+
+                        Array.from(svg.querySelectorAll('.comp-hover')).forEach(el => {
+                            el.addEventListener('mousemove', evt => {
+                                const yr = Number(el.getAttribute('data-yr'));
+                                const x = xFor(yr);
+                                cursorLine.setAttribute('x1', x.toFixed(1));
+                                cursorLine.setAttribute('y1', padTop);
+                                cursorLine.setAttribute('x2', x.toFixed(1));
+                                cursorLine.setAttribute('y2', padTop + innerH);
+                                cursorLine.style.display = '';
+                                if (!tooltip) return;
+                                const invested = yr * 12 * monthlyContrib;
+                                let html = `<div><strong>Year ${yr}</strong> — Invested: <strong>${_money2(invested)}</strong></div><hr style="border-color:#2d3947;margin:4px 0;">`;
+                                data.forEach(d => {
+                                    const v = d.points[yr];
+                                    const gain = v - invested;
+                                    const gainSign = gain >= 0 ? '+' : '';
+                                    html += `<div style="color:${d.color}">${d.label}: <strong>${_money2(v)}</strong> <span style="color:#93a4b7;font-size:0.9em;">(${gainSign}${_money2(gain)})</span></div>`;
+                                });
+                                tooltip.innerHTML = html;
+                                tooltip.style.display = 'block';
+                                const rect = svg.getBoundingClientRect();
+                                const wrap = svg.parentElement.getBoundingClientRect();
+                                const ex = evt.clientX - rect.left;
+                                const ey = evt.clientY - rect.top;
+                                const ttW = tooltip.offsetWidth || 260;
+                                const ttH = tooltip.offsetHeight || 110;
+                                let left = ex + 16;
+                                let top = ey - ttH / 2;
+                                if (left + ttW > wrap.width - 4) left = ex - ttW - 16;
+                                if (top < 4) top = 4;
+                                if (top + ttH > wrap.height - 4) top = wrap.height - ttH - 4;
+                                tooltip.style.left = `${left}px`;
+                                tooltip.style.top = `${top}px`;
+                            });
+                            el.addEventListener('mouseleave', hide);
+                        });
+                        svg.addEventListener('mouseleave', hide);
+                    }
+
+                    function renderProjectionChart(investment) {
             const svg = document.getElementById('projectionSvg');
             const tooltip = document.getElementById('projectionTooltip');
             const meta = document.getElementById('projectionMeta');
@@ -1432,6 +1597,7 @@
         setTab('trading_bot');
         refreshDashboard();
         setInterval(refreshDashboard, 15000);
+            renderCompoundingChart();
     </script>
 </body>
 </html>
