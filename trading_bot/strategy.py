@@ -959,7 +959,10 @@ class TradingStrategy:
                 capital = broker.get_account_balance()
                 current_price = broker.get_current_price(symbol)
                 if current_price <= 0 or capital <= 0:
-                    print(f"Skipping BUY for {symbol}: invalid capital or price.")
+                    print(
+                        f"Skipping BUY for {symbol}: invalid capital or price "
+                        f"(capital={capital:.2f}, price={current_price:.4f})."
+                    )
                     return None
                 portfolio_value = broker.get_portfolio_value()
                 if portfolio_value > 0:
@@ -983,7 +986,12 @@ class TradingStrategy:
                 max_affordable_qty = int(capital // current_price)
                 qty = min(max_affordable_qty, max(1, target_qty)) if max_affordable_qty > 0 else 0
                 if qty <= 0:
-                    print(f"Skipping BUY for {symbol}: insufficient buying power for one share.")
+                    print(
+                        f"Skipping BUY for {symbol}: insufficient buying power for one share "
+                        f"(capital={capital:.2f}, price={current_price:.4f}, "
+                        f"risk={effective_risk_per_trade:.4f}, target_qty={target_qty}, "
+                        f"max_affordable_qty={max_affordable_qty})."
+                    )
                     return None
 
                 proposed_notional = float(qty) * float(current_price)
