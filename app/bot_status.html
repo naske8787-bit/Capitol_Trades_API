@@ -383,6 +383,7 @@
             <div class="chart-legend">
                 <span><span class="legend-dot" style="background:#3ecf8e;"></span>Sell-All Value</span>
                 <span><span class="legend-dot" style="background:#49a5ff;"></span>Cash</span>
+                <span><span class="legend-dot" style="background:#d29922;"></span>Buying Power</span>
             </div>
             <div class="small" style="margin-top:8px;" id="investmentMeta">Loading investment history...</div>
         </div>
@@ -798,6 +799,7 @@
 
             const portfolio = (investment?.portfolio || []).map(p => Number(p.v || 0));
             const cash = (investment?.cash || []).map(p => Number(p.v || 0));
+            const buyingPower = (investment?.buying_power || []).map(p => Number(p.v || 0));
             const times = (investment?.portfolio || []).map(p => String(p.t || ''));
 
             if (!portfolio.length) {
@@ -816,7 +818,7 @@
             const innerW = width - padLeft - padRight;
             const innerH = height - padTop - padBottom;
 
-            const allVals = portfolio.concat(cash.length ? cash : portfolio);
+            const allVals = portfolio.concat(cash.length ? cash : portfolio, buyingPower.length ? buyingPower : []);
             let minV = Math.min(...allVals);
             let maxV = Math.max(...allVals);
             if (!Number.isFinite(minV) || !Number.isFinite(maxV)) {
@@ -834,6 +836,7 @@
 
             const portfolioPath = pathFor(portfolio);
             const cashPath = cash.length ? pathFor(cash) : '';
+            const buyingPowerPath = buyingPower.length ? pathFor(buyingPower) : '';
 
             const grid = [0, 0.25, 0.5, 0.75, 1].map(t => {
                 const y = (padTop + t * innerH).toFixed(2);
@@ -848,11 +851,14 @@
                 ${grid}
                 <path d="${portfolioPath}" fill="none" stroke="#3ecf8e" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"></path>
                 ${cashPath ? `<path d="${cashPath}" fill="none" stroke="#49a5ff" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"></path>` : ''}
+                ${buyingPowerPath ? `<path d="${buyingPowerPath}" fill="none" stroke="#d29922" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"></path>` : ''}
                 <line id="invCursorLine" x1="${padLeft}" y1="${padTop}" x2="${padLeft}" y2="${padTop + innerH}" stroke="#c9d6e2" stroke-dasharray="5 4" stroke-width="1.8" visibility="hidden"></line>
                 <line id="invPortfolioGuide" x1="${padLeft}" y1="${padTop + innerH}" x2="${width - padRight}" y2="${padTop + innerH}" stroke="#3ecf8e" stroke-dasharray="6 5" stroke-width="1.2" opacity="0.9" visibility="hidden"></line>
                 <line id="invCashGuide" x1="${padLeft}" y1="${padTop + innerH}" x2="${width - padRight}" y2="${padTop + innerH}" stroke="#49a5ff" stroke-dasharray="6 5" stroke-width="1.2" opacity="0.9" visibility="hidden"></line>
+                <line id="invBuyingPowerGuide" x1="${padLeft}" y1="${padTop + innerH}" x2="${width - padRight}" y2="${padTop + innerH}" stroke="#d29922" stroke-dasharray="6 5" stroke-width="1.2" opacity="0.9" visibility="hidden"></line>
                 <circle id="invPortfolioPoint" cx="${padLeft}" cy="${padTop + innerH}" r="4" fill="#3ecf8e" stroke="#0b1117" stroke-width="1.5" visibility="hidden"></circle>
                 <circle id="invCashPoint" cx="${padLeft}" cy="${padTop + innerH}" r="4" fill="#49a5ff" stroke="#0b1117" stroke-width="1.5" visibility="hidden"></circle>
+                <circle id="invBuyingPowerPoint" cx="${padLeft}" cy="${padTop + innerH}" r="4" fill="#d29922" stroke="#0b1117" stroke-width="1.5" visibility="hidden"></circle>
                 <text x="6" y="${padTop + 10}" fill="#93a4b7" font-size="11">${yMaxLabel}</text>
                 <text x="6" y="${height - 8}" fill="#93a4b7" font-size="11">${yMinLabel}</text>
             `;
@@ -860,15 +866,19 @@
             const cursorLine = document.getElementById('invCursorLine');
             const portfolioGuide = document.getElementById('invPortfolioGuide');
             const cashGuide = document.getElementById('invCashGuide');
+            const buyingPowerGuide = document.getElementById('invBuyingPowerGuide');
             const portfolioPoint = document.getElementById('invPortfolioPoint');
             const cashPoint = document.getElementById('invCashPoint');
+            const buyingPowerPoint = document.getElementById('invBuyingPowerPoint');
 
             const hideHover = () => {
                 if (cursorLine) cursorLine.setAttribute('visibility', 'hidden');
                 if (portfolioGuide) portfolioGuide.setAttribute('visibility', 'hidden');
                 if (cashGuide) cashGuide.setAttribute('visibility', 'hidden');
+                if (buyingPowerGuide) buyingPowerGuide.setAttribute('visibility', 'hidden');
                 if (portfolioPoint) portfolioPoint.setAttribute('visibility', 'hidden');
                 if (cashPoint) cashPoint.setAttribute('visibility', 'hidden');
+                if (buyingPowerPoint) buyingPowerPoint.setAttribute('visibility', 'hidden');
                 if (tooltip) tooltip.style.display = 'none';
             };
 
@@ -896,6 +906,7 @@
                 const xPoint = xFor(idx, portfolio.length);
                 const pVal = portfolio[idx];
                 const cVal = (idx < cash.length) ? cash[idx] : null;
+                const bpVal = (idx < buyingPower.length) ? buyingPower[idx] : null;
                 const pY = yFor(pVal);
 
                 if (cursorLine) {
@@ -931,11 +942,29 @@
                     }
                 }
 
+                if (buyingPowerPoint) {
+                    if (bpVal === null || bpVal === undefined) {
+                        buyingPowerPoint.setAttribute('visibility', 'hidden');
+                        if (buyingPowerGuide) buyingPowerGuide.setAttribute('visibility', 'hidden');
+                    } else {
+                        buyingPowerPoint.setAttribute('cx', xPoint.toFixed(2));
+                        buyingPowerPoint.setAttribute('cy', yFor(bpVal).toFixed(2));
+                        buyingPowerPoint.setAttribute('visibility', 'visible');
+                        if (buyingPowerGuide) {
+                            const bpY = yFor(bpVal).toFixed(2);
+                            buyingPowerGuide.setAttribute('y1', bpY);
+                            buyingPowerGuide.setAttribute('y2', bpY);
+                            buyingPowerGuide.setAttribute('visibility', 'visible');
+                        }
+                    }
+                }
+
                 if (tooltip) {
                     tooltip.innerHTML =
                         `<div style="color:#93a4b7;margin-bottom:4px;">${formatTs(times[idx])}</div>` +
                         `<div><span style="color:#3ecf8e;">Sell-all value</span>: <strong>${_money2(pVal)}</strong></div>` +
-                        `<div><span style="color:#49a5ff;">Cash</span>: <strong>${cVal === null || cVal === undefined ? '-' : _money2(cVal)}</strong></div>`;
+                        `<div><span style="color:#49a5ff;">Cash</span>: <strong>${cVal === null || cVal === undefined ? '-' : _money2(cVal)}</strong></div>` +
+                        `<div><span style="color:#d29922;">Buying power</span>: <strong>${bpVal === null || bpVal === undefined ? '-' : _money2(bpVal)}</strong></div>`;
 
                     tooltip.style.display = 'block';
                     const wrap = svg.parentElement;
@@ -958,7 +987,7 @@
             const latest = investment?.latest || {};
             const pct = Number(latest.window_pct_change || 0);
             const pctText = `${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`;
-            meta.innerHTML = `Latest sell-all value: <strong>${_money2(latest.portfolio_value)}</strong> · Cash: <strong>${_money2(latest.cash_balance)}</strong> · Window change: <strong>${_money2(latest.window_net_change)} (${pctText})</strong> · Crypto realized PnL: <strong>${_money2(latest.crypto_cum_realized_pnl)}</strong>`;
+            meta.innerHTML = `Latest sell-all value: <strong>${_money2(latest.portfolio_value)}</strong> · Cash: <strong>${_money2(latest.cash_balance)}</strong> · Buying power: <strong>${_money2(latest.buying_power)}</strong> · Window change: <strong>${_money2(latest.window_net_change)} (${pctText})</strong> · Crypto realized PnL: <strong>${_money2(latest.crypto_cum_realized_pnl)}</strong>`;
         }
 
         function renderInvestmentSummary(investment) {

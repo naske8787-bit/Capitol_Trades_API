@@ -690,6 +690,7 @@ async function loadInvestmentPerformance() {
 
     const portfolio = data.portfolio || [];
     const cash = data.cash || [];
+    const buyingPower = data.buying_power || [];
     const latest = data.latest || {};
 
     if (!portfolio.length) {
@@ -708,6 +709,7 @@ async function loadInvestmentPerformance() {
     });
     const portfolioVals = portfolio.map(p => p.v);
     const cashVals = cash.map(p => p.v);
+    const buyingPowerVals = buyingPower.map(p => p.v);
 
     if (S.charts.investment) {
       S.charts.investment.destroy();
@@ -734,6 +736,17 @@ async function loadInvestmentPerformance() {
             label: 'Cash Balance (USD)',
             data: cashVals,
             borderColor: '#1f6feb',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            pointRadius: 1.8,
+            pointHoverRadius: 4,
+            tension: 0.25,
+            fill: false,
+          },
+          {
+            label: 'Buying Power (USD)',
+            data: buyingPowerVals,
+            borderColor: '#d29922',
             backgroundColor: 'transparent',
             borderWidth: 2,
             pointRadius: 1.8,
@@ -771,6 +784,7 @@ async function loadInvestmentPerformance() {
     metaEl.innerHTML =
       `Latest portfolio: <strong>${toMoney(latest.portfolio_value)}</strong> · ` +
       `Cash: <strong>${toMoney(latest.cash_balance)}</strong> · ` +
+      `Buying power: <strong>${toMoney(latest.buying_power)}</strong> · ` +
       `Window change: <strong style="color:${pnlColor}">${toMoney(latest.window_net_change)} (${pctText})</strong> · ` +
       `Crypto realized PnL: <strong>${toMoney(latest.crypto_cum_realized_pnl)}</strong>`;
   } catch (e) {

@@ -1078,36 +1078,49 @@ def _build_investment_progress(max_points=240):
 
     portfolio = []
     cash = []
+    buying_power = []
     for row in equity_rows:
         ts = str(row.get("timestamp") or "").strip()
         if not ts:
             continue
+        row_cash = round(_f(row.get("cash_balance"), 0.0), 2)
         portfolio.append({
             "t": ts,
             "v": round(_f(row.get("portfolio_value"), 0.0), 2),
         })
         cash.append({
             "t": ts,
-            "v": round(_f(row.get("cash_balance"), 0.0), 2),
+            "v": row_cash,
+        })
+        buying_power.append({
+            "t": ts,
+            "v": round(_f(row.get("buying_power"), row_cash), 2),
         })
 
     live_snapshot = _fetch_live_trading_account_snapshot()
     latest_portfolio = portfolio[-1]["v"] if portfolio else 0.0
     latest_cash = cash[-1]["v"] if cash else 0.0
+    latest_buying_power = buying_power[-1]["v"] if buying_power else 0.0
     if (latest_portfolio <= 0.0 and latest_cash <= 0.0) and live_snapshot:
         ts = str(live_snapshot.get("timestamp") or datetime.now(UTC).isoformat())
+        cash_val = round(_f(live_snapshot.get("cash_balance"), 0.0), 2)
         portfolio.append({"t": ts, "v": round(_f(live_snapshot.get("portfolio_value"), 0.0), 2)})
-        cash.append({"t": ts, "v": round(_f(live_snapshot.get("cash_balance"), 0.0), 2)})
+        cash.append({"t": ts, "v": cash_val})
+        buying_power.append({"t": ts, "v": round(_f(live_snapshot.get("buying_power"), cash_val), 2)})
     elif live_snapshot:
         # Keep chart anchored to current account value without waiting for next log flush.
         ts = str(live_snapshot.get("timestamp") or datetime.now(UTC).isoformat())
+        cash_val = round(_f(live_snapshot.get("cash_balance"), latest_cash), 2)
         portfolio.append({"t": ts, "v": round(_f(live_snapshot.get("portfolio_value"), latest_portfolio), 2)})
-        cash.append({"t": ts, "v": round(_f(live_snapshot.get("cash_balance"), latest_cash), 2)})
+        cash.append({"t": ts, "v": cash_val})
+        buying_power.append({"t": ts, "v": round(_f(live_snapshot.get("buying_power"), latest_buying_power or cash_val), 2)})
 
     if max_points and len(portfolio) > max_points:
         portfolio = portfolio[-max_points:]
     if max_points and len(cash) > max_points:
         cash = cash[-max_points:]
+    if max_points and len(buying_power) > max_points:
+        buying_power = buying_power[-max_points:]
 
     crypto_pnl = []
     running_pnl = 0.0
@@ -1136,6 +1149,7 @@ def _build_investment_progress(max_points=240):
 
     latest_portfolio = portfolio[-1]["v"] if portfolio else 0.0
     latest_cash = cash[-1]["v"] if cash else 0.0
+    latest_buying_power = buying_power[-1]["v"] if buying_power else 0.0
     latest_crypto_pnl = crypto_pnl[-1]["v"] if crypto_pnl else 0.0
     start_portfolio = portfolio[0]["v"] if portfolio else 0.0
     net_change = latest_portfolio - start_portfolio if portfolio else 0.0
@@ -1164,11 +1178,13 @@ def _build_investment_progress(max_points=240):
     return {
         "portfolio": portfolio,
         "cash": cash,
+        "buying_power": buying_power,
         "crypto_pnl": crypto_pnl,
         "projection": projection,
         "latest": {
             "portfolio_value": round(latest_portfolio, 2),
             "cash_balance": round(latest_cash, 2),
+            "buying_power": round(latest_buying_power, 2),
             "crypto_cum_realized_pnl": round(latest_crypto_pnl, 2),
             "window_net_change": round(net_change, 2),
             "window_pct_change": round(pct_change, 2),

@@ -23,7 +23,14 @@ class PerformanceTracker:
         "sell_signals",
         "note",
     ]
-    EQUITY_HEADERS = ["timestamp", "portfolio_value", "cash_balance", "open_positions", "note"]
+    EQUITY_HEADERS = [
+        "timestamp",
+        "portfolio_value",
+        "cash_balance",
+        "buying_power",
+        "open_positions",
+        "note",
+    ]
 
     def __init__(self, trade_log_path=TRADE_LOG_PATH, equity_log_path=EQUITY_LOG_PATH):
         self.trade_log_path = trade_log_path
@@ -41,12 +48,29 @@ class PerformanceTracker:
 
     @staticmethod
     def _ensure_csv(path, headers):
-        if os.path.exists(path) and os.path.getsize(path) > 0:
+        if not os.path.exists(path) or os.path.getsize(path) == 0:
+            with open(path, "w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(handle, fieldnames=headers)
+                writer.writeheader()
             return
 
+        try:
+            with open(path, "r", newline="", encoding="utf-8") as handle:
+                reader = csv.DictReader(handle)
+                existing_headers = list(reader.fieldnames or [])
+                rows = list(reader)
+        except Exception:
+            return
+
+        if existing_headers == list(headers):
+            return
+
+        # Keep existing data while upgrading header schema for new fields.
         with open(path, "w", newline="", encoding="utf-8") as handle:
             writer = csv.DictWriter(handle, fieldnames=headers)
             writer.writeheader()
+            for row in rows:
+                writer.writerow({k: row.get(k, "") for k in headers})
 
     @staticmethod
     def _append_row(path, headers, row):
@@ -76,14 +100,22 @@ class PerformanceTracker:
         self._append_row(self.trade_log_path, self.TRADE_HEADERS, row)
 
     def record_equity_snapshot(self, broker, note="cycle"):
-        cash_balance = float(broker.get_account_balance())
-        portfolio_value = float(broker.get_portfolio_value()) if hasattr(broker, "get_portfolio_value") else cash_balance
+        details = broker.get_account_details() if hasattr(broker, "get_account_details") else {}
+
+        buying_power = float(details.get("buying_power", broker.get_account_balance()))
+        cash_balance = float(details.get("cash", buying_power))
+        portfolio_value = (
+            float(details.get("portfolio_value", 0.0))
+            if details
+            else float(broker.get_portfolio_value()) if hasattr(broker, "get_portfolio_value") else cash_balance
+        )
         open_positions = int(broker.get_open_positions_count()) if hasattr(broker, "get_open_positions_count") else 0
 
         row = {
             "timestamp": self._timestamp(),
             "portfolio_value": f"{portfolio_value:.4f}",
             "cash_balance": f"{cash_balance:.4f}",
+            "buying_power": f"{buying_power:.4f}",
             "open_positions": open_positions,
             "note": note,
         }

@@ -87,12 +87,14 @@ def _read_trading_equity_series(path):
                 try:
                     portfolio_value = float(row.get('portfolio_value', 0.0) or 0.0)
                     cash_balance = float(row.get('cash_balance', 0.0) or 0.0)
+                    buying_power = float(row.get('buying_power', cash_balance) or cash_balance)
                 except (TypeError, ValueError):
                     continue
                 out.append({
                     't': ts.isoformat(),
                     'portfolio_value': round(portfolio_value, 2),
                     'cash_balance': round(cash_balance, 2),
+                    'buying_power': round(buying_power, 2),
                 })
     except Exception:
         return []
@@ -423,6 +425,7 @@ def investment_performance():
 
     latest_portfolio = equity_rows[-1]['portfolio_value'] if equity_rows else 0.0
     latest_cash = equity_rows[-1]['cash_balance'] if equity_rows else 0.0
+    latest_buying_power = equity_rows[-1]['buying_power'] if equity_rows else 0.0
     latest_crypto_pnl = crypto_rows[-1]['cum_realized_pnl'] if crypto_rows else 0.0
     start_portfolio = equity_rows[0]['portfolio_value'] if equity_rows else 0.0
     net_change = latest_portfolio - start_portfolio if equity_rows else 0.0
@@ -435,12 +438,16 @@ def investment_performance():
         'cash': [
             {'t': row['t'], 'v': row['cash_balance']} for row in equity_rows
         ],
+        'buying_power': [
+            {'t': row['t'], 'v': row['buying_power']} for row in equity_rows
+        ],
         'crypto_pnl': [
             {'t': row['t'], 'v': row['cum_realized_pnl']} for row in crypto_rows
         ],
         'latest': {
             'portfolio_value': round(latest_portfolio, 2),
             'cash_balance': round(latest_cash, 2),
+            'buying_power': round(latest_buying_power, 2),
             'crypto_cum_realized_pnl': round(latest_crypto_pnl, 2),
             'window_net_change': round(net_change, 2),
             'window_pct_change': round(pct_change * 100, 2),
