@@ -9,6 +9,7 @@ RESTART_DELAY="${RESTART_DELAY:-10}"
 PYTHON_BIN="${PYTHON_BIN:-python}"
 PREFLIGHT_SCRIPT="$(cd .. && pwd)/scripts/preflight_alpaca.sh"
 ENV_FILE="$(pwd)/.env"
+LOCK_FILE="${LOCK_FILE:-/tmp/capitol-crypto-bot.supervisor.lock}"
 
 timestamp() {
   date -u +"%Y-%m-%dT%H:%M:%SZ"
@@ -20,7 +21,19 @@ timestamp_log_stream() {
   done
 }
 
+acquire_lock() {
+  exec 9>"$LOCK_FILE"
+  if flock -n 9; then
+    return 0
+  fi
+
+  echo "[$(timestamp)] Another supervisor instance detected. Waiting for lock: $LOCK_FILE" >> "$SUPERVISOR_LOG"
+  flock 9
+  echo "[$(timestamp)] Lock acquired after wait: $LOCK_FILE" >> "$SUPERVISOR_LOG"
+}
+
 echo "[$(timestamp)] Supervisor started. Auto-restart is enabled." >> "$SUPERVISOR_LOG"
+acquire_lock
 
 while true; do
   if [[ -x "$PREFLIGHT_SCRIPT" ]]; then
