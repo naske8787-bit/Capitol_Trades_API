@@ -243,6 +243,29 @@
     </div>
 
     <div class="grid">
+        <!-- ===== Bot Health Alerts ===== -->
+        <div class="card full" id="panel-health-alerts">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <div class="kpi-title" style="margin:0;">Bot Health Alerts</div>
+                <span id="healthAlertsBadge" style="display:none;background:rgba(255,123,114,.18);color:#ff7b72;border:1px solid rgba(255,123,114,.45);border-radius:999px;padding:2px 10px;font-size:0.78rem;font-weight:700;"></span>
+            </div>
+            <table id="healthAlertsTable">
+                <thead>
+                    <tr>
+                        <th>Bot</th>
+                        <th>Process</th>
+                        <th>Log Errors</th>
+                        <th>Kill-Switch</th>
+                        <th>Log Silent</th>
+                        <th>Source Degraded</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="healthAlertsRows"></tbody>
+            </table>
+            <div class="small" style="margin-top:8px;color:#5a7a99;">Refreshes every 30 s. "Log Silent" = no log writes in >90 min (orange) or >3 h (red).</div>
+        </div>
+
         <div class="card third">
             <div class="kpi-title">Trading Bot</div>
             <div id="tradingStatus" class="status-pill">Checking...</div>
@@ -1355,6 +1378,80 @@
             statusPill(document.getElementById('asxStatus'), !!s.asx_bot?.running, s.asx_bot?.running ? 'Running' : 'Stopped');
             statusPill(document.getElementById('forexStatus'), !!s.forex_bot?.running, s.forex_bot?.running ? 'Running' : 'Stopped');
             statusPill(document.getElementById('techStatus'), !!s.tech_research_bot?.running, s.tech_research_bot?.running ? 'Running' : 'Stopped');
+
+            // ===== Health Alerts Table =====
+            (function renderHealthAlerts() {
+                const bots = [
+                    { id: 'trading_bot',      label: 'Trading Bot' },
+                    { id: 'crypto_bot',       label: 'Crypto Bot' },
+                    { id: 'asx_bot',          label: 'ASX Bot' },
+                    { id: 'forex_bot',        label: 'Forex Bot' },
+                    { id: 'tech_research_bot',label: 'Research Bot' },
+                ];
+                const tbody = document.getElementById('healthAlertsRows');
+                const badge = document.getElementById('healthAlertsBadge');
+                if (!tbody) return;
+                let totalAlerts = 0;
+                const rows = bots.map(bot => {
+                    const info  = s[bot.id] || {};
+                    const h     = info.health || {};
+                    const running = !!info.running;
+
+                    const ok   = '<span style="color:#3ecf8e;font-weight:700;">✓ OK</span>';
+                    const warn = (t) => `<span style="color:#f59f00;font-weight:700;">⚠ ${t}</span>`;
+                    const bad  = (t) => `<span style="color:#ff7b72;font-weight:700;">✗ ${t}</span>`;
+
+                    const processBadge = running ? ok : bad('Stopped');
+                    const errCount = (h.error_lines || []).length;
+                    const errBadge = errCount > 0 ? bad(`${errCount} error(s)`) : ok;
+
+                    const ksBadge = h.kill_switch_active ? bad('Active') : ok;
+
+                    let silentBadge = ok;
+                    const staleSecs = h.log_stale_seconds;
+                    if (h.log_silent_critical)      silentBadge = bad(`${Math.round(staleSecs/3600)}h silent`);
+                    else if (h.log_silent)          silentBadge = warn(`${Math.round(staleSecs/60)}m silent`);
+                    else if (!h.log_exists)         silentBadge = warn('No log file');
+                    else if (staleSecs !== null && staleSecs !== undefined)
+                        silentBadge = `<span style="color:#93a4b7;">~${staleSecs < 60 ? staleSecs+'s' : Math.round(staleSecs/60)+'m'} ago</span>`;
+
+                    const srcBadge = h.source_degraded
+                        ? warn('Degraded' + (h.source_confidence !== null && h.source_confidence !== undefined ? ` (conf ${(h.source_confidence).toFixed(2)})` : ''))
+                        : ok;
+
+                    // count total problems
+                    if (!running) totalAlerts++;
+                    if (errCount > 0) totalAlerts++;
+                    if (h.kill_switch_active) totalAlerts++;
+                    if (h.log_silent) totalAlerts++;
+                    if (h.source_degraded) totalAlerts++;
+
+                    const detailParts = [];
+                    (h.error_lines || []).forEach(l => detailParts.push(l.slice(0, 120)));
+                    if (h.kill_switch_active) detailParts.push('Kill-switch is active — entries paused.');
+                    if (h.source_degraded) detailParts.push('Political feed confidence degraded.');
+                    const details = detailParts.length
+                        ? `<span class="mono small" style="display:block;white-space:pre-wrap;color:#ff9c7c;max-height:70px;overflow-y:auto;">${detailParts.map(l=>`• ${l}`).join('\n')}</span>`
+                        : '<span style="color:#5a7a99;font-size:0.8rem;">—</span>';
+
+                    return `<tr>
+                        <td style="font-weight:600;">${bot.label}</td>
+                        <td>${processBadge}</td>
+                        <td>${errBadge}</td>
+                        <td>${ksBadge}</td>
+                        <td>${silentBadge}</td>
+                        <td>${srcBadge}</td>
+                        <td>${details}</td>
+                    </tr>`;
+                });
+                tbody.innerHTML = rows.join('');
+                if (totalAlerts > 0) {
+                    badge.style.display = '';
+                    badge.textContent = `${totalAlerts} alert${totalAlerts > 1 ? 's' : ''}`;
+                } else {
+                    badge.style.display = 'none';
+                }
+            })();
 
             const researchActive = (r) => Boolean(r?.enabled && r?.key_set && Number(r?.mentions || 0) > 0);
             const rTrading = research.trading_bot || {};

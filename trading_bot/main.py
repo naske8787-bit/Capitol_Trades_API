@@ -2,6 +2,7 @@ import time
 import json
 import os
 import sys
+import urllib.request
 from collections import deque
 
 from broker import Broker
@@ -16,6 +17,21 @@ from config import (
     MARKET_OVERLAY_ENABLED,
     MARKET_OVERLAY_LOOKBACK_DAYS,
     MARKET_OVERLAY_REFRESH_SECONDS,
+    CAPITOL_DATA_MIN_CONFIDENCE_TO_TRADE,
+    ALERTS_ENABLED,
+    ALERT_MIN_INTERVAL_SECONDS,
+    ALERT_WEBHOOK_URL,
+    ALERT_TELEGRAM_BOT_TOKEN,
+    ALERT_TELEGRAM_CHAT_ID,
+    ALERT_SOURCE_DEGRADED_ENABLED,
+    ALERT_KILL_SWITCH_ENABLED,
+    ALERT_SOURCE_STALE_SECONDS,
+    ALERT_SELF_TEST_ON_START,
+    ALERT_SYMBOL_ERROR_THRESHOLD,
+    ALERT_SYMBOL_ERROR_COOLDOWN_SECONDS,
+    WALK_FORWARD_ENABLED,
+    WALK_FORWARD_INTERVAL_HOURS,
+    WALK_FORWARD_CAUTIOUS_RISK_MULTIPLIER,
     WATCHLIST,
 )
 from performance_tracker import PerformanceTracker
@@ -24,11 +40,81 @@ from train import retrain_models
 from autonomy import AutonomousDecisionEngine
 from config import AUTONOMOUS_EXECUTION_ENABLED
 from data_fetcher import fetch_external_research_sentiment
+from data_fetcher import get_capitol_data_health
+from walk_forward import run_walk_forward, load_latest_report
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
 from market_overlay import MarketOverlay
+
+
+_ALERT_LAST_SENT_TS = {}
+
+
+def _send_webhook_alert(payload):
+    if not ALERT_WEBHOOK_URL:
+        return False
+    try:
+        body = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            ALERT_WEBHOOK_URL,
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=8):
+            return True
+    except Exception:
+        return False
+
+
+def _send_telegram_alert(message):
+    if not ALERT_TELEGRAM_BOT_TOKEN or not ALERT_TELEGRAM_CHAT_ID:
+        return False
+    try:
+        body = json.dumps(
+            {
+                "chat_id": ALERT_TELEGRAM_CHAT_ID,
+                "text": message,
+                "disable_web_page_preview": True,
+            }
+        ).encode("utf-8")
+        url = f"https://api.telegram.org/bot{ALERT_TELEGRAM_BOT_TOKEN}/sendMessage"
+        req = urllib.request.Request(
+            url,
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=8):
+            return True
+    except Exception:
+        return False
+
+
+def notify_alert(event_key, message, severity="warning", min_interval=None):
+    if not ALERTS_ENABLED:
+        return
+
+    now = time.time()
+    interval = ALERT_MIN_INTERVAL_SECONDS if min_interval is None else max(0, int(min_interval))
+    last_ts = float(_ALERT_LAST_SENT_TS.get(event_key, 0.0) or 0.0)
+    if interval > 0 and (now - last_ts) < interval:
+        return
+
+    payload = {
+        "event": event_key,
+        "severity": str(severity),
+        "message": str(message),
+        "ts": now,
+        "bot": "trading_bot",
+    }
+    sent = False
+    sent = _send_webhook_alert(payload) or sent
+    sent = _send_telegram_alert(f"[trading_bot][{severity}] {message}") or sent
+    if sent:
+        _ALERT_LAST_SENT_TS[event_key] = now
 
 
 def _rank_multipliers(rows):
@@ -156,9 +242,12 @@ def main():
         print(f"IBKR international symbols: {IBKR_WATCHLIST}")
     # Avoid immediate full retrain on each restart; wait for configured interval.
     last_retrain_ts = time.time()
+    last_walk_forward_ts = 0.0
     last_influence_report_ts = 0.0
     last_setup_scorecard_ts = 0.0
     setup_expectancy_window = deque(maxlen=30)
+    symbol_error_counts = {}
+    wf_cautious_active = False
     market_overlay = None
     if MARKET_OVERLAY_ENABLED:
         market_overlay = MarketOverlay(
@@ -175,6 +264,14 @@ def main():
         f"cash=${float(startup_snapshot['cash_balance']):.2f}, "
         f"positions={startup_snapshot['open_positions']}"
     )
+
+    if ALERT_SELF_TEST_ON_START:
+        notify_alert(
+            "startup_self_test",
+            "Startup alert self-test fired successfully.",
+            severity="info",
+            min_interval=0,
+        )
 
     while True:
         now = time.time()
@@ -285,6 +382,16 @@ def main():
                     "Risk kill-switch active: pausing new entries "
                     f"(closed_7d={closed_7d}, pf_7d={pf_7d:.2f}, dd_7d={dd_7d:.2%})."
                 )
+                if ALERT_KILL_SWITCH_ENABLED:
+                    notify_alert(
+                        "kill_switch_active",
+                        (
+                            "Risk kill-switch activated; new entries paused "
+                            f"(closed_7d={closed_7d}, pf_7d={pf_7d:.2f}, dd_7d={dd_7d:.2%})."
+                        ),
+                        severity="critical",
+                        min_interval=300,
+                    )
             for reason in auto_profile.get("reasons", [])[:4]:
                 print(f"  - {reason}")
             for update in strategy.auto_apply_improvements():
@@ -300,6 +407,62 @@ def main():
                 strategy.model_cache.clear()
                 last_retrain_ts = time.time()
                 print("Auto-retrain complete. Resuming trading loop.")
+
+        # Walk-forward validation on its own (slower) schedule
+        if WALK_FORWARD_ENABLED:
+            wf_interval_secs = max(3600, WALK_FORWARD_INTERVAL_HOURS * 3600)
+            if now - last_walk_forward_ts >= wf_interval_secs:
+                print("Running walk-forward validation...")
+                try:
+                    # Run on a representative subset (up to 4 symbols) to keep runtime reasonable
+                    wf_symbols = [s for s in symbols if "/" not in s][:4]
+                    wf_report = run_walk_forward(wf_symbols)
+                    last_walk_forward_ts = time.time()
+                    verdict = wf_report.get("verdict", "unknown")
+                    summary = wf_report.get("summary") or {}
+                    print(
+                        f"Walk-forward result: verdict={verdict} "
+                        f"median_pf={summary.get('median_profit_factor', 'n/a')} "
+                        f"median_sharpe={summary.get('median_sharpe', 'n/a')} "
+                        f"median_dd={summary.get('median_max_drawdown_pct', 'n/a')}% "
+                        f"folds={summary.get('folds_evaluated', 0)}"
+                    )
+                    if verdict == "fail":
+                        wf_cautious_active = True
+                        risk_mult = float(WALK_FORWARD_CAUTIOUS_RISK_MULTIPLIER)
+                        strategy.apply_autonomy_profile({
+                            "mode": "cautious",
+                            "risk_multiplier": risk_mult,
+                            "buy_threshold_multiplier": 1.3,
+                            "allow_new_entries": True,
+                        })
+                        fail_reasons = summary.get("fail_reasons") or []
+                        print(
+                            f"Walk-forward FAIL: cautious mode applied "
+                            f"(risk_mult={risk_mult}). "
+                            f"Reasons: {'; '.join(fail_reasons) or 'see report'}"
+                        )
+                        if ALERT_KILL_SWITCH_ENABLED:
+                            notify_alert(
+                                "walk_forward_fail",
+                                (
+                                    "Walk-forward OOS validation failed; cautious mode applied. "
+                                    + ('; '.join(fail_reasons) or 'see models/walk_forward_report.json')
+                                ),
+                                severity="critical",
+                                min_interval=3600,
+                            )
+                    elif verdict == "pass" and wf_cautious_active:
+                        wf_cautious_active = False
+                        print("Walk-forward PASS: cautious override lifted.")
+                        notify_alert(
+                            "walk_forward_pass",
+                            "Walk-forward OOS validation passed; cautious override lifted.",
+                            severity="info",
+                            min_interval=3600,
+                        )
+                except Exception as wf_exc:
+                    print(f"Walk-forward validation error (non-fatal): {wf_exc}")
 
         for symbol in symbols:
             try:
@@ -344,9 +507,21 @@ def main():
                         note="bot_execution",
                     )
 
+                symbol_error_counts[symbol] = 0
                 time.sleep(1)
             except Exception as e:
+                symbol_error_counts[symbol] = int(symbol_error_counts.get(symbol, 0) or 0) + 1
                 print(f"Error processing {symbol}: {e}")
+                if symbol_error_counts[symbol] >= max(1, ALERT_SYMBOL_ERROR_THRESHOLD):
+                    notify_alert(
+                        f"symbol_error_{symbol}",
+                        (
+                            f"Repeated processing failures for {symbol} "
+                            f"(count={symbol_error_counts[symbol]}, error={e})."
+                        ),
+                        severity="critical",
+                        min_interval=max(60, ALERT_SYMBOL_ERROR_COOLDOWN_SECONDS),
+                    )
 
         # Setup-decay de-risk: if rolling setup expectancy is negative, remove
         # concentration and tighten entry/risk settings until quality recovers.
@@ -371,6 +546,38 @@ def main():
             f"cash=${float(cycle_snapshot['cash_balance']):.2f}, "
             f"positions={cycle_snapshot['open_positions']}"
         )
+
+        if ALERT_SOURCE_DEGRADED_ENABLED:
+            data_health = get_capitol_data_health()
+            source_name = str(data_health.get("source") or "unknown")
+            source_conf = float(data_health.get("confidence", 0.0) or 0.0)
+            source_degraded = bool(data_health.get("degraded", False))
+            stale_age_seconds = data_health.get("stale_age_seconds")
+            stale_age_seconds = None if stale_age_seconds is None else float(stale_age_seconds)
+
+            if source_degraded or source_conf < CAPITOL_DATA_MIN_CONFIDENCE_TO_TRADE:
+                notify_alert(
+                    "capitol_source_degraded",
+                    (
+                        "Political feed degraded "
+                        f"(source={source_name}, confidence={source_conf:.2f}, "
+                        f"stale_age_seconds={stale_age_seconds})."
+                    ),
+                    severity="warning",
+                    min_interval=900,
+                )
+
+            if stale_age_seconds is not None and stale_age_seconds >= max(1, ALERT_SOURCE_STALE_SECONDS):
+                notify_alert(
+                    "capitol_source_stale",
+                    (
+                        "Political feed stale beyond threshold "
+                        f"(source={source_name}, stale_age_seconds={stale_age_seconds:.0f}, "
+                        f"threshold={ALERT_SOURCE_STALE_SECONDS})."
+                    ),
+                    severity="critical",
+                    min_interval=900,
+                )
 
         if EVENT_INFLUENCE_REPORT_ENABLED:
             report_interval_secs = max(1, EVENT_INFLUENCE_REPORT_INTERVAL_MINUTES) * 60

@@ -28,6 +28,8 @@ from config import (
     STOP_LOSS_PCT,
     TAKE_PROFIT_PCT,
     TRADE_COOLDOWN_MINUTES,
+    CAPITOL_DATA_MIN_CONFIDENCE_TO_TRADE,
+    CAPITOL_DATA_LOW_CONFIDENCE_RISK_MULTIPLIER,
     EVENT_LEARNER_ALPHA,
     EVENT_MAX_EDGE_ADJUSTMENT_PCT,
     EVENT_LEARNER_LAGS,
@@ -59,6 +61,7 @@ from config import (
 from data_fetcher import fetch_capitol_trades, fetch_stock_data, preprocess_data, fetch_vix_level, fetch_news_sentiment, fetch_sector_momentum
 from data_fetcher import fetch_global_macro_sentiment
 from data_fetcher import fetch_external_research_sentiment
+from data_fetcher import get_capitol_data_health
 from experience_policy import ExperiencePolicy
 from event_learner import EventImpactLearner
 from model import load_trained_model, predict_price
@@ -607,6 +610,7 @@ class TradingStrategy:
             trend_strength = (short_trend - long_trend) / max(abs(long_trend), 1e-9)
 
             trades = fetch_capitol_trades()
+            data_health = get_capitol_data_health()
             sentiment, buy_signals, sell_signals = self._calculate_sentiment(trades, symbol)
             position = self._sync_position(symbol, broker)
             market_state = self._get_market_regime()
@@ -615,6 +619,18 @@ class TradingStrategy:
             regime_entry_multiplier = float(market_state.get("entry_threshold_multiplier", 1.0) or 1.0)
             regime_risk_multiplier = float(market_state.get("risk_multiplier", 1.0) or 1.0)
             regime_allow_new_entries = bool(market_state.get("allow_new_entries", True))
+            capitol_data_confidence = float(data_health.get("confidence", 0.0) or 0.0)
+            capitol_data_source = str(data_health.get("source") or "unknown")
+            capitol_data_degraded = bool(data_health.get("degraded", True))
+            low_confidence_risk_mult = min(1.0, max(0.1, float(CAPITOL_DATA_LOW_CONFIDENCE_RISK_MULTIPLIER)))
+            if capitol_data_confidence < CAPITOL_DATA_MIN_CONFIDENCE_TO_TRADE:
+                data_confidence_risk_multiplier = low_confidence_risk_mult
+            elif capitol_data_confidence < 0.75:
+                # Partial degradation still cuts size while allowing selective entries.
+                data_confidence_risk_multiplier = 0.80
+            else:
+                data_confidence_risk_multiplier = 1.0
+            regime_risk_multiplier *= data_confidence_risk_multiplier
             in_cooldown, cooldown_remaining = self._in_cooldown(symbol)
             force_signal = self._research_force_buy_signal(symbol)
 
@@ -727,6 +743,10 @@ class TradingStrategy:
                 "market_regime_confidence": regime_confidence,
                 "regime_entry_multiplier": regime_entry_multiplier,
                 "regime_risk_multiplier": regime_risk_multiplier,
+                "capitol_data_source": capitol_data_source,
+                "capitol_data_confidence": capitol_data_confidence,
+                "capitol_data_degraded": capitol_data_degraded,
+                "capitol_data_risk_multiplier": data_confidence_risk_multiplier,
                 "cooldown_remaining_minutes": cooldown_remaining / 60,
                 "has_position": bool(position),
                 "vix": vix,
@@ -885,6 +905,12 @@ class TradingStrategy:
                 return "HOLD"
 
             if not has_capacity or in_cooldown:
+                return "HOLD"
+            if (
+                capitol_data_confidence < CAPITOL_DATA_MIN_CONFIDENCE_TO_TRADE
+                and not force_signal.get("triggered", False)
+            ):
+                self.last_analysis[symbol]["autonomy_block_reason"] = "capitol_data_confidence_too_low"
                 return "HOLD"
             if regime_confidence < 0.35 and not is_etf and not has_strong_model_edge and not force_signal.get("triggered", False):
                 self.last_analysis[symbol]["autonomy_block_reason"] = "regime_uncertain"

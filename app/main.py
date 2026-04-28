@@ -2610,6 +2610,77 @@ def _last_log_lines(path, n=8):
         return []
 
 
+_ERROR_PATTERNS = ("error", "traceback", "exception", "critical", "fatal")
+_WARN_PATTERNS = ("warning", "warn")
+_KILL_SWITCH_PATTERN = "kill-switch active"
+_SOURCE_DEGRADED_PATTERN = "political feed degraded"
+_CONFIDENCE_PATTERN = "confidence="
+_LOG_STALE_WARN_SECONDS = 5400   # 90 min
+_LOG_STALE_CRIT_SECONDS = 10800  # 3 h
+
+
+def _bot_log_health(bot_id):
+    """Return health signals derived from the bot's log file and its mtime."""
+    log_path = (_BOT_CONFIG.get(bot_id) or {}).get("log", "")
+    lines = _last_log_lines(log_path, n=120)
+
+    error_lines = []
+    warning_lines = []
+    kill_switch_active = False
+    source_degraded = False
+    source_confidence = None
+
+    for line in lines:
+        lower = line.lower()
+        if _KILL_SWITCH_PATTERN in lower:
+            kill_switch_active = True
+        if _SOURCE_DEGRADED_PATTERN in lower:
+            source_degraded = True
+        if _CONFIDENCE_PATTERN in lower and "capitol_data_confidence" not in lower:
+            try:
+                part = lower.split(_CONFIDENCE_PATTERN, 1)[-1].split(",")[0].split(")")[0].split(" ")[0]
+                v = float(part)
+                if source_confidence is None or v < source_confidence:
+                    source_confidence = v
+            except (ValueError, IndexError):
+                pass
+        if any(p in lower for p in _ERROR_PATTERNS) and len(error_lines) < 3:
+            error_lines.append(line)
+        elif any(p in lower for p in _WARN_PATTERNS) and len(warning_lines) < 3:
+            warning_lines.append(line)
+
+    # Log file staleness
+    log_stale_seconds = None
+    log_exists = os.path.exists(log_path)
+    if log_exists:
+        try:
+            age = time.time() - os.path.getmtime(log_path)
+            log_stale_seconds = int(max(0, age))
+        except OSError:
+            pass
+
+    log_silent = (
+        log_stale_seconds is not None and log_stale_seconds >= _LOG_STALE_WARN_SECONDS
+    )
+    log_silent_critical = (
+        log_stale_seconds is not None and log_stale_seconds >= _LOG_STALE_CRIT_SECONDS
+    )
+
+    return {
+        "has_error": len(error_lines) > 0,
+        "error_lines": error_lines,
+        "has_warning": len(warning_lines) > 0,
+        "warning_lines": warning_lines,
+        "kill_switch_active": kill_switch_active,
+        "source_degraded": source_degraded,
+        "source_confidence": source_confidence,
+        "log_stale_seconds": log_stale_seconds,
+        "log_silent": log_silent,
+        "log_silent_critical": log_silent_critical,
+        "log_exists": log_exists,
+    }
+
+
 def _check_bot_status():
     trading_running = _bot_running("trading_bot")
     crypto_running = _bot_running("crypto_bot")
@@ -2621,26 +2692,31 @@ def _check_bot_status():
             "running": trading_running,
             "session": "trading_bot",
             "log": _last_log_lines(_BOT_CONFIG["trading_bot"]["log"]),
+            "health": _bot_log_health("trading_bot"),
         },
         "crypto_bot": {
             "running": crypto_running,
             "session": "crypto_bot",
             "log": _last_log_lines(_BOT_CONFIG["crypto_bot"]["log"]),
+            "health": _bot_log_health("crypto_bot"),
         },
         "asx_bot": {
             "running": asx_running,
             "session": "asx_bot",
             "log": _last_log_lines(_BOT_CONFIG["asx_bot"]["log"]),
+            "health": _bot_log_health("asx_bot"),
         },
         "forex_bot": {
             "running": forex_running,
             "session": "forex_bot",
             "log": _last_log_lines(_BOT_CONFIG["forex_bot"]["log"]),
+            "health": _bot_log_health("forex_bot"),
         },
         "tech_research_bot": {
             "running": tech_research_running,
             "session": "tech_research_bot",
             "log": _last_log_lines(_BOT_CONFIG["tech_research_bot"]["log"]),
+            "health": _bot_log_health("tech_research_bot"),
         },
         "all_running": trading_running and crypto_running and asx_running and forex_running,
         "timestamp": datetime.now(UTC).isoformat(),

@@ -68,12 +68,29 @@ def _int_env(env_key, default):
         return int(default)
 
 
+def _parse_float_map(value):
+    parsed = {}
+    for part in str(value or "").split(","):
+        token = part.strip()
+        if not token or ":" not in token:
+            continue
+        key, raw_val = token.split(":", 1)
+        key = key.strip().upper()
+        try:
+            parsed[key] = float(raw_val.strip())
+        except Exception:
+            continue
+    return parsed
+
+
 # API Keys
 CAPITOL_TRADES_API_URL = os.getenv("CAPITOL_TRADES_API_URL", "https://www.capitoltrades.com")
 CAPITOL_TRADES_MAX_PAGES = int(os.getenv("CAPITOL_TRADES_MAX_PAGES", "5"))
 CAPITOL_TRADES_REQUEST_RETRIES = int(os.getenv("CAPITOL_TRADES_REQUEST_RETRIES", "3"))
 CAPITOL_TRADES_RETRY_BACKOFF_SECONDS = float(os.getenv("CAPITOL_TRADES_RETRY_BACKOFF_SECONDS", "1.5"))
 CAPITOL_TRADES_FAILURE_RETRY_SECONDS = int(os.getenv("CAPITOL_TRADES_FAILURE_RETRY_SECONDS", "90"))
+CAPITOL_TRADES_PRIMARY_SOURCE = (os.getenv("CAPITOL_TRADES_PRIMARY_SOURCE", "quiver") or "quiver").strip().lower()
+QUIVER_API_KEY = (os.getenv("QUIVER_API_KEY") or "").strip()
 ALPACA_API_KEY = os.getenv("ALPACA_API_KEY")
 ALPACA_API_SECRET = os.getenv("ALPACA_API_SECRET")
 ALPACA_BASE_URL = os.getenv("ALPACA_BASE_URL", "https://paper-api.alpaca.markets")  # Use paper trading for testing
@@ -100,6 +117,10 @@ MARKET_REGIME_SYMBOL = os.getenv("MARKET_REGIME_SYMBOL", "SPY")
 MARKET_REGIME_SHORT_WINDOW = int(os.getenv("MARKET_REGIME_SHORT_WINDOW", "50"))
 MARKET_REGIME_LONG_WINDOW = int(os.getenv("MARKET_REGIME_LONG_WINDOW", "200"))
 STOCK_DATA_CACHE_TTL_SECONDS = int(os.getenv("STOCK_DATA_CACHE_TTL_SECONDS", "900"))
+CAPITOL_DATA_MIN_CONFIDENCE_TO_TRADE = float(os.getenv("CAPITOL_DATA_MIN_CONFIDENCE_TO_TRADE", "0.35"))
+CAPITOL_DATA_LOW_CONFIDENCE_RISK_MULTIPLIER = float(
+    os.getenv("CAPITOL_DATA_LOW_CONFIDENCE_RISK_MULTIPLIER", "0.55")
+)
 WATCHLIST = _parse_symbol_list(
     os.getenv("WATCHLIST"),
     "AAPL,MSFT,NVDA,GOOGL,TSLA,AMZN",
@@ -119,6 +140,16 @@ ETF_SYMBOLS = set(_parse_symbol_list(
     "GLD,SLV,GDX,USO,SPY,QQQ,IAU,CPER",
 ))
 
+# Backtest execution cost model
+BACKTEST_SPREAD_BPS_DEFAULT = float(os.getenv("BACKTEST_SPREAD_BPS_DEFAULT", "8"))
+BACKTEST_SPREAD_BPS_BY_SYMBOL = _parse_float_map(os.getenv("BACKTEST_SPREAD_BPS_BY_SYMBOL", ""))
+BACKTEST_SLIPPAGE_VOL_MULTIPLIER = float(os.getenv("BACKTEST_SLIPPAGE_VOL_MULTIPLIER", "0.25"))
+BACKTEST_SLIPPAGE_BPS_MIN = float(os.getenv("BACKTEST_SLIPPAGE_BPS_MIN", "2"))
+BACKTEST_SLIPPAGE_BPS_MAX = float(os.getenv("BACKTEST_SLIPPAGE_BPS_MAX", "80"))
+BACKTEST_COMMISSION_PER_SHARE = float(os.getenv("BACKTEST_COMMISSION_PER_SHARE", "0.005"))
+BACKTEST_MIN_COMMISSION = float(os.getenv("BACKTEST_MIN_COMMISSION", "1.00"))
+BACKTEST_FILL_LATENCY_BARS = int(os.getenv("BACKTEST_FILL_LATENCY_BARS", "1"))
+
 # Model settings
 MODEL_PATH = os.path.join(BASE_DIR, "models", "trading_model.h5")
 
@@ -126,6 +157,19 @@ MODEL_PATH = os.path.join(BASE_DIR, "models", "trading_model.h5")
 AUTO_RETRAIN_ENABLED = os.getenv("AUTO_RETRAIN_ENABLED", "true").lower() == "true"
 AUTO_RETRAIN_INTERVAL_HOURS = int(os.getenv("AUTO_RETRAIN_INTERVAL_HOURS", "24"))
 RETRAIN_LOOKBACK_PERIOD = os.getenv("RETRAIN_LOOKBACK_PERIOD", "1y")
+
+# Walk-forward validation
+WALK_FORWARD_ENABLED = os.getenv("WALK_FORWARD_ENABLED", "true").lower() == "true"
+WALK_FORWARD_INTERVAL_HOURS = int(os.getenv("WALK_FORWARD_INTERVAL_HOURS", "168"))  # weekly
+WALK_FORWARD_TRAIN_MONTHS = int(os.getenv("WALK_FORWARD_TRAIN_MONTHS", "6"))
+WALK_FORWARD_TEST_MONTHS = int(os.getenv("WALK_FORWARD_TEST_MONTHS", "1"))
+WALK_FORWARD_MIN_FOLDS = int(os.getenv("WALK_FORWARD_MIN_FOLDS", "3"))
+WALK_FORWARD_MAX_FOLDS = int(os.getenv("WALK_FORWARD_MAX_FOLDS", "6"))
+WALK_FORWARD_FAIL_PROFIT_FACTOR = float(os.getenv("WALK_FORWARD_FAIL_PROFIT_FACTOR", "0.90"))
+WALK_FORWARD_FAIL_SHARPE = float(os.getenv("WALK_FORWARD_FAIL_SHARPE", "-0.20"))
+WALK_FORWARD_FAIL_MAX_DD_PCT = float(os.getenv("WALK_FORWARD_FAIL_MAX_DD_PCT", "30.0"))
+WALK_FORWARD_CAUTIOUS_RISK_MULTIPLIER = float(os.getenv("WALK_FORWARD_CAUTIOUS_RISK_MULTIPLIER", "0.50"))
+WALK_FORWARD_REPORT_PATH = os.path.join(BASE_DIR, "models", "walk_forward_report.json")
 
 # Event/news learning settings
 EVENT_LEARNER_ALPHA = float(os.getenv("EVENT_LEARNER_ALPHA", "0.15"))
@@ -219,3 +263,16 @@ LONG_HORIZON_CASH_BUFFER_PCT = float(os.getenv("LONG_HORIZON_CASH_BUFFER_PCT", "
 MARKET_OVERLAY_ENABLED = os.getenv("MARKET_OVERLAY_ENABLED", "true").lower() == "true"
 MARKET_OVERLAY_REFRESH_SECONDS = int(os.getenv("MARKET_OVERLAY_REFRESH_SECONDS", "1800"))
 MARKET_OVERLAY_LOOKBACK_DAYS = int(os.getenv("MARKET_OVERLAY_LOOKBACK_DAYS", "365"))
+
+# Observability and notifications
+ALERTS_ENABLED = os.getenv("ALERTS_ENABLED", "false").lower() == "true"
+ALERT_MIN_INTERVAL_SECONDS = int(os.getenv("ALERT_MIN_INTERVAL_SECONDS", "900"))
+ALERT_WEBHOOK_URL = (os.getenv("ALERT_WEBHOOK_URL") or "").strip()
+ALERT_TELEGRAM_BOT_TOKEN = (os.getenv("ALERT_TELEGRAM_BOT_TOKEN") or "").strip()
+ALERT_TELEGRAM_CHAT_ID = (os.getenv("ALERT_TELEGRAM_CHAT_ID") or "").strip()
+ALERT_SOURCE_DEGRADED_ENABLED = os.getenv("ALERT_SOURCE_DEGRADED_ENABLED", "true").lower() == "true"
+ALERT_KILL_SWITCH_ENABLED = os.getenv("ALERT_KILL_SWITCH_ENABLED", "true").lower() == "true"
+ALERT_SOURCE_STALE_SECONDS = int(os.getenv("ALERT_SOURCE_STALE_SECONDS", "10800"))
+ALERT_SELF_TEST_ON_START = os.getenv("ALERT_SELF_TEST_ON_START", "false").lower() == "true"
+ALERT_SYMBOL_ERROR_THRESHOLD = int(os.getenv("ALERT_SYMBOL_ERROR_THRESHOLD", "3"))
+ALERT_SYMBOL_ERROR_COOLDOWN_SECONDS = int(os.getenv("ALERT_SYMBOL_ERROR_COOLDOWN_SECONDS", "1800"))

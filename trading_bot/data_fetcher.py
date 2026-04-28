@@ -21,6 +21,8 @@ from config import (
     CAPITOL_TRADES_REQUEST_RETRIES,
     CAPITOL_TRADES_RETRY_BACKOFF_SECONDS,
     CAPITOL_TRADES_FAILURE_RETRY_SECONDS,
+    CAPITOL_TRADES_PRIMARY_SOURCE,
+    QUIVER_API_KEY,
     STOCK_DATA_CACHE_TTL_SECONDS,
     ALPACA_API_KEY,
     ALPACA_API_SECRET,
@@ -48,12 +50,25 @@ _CAPITOL_TRADES_CACHE = []
 _STOCK_DATA_CACHE = {}
 _LAST_FETCH_TS = 0.0
 _LAST_WARNING_TS = 0.0
+_CAPITOL_LAST_SUCCESS_TS = 0.0
 _CACHE_TTL_SECONDS = 300
 _WARNING_COOLDOWN_SECONDS = 300
 _REQUEST_TIMEOUT_SECONDS = 10
 _BROWSER_HEADERS = {"User-Agent": "Mozilla/5.0"}
 _CAPITOL_CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs", "capitol_trades_cache.json")
 _LAST_CACHE_LOAD_TS = 0.0
+_QUIVER_CACHE = {}
+_QUIVER_CACHE_TS = {}
+_QUIVER_CACHE_TTL = 300
+_CAPITOL_DATA_HEALTH = {
+    "source": "cold_start",
+    "confidence": 0.0,
+    "record_count": 0,
+    "stale_age_seconds": None,
+    "degraded": True,
+    "errors": [],
+    "updated_at": 0.0,
+}
 
 
 def _save_capitol_cache(trades):
@@ -83,6 +98,83 @@ def _load_capitol_cache(max_age_seconds=86400):
         return trades if isinstance(trades, list) else []
     except Exception:
         return []
+
+
+def _set_capitol_data_health(source, confidence, record_count, stale_age_seconds=None, degraded=False, errors=None):
+    global _CAPITOL_DATA_HEALTH
+    _CAPITOL_DATA_HEALTH = {
+        "source": str(source),
+        "confidence": max(0.0, min(1.0, float(confidence or 0.0))),
+        "record_count": int(record_count or 0),
+        "stale_age_seconds": (None if stale_age_seconds is None else float(max(0.0, stale_age_seconds))),
+        "degraded": bool(degraded),
+        "errors": list(errors or []),
+        "updated_at": time.time(),
+    }
+
+
+def get_capitol_data_health():
+    """Return latest source/quality metadata for Capitol Trades sentiment feed."""
+    return dict(_CAPITOL_DATA_HEALTH)
+
+
+def _normalize_trade_action(value):
+    action = str(value or "").strip().lower()
+    if any(token in action for token in ("buy", "purchase", "bought", "acquire")):
+        return "buy"
+    if any(token in action for token in ("sell", "sale", "sold", "dispose")):
+        return "sell"
+    return action
+
+
+def _normalize_quiver_trade_payload(payload):
+    rows = payload if isinstance(payload, list) else []
+    normalized = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        symbol = str(
+            row.get("Ticker")
+            or row.get("ticker")
+            or row.get("Symbol")
+            or row.get("symbol")
+            or row.get("Asset")
+            or ""
+        ).strip().upper()
+        if not symbol:
+            continue
+        action = _normalize_trade_action(
+            row.get("Transaction")
+            or row.get("transaction")
+            or row.get("Type")
+            or row.get("type")
+            or row.get("action")
+        )
+        normalized.append(
+            {
+                "politician": str(
+                    row.get("Representative")
+                    or row.get("Senator")
+                    or row.get("Name")
+                    or row.get("Politician")
+                    or ""
+                ),
+                "asset": symbol,
+                "symbol": symbol,
+                "action": action,
+                "traded": row.get("Date") or row.get("DateRecieved") or row.get("DateReceived"),
+                "range": row.get("Range") or row.get("Amount") or row.get("AmountRange"),
+                "owner": row.get("Owner") or row.get("District") or row.get("Chamber"),
+            }
+        )
+    return _dedupe_trades(normalized)
+
+
+def _fetch_quiver_fallback_trades():
+    """Fallback source for congressional trade sentiment via Quiver public endpoints."""
+    endpoint = "https://api.quiverquant.com/beta/live/congresstrading?normalized=true"
+    payload = fetch_quiver_data(endpoint=endpoint, use_cache=True)
+    return _normalize_quiver_trade_payload(payload)
 
 
 def _request_with_retry(url, headers, timeout):
@@ -277,7 +369,7 @@ def fetch_capitol_trades():
     Supports either a JSON API or the public website HTML and uses a short-lived
     cache so repeated symbol checks do not spam the network or logs.
     """
-    global _CAPITOL_TRADES_CACHE, _LAST_FETCH_TS, _LAST_WARNING_TS
+    global _CAPITOL_TRADES_CACHE, _LAST_FETCH_TS, _LAST_WARNING_TS, _CAPITOL_LAST_SUCCESS_TS
 
     now = time.time()
     if not _CAPITOL_TRADES_CACHE:
@@ -286,37 +378,92 @@ def fetch_capitol_trades():
             _CAPITOL_TRADES_CACHE = _dedupe_trades(disk_cache)
 
     if now - _LAST_FETCH_TS < _CACHE_TTL_SECONDS:
+        if _CAPITOL_TRADES_CACHE:
+            _set_capitol_data_health(
+                source="memory_cache",
+                confidence=0.65,
+                record_count=len(_CAPITOL_TRADES_CACHE),
+                stale_age_seconds=max(0.0, now - _LAST_FETCH_TS),
+                degraded=True,
+            )
         return _CAPITOL_TRADES_CACHE
 
     base_url = CAPITOL_TRADES_API_URL.rstrip("/")
     candidate_base_urls = _capitol_candidate_base_urls(base_url)
     attempt_failures = []
+    primary_source = str(CAPITOL_TRADES_PRIMARY_SOURCE or "quiver").strip().lower()
 
     try:
         trades = None
-        for candidate_base_url in candidate_base_urls:
-            request_url = f"{candidate_base_url}/trades"
+        chosen_source = None
+        if primary_source == "quiver":
             try:
-                if _is_public_site_base_url(candidate_base_url):
-                    trades = _fetch_public_site_trades(candidate_base_url, CAPITOL_TRADES_MAX_PAGES)
-                else:
-                    response = _request_with_retry(
-                        request_url,
-                        headers=_BROWSER_HEADERS,
-                        timeout=_REQUEST_TIMEOUT_SECONDS,
-                    )
+                primary_trades = _fetch_quiver_fallback_trades()
+                if primary_trades:
+                    trades = primary_trades
+                    chosen_source = "quiver_primary"
+            except Exception as primary_err:
+                attempt_failures.append(("quiver_primary", primary_err))
 
-                    content_type = response.headers.get("content-type", "").lower()
-                    if "json" in content_type:
-                        trades = _normalize_json_payload(response.json())
+            if not trades:
+                for candidate_base_url in candidate_base_urls:
+                    request_url = f"{candidate_base_url}/trades"
+                    try:
+                        if _is_public_site_base_url(candidate_base_url):
+                            trades = _fetch_public_site_trades(candidate_base_url, CAPITOL_TRADES_MAX_PAGES)
+                        else:
+                            response = _request_with_retry(
+                                request_url,
+                                headers=_BROWSER_HEADERS,
+                                timeout=_REQUEST_TIMEOUT_SECONDS,
+                            )
+
+                            content_type = response.headers.get("content-type", "").lower()
+                            if "json" in content_type:
+                                trades = _normalize_json_payload(response.json())
+                            else:
+                                trades = _parse_trade_rows_from_html(response.text)
+
+                        if trades:
+                            chosen_source = f"capitol_fallback:{urlparse(candidate_base_url).netloc}"
+                            break
+                    except (requests.RequestException, ValueError) as candidate_error:
+                        attempt_failures.append((candidate_base_url, candidate_error))
+                        continue
+        else:
+            for candidate_base_url in candidate_base_urls:
+                request_url = f"{candidate_base_url}/trades"
+                try:
+                    if _is_public_site_base_url(candidate_base_url):
+                        trades = _fetch_public_site_trades(candidate_base_url, CAPITOL_TRADES_MAX_PAGES)
                     else:
-                        trades = _parse_trade_rows_from_html(response.text)
+                        response = _request_with_retry(
+                            request_url,
+                            headers=_BROWSER_HEADERS,
+                            timeout=_REQUEST_TIMEOUT_SECONDS,
+                        )
 
-                if trades:
-                    break
-            except (requests.RequestException, ValueError) as candidate_error:
-                attempt_failures.append((candidate_base_url, candidate_error))
-                continue
+                        content_type = response.headers.get("content-type", "").lower()
+                        if "json" in content_type:
+                            trades = _normalize_json_payload(response.json())
+                        else:
+                            trades = _parse_trade_rows_from_html(response.text)
+
+                    if trades:
+                        chosen_source = f"capitol_primary:{urlparse(candidate_base_url).netloc}"
+                        break
+                except (requests.RequestException, ValueError) as candidate_error:
+                    attempt_failures.append((candidate_base_url, candidate_error))
+                    continue
+
+            if not trades:
+                try:
+                    fallback_trades = _fetch_quiver_fallback_trades()
+                    if fallback_trades:
+                        trades = fallback_trades
+                        chosen_source = "quiver_fallback"
+                except Exception as fallback_err:
+                    attempt_failures.append(("quiver_fallback", fallback_err))
 
         if trades is None:
             if attempt_failures:
@@ -326,6 +473,23 @@ def fetch_capitol_trades():
         _CAPITOL_TRADES_CACHE = _dedupe_trades(trades)
         _save_capitol_cache(_CAPITOL_TRADES_CACHE)
         _LAST_FETCH_TS = now
+        _CAPITOL_LAST_SUCCESS_TS = now
+        source_label = str(chosen_source or "")
+        if source_label.startswith("quiver_primary"):
+            source_confidence = 0.95
+        elif source_label.startswith("capitol_primary"):
+            source_confidence = 1.0
+        elif source_label.startswith("capitol_fallback"):
+            source_confidence = 0.78
+        else:
+            source_confidence = 0.72
+        _set_capitol_data_health(
+            source=chosen_source or "unknown",
+            confidence=source_confidence,
+            record_count=len(_CAPITOL_TRADES_CACHE),
+            stale_age_seconds=0.0,
+            degraded=source_confidence < 0.95,
+        )
         return _CAPITOL_TRADES_CACHE
     except (requests.RequestException, ValueError) as e:
         if not _CAPITOL_TRADES_CACHE:
@@ -356,12 +520,96 @@ def fetch_capitol_trades():
                 )
             _LAST_WARNING_TS = now
 
+        stale_age_seconds = (now - _CAPITOL_LAST_SUCCESS_TS) if _CAPITOL_LAST_SUCCESS_TS > 0 else None
+        if _CAPITOL_TRADES_CACHE:
+            _set_capitol_data_health(
+                source="stale_cache",
+                confidence=0.45,
+                record_count=len(_CAPITOL_TRADES_CACHE),
+                stale_age_seconds=stale_age_seconds,
+                degraded=True,
+                errors=[_summarize_request_error(e)],
+            )
+        else:
+            _set_capitol_data_health(
+                source="unavailable",
+                confidence=0.0,
+                record_count=0,
+                stale_age_seconds=stale_age_seconds,
+                degraded=True,
+                errors=[_summarize_request_error(e)],
+            )
+
         # Retry sooner when there is no cache; otherwise use normal cache cadence.
         if _CAPITOL_TRADES_CACHE:
             _LAST_FETCH_TS = now
         else:
             _LAST_FETCH_TS = now - max(0, (_CACHE_TTL_SECONDS - CAPITOL_TRADES_FAILURE_RETRY_SECONDS))
         return _CAPITOL_TRADES_CACHE
+
+
+def fetch_quiver_data(endpoint, use_cache=True, timeout=None):
+    """Fetch data from a Quiver Quant endpoint using API-key authorization.
+
+    Supports common auth header variants to maximize compatibility and caches
+    successful responses briefly to avoid unnecessary repeated requests.
+    """
+    endpoint = str(endpoint or "").strip()
+    if not endpoint:
+        return None
+    if "api.quiverquant.com" not in endpoint:
+        print(f"Warning: refusing non-Quiver endpoint: {endpoint}")
+        return None
+    if not QUIVER_API_KEY:
+        print("Warning: QUIVER_API_KEY is not configured.")
+        return None
+
+    now = time.time()
+    if use_cache and endpoint in _QUIVER_CACHE:
+        age = now - float(_QUIVER_CACHE_TS.get(endpoint, 0.0) or 0.0)
+        if age < _QUIVER_CACHE_TTL:
+            return _QUIVER_CACHE[endpoint]
+
+    request_timeout = float(timeout if timeout is not None else _REQUEST_TIMEOUT_SECONDS)
+    base_headers = {
+        "Accept": "application/json",
+        "User-Agent": "Capitol-Trades-Bot/1.0",
+    }
+    auth_header_variants = [
+        {"Authorization": f"Bearer {QUIVER_API_KEY}"},
+        {"Authorization": f"Token {QUIVER_API_KEY}"},
+        {"Authorization": QUIVER_API_KEY},
+        {"X-API-Key": QUIVER_API_KEY},
+    ]
+
+    last_error = None
+    for auth_headers in auth_header_variants:
+        headers = {**base_headers, **auth_headers}
+        try:
+            response = requests.get(endpoint, headers=headers, timeout=request_timeout)
+            if response.status_code in (401, 403):
+                last_error = requests.HTTPError(
+                    f"HTTP {response.status_code} auth rejected",
+                    response=response,
+                )
+                continue
+            response.raise_for_status()
+            payload = response.json()
+
+            if isinstance(payload, dict):
+                data = payload.get("data", payload.get("results", payload))
+            else:
+                data = payload
+
+            _QUIVER_CACHE[endpoint] = data
+            _QUIVER_CACHE_TS[endpoint] = now
+            return data
+        except (requests.RequestException, ValueError) as err:
+            last_error = err
+
+    if last_error is not None:
+        print(f"Warning: Quiver fetch failed for {endpoint}: {last_error}")
+    return None
 
 def fetch_realtime_price(symbol):
     """Fetch the latest real-time price for a symbol using Alpaca's market data API.
