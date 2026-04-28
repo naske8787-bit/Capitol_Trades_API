@@ -14,6 +14,15 @@ from config import (
     AUTONOMY_AGGRESSIVE_MIN_CLOSED_TRADES,
     AUTONOMY_AGGRESSIVE_MIN_CONFIDENCE,
     AUTONOMY_LEARNING_ENABLED,
+    AUTONOMY_DYNAMIC_TUNING_ENABLED,
+    AUTONOMY_DYNAMIC_STEP,
+    AUTONOMY_RISK_MULT_MIN,
+    AUTONOMY_RISK_MULT_MAX,
+    AUTONOMY_BUY_THRESHOLD_MULT_MIN,
+    AUTONOMY_BUY_THRESHOLD_MULT_MAX,
+    AUTONOMY_MAX_POSITIONS_MULT_MIN,
+    AUTONOMY_MAX_POSITIONS_MULT_MAX,
+    AUTONOMY_FAILSAFE_DRAWDOWN_PCT,
     AUTONOMY_LOSS_EVENT_MIN_PNL,
     AUTONOMY_RECOVERY_EVENT_MIN_PNL,
 )
@@ -52,8 +61,17 @@ class AutonomousDecisionEngine:
                 "cautious": {"wins": 0, "losses": 0, "pnl_sum": 0.0},
                 "capital_preservation": {"wins": 0, "losses": 0, "pnl_sum": 0.0},
             },
+            "dynamic_offsets": {
+                "risk": 0.0,
+                "buy_threshold": 0.0,
+                "max_positions": 0.0,
+            },
         }
         self._load_state()
+
+    @staticmethod
+    def _clamp(value, lo, hi):
+        return max(lo, min(hi, float(value)))
 
     def _load_state(self):
         if not self.learning_enabled or not os.path.exists(self.state_path):
@@ -311,7 +329,7 @@ class AutonomousDecisionEngine:
             mode = "aggressive"
             allow_new_entries = True
             risk_multiplier = 1.25
-            buy_threshold_multiplier = 0.90
+            buy_threshold_multiplier = 0.85
             max_positions_multiplier = 1.10
         elif score >= 14:
             mode = "normal"
@@ -323,7 +341,7 @@ class AutonomousDecisionEngine:
             mode = "cautious"
             allow_new_entries = True
             risk_multiplier = 0.60
-            buy_threshold_multiplier = 1.20
+            buy_threshold_multiplier = 1.10
             max_positions_multiplier = 0.80
         else:
             mode = "capital_preservation"
@@ -337,7 +355,7 @@ class AutonomousDecisionEngine:
                 mode = "cautious"
                 allow_new_entries = True
                 risk_multiplier = 0.60
-                buy_threshold_multiplier = 1.20
+                buy_threshold_multiplier = 1.10
                 max_positions_multiplier = 0.80
                 reasons.append("aggressive blocked during cooldown after recent underperformance")
             elif closed < max(1, AUTONOMY_AGGRESSIVE_MIN_CLOSED_TRADES):
@@ -358,6 +376,75 @@ class AutonomousDecisionEngine:
                 reasons.append(
                     f"aggressive held back: confidence {confidence:.0%} below {AUTONOMY_AGGRESSIVE_MIN_CONFIDENCE:.0%}"
                 )
+
+        # Autonomous guardrail tuning: bounded and stateful for smoother adaptation.
+        offsets = dict(self.state.get("dynamic_offsets") or {})
+        risk_offset = _to_float(offsets.get("risk"), 0.0)
+        buy_offset = _to_float(offsets.get("buy_threshold"), 0.0)
+        max_pos_offset = _to_float(offsets.get("max_positions"), 0.0)
+
+        if AUTONOMY_DYNAMIC_TUNING_ENABLED:
+            step = max(0.01, float(AUTONOMY_DYNAMIC_STEP))
+            robust_sample = closed >= max(4, AUTONOMOUS_MIN_CLOSED_TRADES)
+            quality_good = (
+                robust_sample
+                and profit_factor >= max(1.0, AUTONOMOUS_MIN_PROFIT_FACTOR)
+                and drawdown_7d <= AUTONOMOUS_MAX_DRAWDOWN_7D_PCT
+                and win_rate >= max(0.45, AUTONOMOUS_MIN_WIN_RATE - 0.03)
+                and research_score > -2.0
+            )
+            quality_weak = (
+                robust_sample
+                and (
+                    profit_factor < 0.95
+                    or drawdown_7d > AUTONOMOUS_MAX_DRAWDOWN_7D_PCT * 1.15
+                    or win_rate < max(0.35, AUTONOMOUS_MIN_WIN_RATE - 0.15)
+                )
+            )
+
+            if quality_good:
+                risk_offset += step
+                buy_offset -= step * 0.5
+                max_pos_offset += step * 0.5
+                reasons.append("dynamic tuning: quality supportive, easing entry guardrails")
+            elif quality_weak:
+                risk_offset -= step
+                buy_offset += step
+                max_pos_offset -= step * 0.5
+                reasons.append("dynamic tuning: quality weak, tightening guardrails")
+
+            # Hard failsafe rollback on sustained deterioration.
+            if closed >= 8 and (profit_factor < 0.90 or drawdown_7d > AUTONOMY_FAILSAFE_DRAWDOWN_PCT):
+                allow_new_entries = False
+                mode = "capital_preservation"
+                risk_multiplier = 0.0
+                buy_threshold_multiplier = 10.0
+                max_positions_multiplier = 0.50
+                risk_offset = min(risk_offset, -0.20)
+                buy_offset = max(buy_offset, 0.25)
+                max_pos_offset = min(max_pos_offset, -0.20)
+                reasons.append("failsafe rollback: pausing new entries after weak realized quality")
+
+        risk_multiplier = self._clamp(risk_multiplier + risk_offset, AUTONOMY_RISK_MULT_MIN, AUTONOMY_RISK_MULT_MAX)
+        buy_threshold_multiplier = self._clamp(
+            buy_threshold_multiplier + buy_offset,
+            AUTONOMY_BUY_THRESHOLD_MULT_MIN,
+            AUTONOMY_BUY_THRESHOLD_MULT_MAX,
+        )
+        max_positions_multiplier = self._clamp(
+            max_positions_multiplier + max_pos_offset,
+            AUTONOMY_MAX_POSITIONS_MULT_MIN,
+            AUTONOMY_MAX_POSITIONS_MULT_MAX,
+        )
+
+        if not allow_new_entries:
+            risk_multiplier = 0.0
+
+        self.state["dynamic_offsets"] = {
+            "risk": risk_offset,
+            "buy_threshold": buy_offset,
+            "max_positions": max_pos_offset,
+        }
 
         weak_symbols = []
         for symbol, vals in pnls_by_symbol.items():
