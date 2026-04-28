@@ -2615,6 +2615,12 @@ _WARN_PATTERNS = ("warning", "warn")
 _KILL_SWITCH_PATTERN = "kill-switch active"
 _SOURCE_DEGRADED_PATTERN = "political feed degraded"
 _CONFIDENCE_PATTERN = "confidence="
+_BENIGN_RUNTIME_PATTERNS = (
+    "all log messages before absl::initializelog() is called are written to stderr",
+    "onednn custom operations are on",
+    "could not find cuda drivers on your machine",
+    "floating-point round-off errors",
+)
 _LOG_STALE_WARN_SECONDS = 5400   # 90 min
 _LOG_STALE_CRIT_SECONDS = 10800  # 3 h
 
@@ -2632,6 +2638,8 @@ def _bot_log_health(bot_id):
 
     for line in lines:
         lower = line.lower()
+        if any(p in lower for p in _BENIGN_RUNTIME_PATTERNS):
+            continue
         if _KILL_SWITCH_PATTERN in lower:
             kill_switch_active = True
         if _SOURCE_DEGRADED_PATTERN in lower:
