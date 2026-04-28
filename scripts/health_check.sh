@@ -4,6 +4,13 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 fail=0
 
+has_systemd_unit() {
+  local unit="$1"
+  local state
+  state="$(systemctl show "$unit" --property=LoadState --value 2>/dev/null || echo "not-found")"
+  [[ "$state" != "not-found" ]]
+}
+
 echo "=== HEALTH $(date -u +"%Y-%m-%dT%H:%M:%SZ") ==="
 
 for s in trading_bot crypto_bot; do
@@ -16,7 +23,7 @@ for s in trading_bot crypto_bot; do
 done
 
 if command -v systemctl >/dev/null 2>&1; then
-  if systemctl list-unit-files --type=service --no-legend 2>/dev/null | awk '{print $1}' | grep -qx "capitol-api.service"; then
+  if has_systemd_unit "capitol-api.service"; then
     api_state="$(systemctl is-active capitol-api || true)"
     echo "api: $api_state (systemd)"
     [[ "$api_state" == "active" ]] || fail=1
@@ -27,7 +34,7 @@ if command -v systemctl >/dev/null 2>&1; then
     fail=1
   fi
 
-  if systemctl list-unit-files --type=service --no-legend 2>/dev/null | awk '{print $1}' | grep -qx "capitol-dashboard.service"; then
+  if has_systemd_unit "capitol-dashboard.service"; then
     dash_state="$(systemctl is-active capitol-dashboard || true)"
     echo "dashboard: $dash_state (systemd)"
     [[ "$dash_state" == "active" ]] || fail=1

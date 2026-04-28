@@ -12,7 +12,9 @@ VENV_PY="$ROOT_DIR/.venv/bin/python"
 
 has_systemd_unit() {
   local unit="$1"
-  systemctl list-unit-files --type=service --no-legend 2>/dev/null | awk '{print $1}' | grep -qx "$unit"
+  local state
+  state="$(systemctl show "$unit" --property=LoadState --value 2>/dev/null || echo "not-found")"
+  [[ "$state" != "not-found" ]]
 }
 
 start_tmux_bot() {
