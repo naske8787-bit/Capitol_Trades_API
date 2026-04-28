@@ -87,12 +87,8 @@ IMPACT_THEMES = {
 }
 
 
-def ts():
-    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
 def log(msg):
-    print(f"[{ts()}] {msg}", flush=True)
+    print(str(msg), flush=True)
 
 
 def _safe_text(value):
