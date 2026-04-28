@@ -7,6 +7,9 @@ LOG_FILE="bot.log"
 SUPERVISOR_LOG="supervisor.log"
 RESTART_DELAY="${RESTART_DELAY:-10}"
 PYTHON_BIN="${PYTHON_BIN:-python}"
+PREFLIGHT_ALPACA="${PREFLIGHT_ALPACA:-true}"
+PREFLIGHT_SCRIPT="$(cd .. && pwd)/scripts/preflight_alpaca.sh"
+ENV_FILE="$(pwd)/.env"
 
 timestamp() {
   date -u +"%Y-%m-%dT%H:%M:%SZ"
@@ -21,6 +24,13 @@ timestamp_log_stream() {
 echo "[$(timestamp)] Supervisor started. Auto-restart is enabled." >> "$SUPERVISOR_LOG"
 
 while true; do
+  if [[ "$PREFLIGHT_ALPACA" == "true" ]] && [[ -x "$PREFLIGHT_SCRIPT" ]]; then
+    if ! "$PREFLIGHT_SCRIPT" "$ENV_FILE" >> "$SUPERVISOR_LOG" 2>&1; then
+      echo "[$(timestamp)] Alpaca preflight failed. Retrying in ${RESTART_DELAY}s..." >> "$SUPERVISOR_LOG"
+      sleep "$RESTART_DELAY"
+      continue
+    fi
+  fi
   echo "[$(timestamp)] Launching trading bot..." >> "$SUPERVISOR_LOG"
   if "$PYTHON_BIN" -u main.py 2>&1 | timestamp_log_stream >> "$LOG_FILE"; then
     exit_code=0

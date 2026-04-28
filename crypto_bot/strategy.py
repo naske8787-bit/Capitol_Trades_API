@@ -46,6 +46,7 @@ from config import (
     CRYPTO_RESEARCH_ENTRY_GUARD_SCORE,
     CRYPTO_RESEARCH_HARD_BLOCK_SCORE,
     CRYPTO_RESEARCH_SOFT_BLOCK_SCORE,
+    CRYPTO_LOG_HOLD_REASONS,
     INFLUENCER_PUMP_TRADE_SCORE,
     INFLUENCER_DUMP_SELL_SCORE,
     INFLUENCER_MANIPULATION_RIDE_SCORE,
@@ -552,10 +553,17 @@ class TradingStrategy:
     def analyze_signal(self, symbol):
         symbol = symbol.upper()
         try:
+            def hold(reason):
+                if symbol in self.last_analysis:
+                    self.last_analysis[symbol]["hold_reason"] = reason
+                if CRYPTO_LOG_HOLD_REASONS:
+                    print(f"{symbol}: HOLD reason={reason}")
+                return "HOLD"
+
             data = preprocess_data(fetch_crypto_data(symbol))
             if len(data) < max(35, CRYPTO_MACD_SLOW + CRYPTO_MACD_SIGNAL):
                 self.last_analysis[symbol] = {"reason": "not_enough_data"}
-                return "HOLD"
+                return hold("not_enough_data")
 
             close = data["Close"].astype(float)
             volume = data["Volume"].astype(float) if "Volume" in data.columns else None
@@ -614,7 +622,7 @@ class TradingStrategy:
 
             blocked_union = set(profile.get("blocked_symbols", []) or set()) | set(self.blocked_symbols_by_improvement)
             if symbol in blocked_union:
-                return "HOLD"
+                return hold("blocked_by_improvement")
 
             self.last_analysis[symbol] = {
                 "current_price": current_price,
@@ -707,7 +715,7 @@ class TradingStrategy:
                 if current_price <= stop_loss_price:
                     return "SELL"
                 if not min_hold_reached:
-                    return "HOLD"
+                    return hold("min_hold_not_reached")
                 if current_price >= take_profit_price and rsi >= CRYPTO_RSI_SELL_THRESHOLD:
                     return "SELL"
                 # MACD bearish crossover exit
@@ -715,28 +723,28 @@ class TradingStrategy:
                     return "SELL"
                 if ema_fast < ema_slow and momentum_pct < 0:
                     return "SELL"
-                return "HOLD"
+                return hold("position_hold")
 
             if not volume_ok:
-                return "HOLD"
+                return hold("volume_filter")
 
             if self.active_setup_candidates and symbol not in self.active_setup_candidates:
-                return "HOLD"
+                return hold("not_in_setup_candidates")
 
             if not bool(profile.get("allow_new_entries", True)):
-                return "HOLD"
+                return hold("autonomy_blocks_entries")
             if self.long_term_policy.drawdown_blocked():
-                return "HOLD"
+                return hold("long_term_drawdown_block")
             if not regime_allow_new_entries and not oversold_rebound:
-                return "HOLD"
+                return hold("regime_blocks_entries")
             if regime_confidence < 0.35 and not oversold_rebound:
-                return "HOLD"
+                return hold("low_regime_confidence")
 
             # Macro filter: During extreme bearish research regime, block all new entries
             # unless we have a strong oversold rebound signal with positive momentum
             if external_research_score <= CRYPTO_RESEARCH_HARD_BLOCK_SCORE:
                 if not (oversold_rebound and momentum_pct > 0):
-                    return "HOLD"
+                    return hold("research_hard_block")
 
             effective_max_positions = max(1, int(CRYPTO_MAX_POSITIONS * float(profile.get("max_positions_multiplier", 1.0))))
             dynamic_trend_threshold = CRYPTO_MIN_TREND_STRENGTH_PCT * float(profile.get("buy_threshold_multiplier", 1.0))
@@ -756,9 +764,9 @@ class TradingStrategy:
             elif trend_continuation:
                 current_setup = "trend_continuation"
             if risk_off_signal <= -2.5 and not oversold_rebound:
-                return "HOLD"
+                return hold("risk_off_block")
             if external_research_score <= CRYPTO_RESEARCH_SOFT_BLOCK_SCORE and not oversold_rebound:
-                return "HOLD"
+                return hold("research_soft_block")
 
             # Influencer dump/FUD guard: block new entries when influencers are
             # signalling a coordinated dump or spreading FUD for this symbol.
@@ -767,7 +775,7 @@ class TradingStrategy:
                     f"[INFLUENCER] Blocking new entry for {symbol}: "
                     f"dump signal inf_net={inf_net:.2f}, actors={inf_top_influencers}"
                 )
-                return "HOLD"
+                return hold("influencer_dump_block")
 
             # ── Proven historical pattern scoring ─────────────────────────────
             # Score current crypto conditions against documented historical patterns.
@@ -829,16 +837,16 @@ class TradingStrategy:
 
             if has_capacity and (oversold_rebound or trend_continuation):
                 if not setup_passed:
-                    return "HOLD"
+                    return hold("setup_validation_failed")
                 if external_research_score <= CRYPTO_RESEARCH_ENTRY_GUARD_SCORE and risk_on_signal <= 0 and not pattern_override:
-                    return "HOLD"
+                    return hold("research_entry_guard")
                 return "BUY"
 
             # Research-assisted momentum entry: allow strong trend continuation
             # when market-impact topics are broadly supportive.
             if has_capacity and bullish_trend and macd_bullish and momentum_pct > 0 and risk_on_signal >= 2.0 and risk_off_signal >= -1.0:
                 if not setup_passed:
-                    return "HOLD"
+                    return hold("setup_validation_failed")
                 return "BUY"
 
             # Pattern-driven entry: if multiple proven bullish patterns are firing
@@ -846,7 +854,7 @@ class TradingStrategy:
             # MACD/RSI signal — patterns represent 60-80% win-rate historical setups.
             if has_capacity and pattern_score >= 2.0 and external_research_score > CRYPTO_RESEARCH_SOFT_BLOCK_SCORE and momentum_pct > 0:
                 if not setup_passed:
-                    return "HOLD"
+                    return hold("setup_validation_failed")
                 return "BUY"
 
             # Influencer pump-ride entry: buy early to capture a likely influencer-
@@ -857,7 +865,7 @@ class TradingStrategy:
                 if INFLUENCER_REQUIRE_TECHNICAL_CONFIRM:
                     tech_ok = momentum_pct > 0 and rsi < 75 and not (ema_fast < ema_slow and rsi > 70)
                     if not tech_ok:
-                        return "HOLD"
+                        return hold("influencer_tech_confirm_failed")
                 print(
                     f"[INFLUENCER] Pump signal for {symbol}: "
                     f"inf_net={inf_net:.2f}, manip_score={inf_manip_score:.2f}, "
@@ -867,7 +875,7 @@ class TradingStrategy:
                 self.last_analysis[symbol]["influencer_pump_mode"] = True
                 return "BUY"
 
-            return "HOLD"
+            return hold("no_entry_condition_met")
         except Exception as e:
             print(f"Error analyzing signal for {symbol}: {e}")
             return "HOLD"

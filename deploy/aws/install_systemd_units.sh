@@ -192,6 +192,34 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
+cat >/etc/systemd/system/capitol-healthcheck.service <<EOF
+[Unit]
+Description=Capitol periodic health check
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=$APP_USER
+WorkingDirectory=$APP_DIR
+EnvironmentFile=$ENV_FILE
+ExecStart=/bin/bash -lc './scripts/health_check.sh >> /tmp/capitol-healthcheck.log 2>&1'
+EOF
+
+cat >/etc/systemd/system/capitol-healthcheck.timer <<EOF
+[Unit]
+Description=Run Capitol health check every 5 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Unit=capitol-healthcheck.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+
 systemctl daemon-reload
 systemctl enable \
   capitol-api \
@@ -200,7 +228,8 @@ systemctl enable \
   capitol-crypto-bot \
   capitol-asx-bot \
   capitol-forex-bot \
-  capitol-tech-research-bot
+  capitol-tech-research-bot \
+  capitol-healthcheck.timer
 
 echo "Installed and enabled systemd units:"
 echo "  - capitol-api"
@@ -210,3 +239,4 @@ echo "  - capitol-crypto-bot"
 echo "  - capitol-asx-bot"
 echo "  - capitol-forex-bot"
 echo "  - capitol-tech-research-bot"
+echo "  - capitol-healthcheck.timer"
