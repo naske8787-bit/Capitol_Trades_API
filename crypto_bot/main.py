@@ -183,13 +183,22 @@ def main():
             guardrails = _fetch_portfolio_guardrails() or {}
             kill_switch_by_bot = guardrails.get("kill_switch_by_bot") or {}
             bot_reasons = guardrails.get("bot_reasons") or {}
+            global_hard_stop_active = bool(guardrails.get("global_hard_stop_active", guardrails.get("kill_switch_active", False)))
+            global_hard_stop_reasons = guardrails.get("global_hard_stop_reasons") or guardrails.get("reasons") or []
             if isinstance(kill_switch_by_bot, dict) and ("crypto_bot" in kill_switch_by_bot):
                 guardrail_kill_switch = bool(kill_switch_by_bot.get("crypto_bot", False))
+                reasons = bot_reasons.get("crypto_bot") or []
             else:
                 guardrail_kill_switch = bool(guardrails.get("kill_switch_active", False))
-            if guardrail_kill_switch:
+                reasons = guardrails.get("reasons") or []
+            effective_kill_switch = bool(guardrail_kill_switch or global_hard_stop_active)
+            if effective_kill_switch:
                 portfolio_guardrail_kill_switch = True
-                reasons = bot_reasons.get("crypto_bot") or guardrails.get("reasons") or []
+                merged_reasons = list(reasons)
+                if global_hard_stop_active:
+                    for r in global_hard_stop_reasons:
+                        if r not in merged_reasons:
+                            merged_reasons.append(r)
                 strategy.apply_autonomy_profile({
                     "allow_new_entries": False,
                     "risk_multiplier": 0.0,
@@ -197,7 +206,7 @@ def main():
                 })
                 print(
                     "Crypto portfolio guardrail kill-switch active: "
-                    + ("; ".join(str(r) for r in reasons) or "risk thresholds breached")
+                    + ("; ".join(str(r) for r in merged_reasons) or "risk thresholds breached")
                 )
             elif portfolio_guardrail_kill_switch:
                 portfolio_guardrail_kill_switch = False

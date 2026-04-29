@@ -423,24 +423,40 @@ def main():
                 print(f"Auto-improvement: {update}")
 
             guardrails = _fetch_portfolio_guardrails() or {}
-            guardrail_kill_switch = bool(guardrails.get("kill_switch_active", False))
-            if guardrail_kill_switch:
-                portfolio_guardrail_kill_switch = True
+            kill_switch_by_bot = guardrails.get("kill_switch_by_bot") or {}
+            bot_reasons = guardrails.get("bot_reasons") or {}
+            global_hard_stop_active = bool(guardrails.get("global_hard_stop_active", guardrails.get("kill_switch_active", False)))
+            global_hard_stop_reasons = guardrails.get("global_hard_stop_reasons") or guardrails.get("reasons") or []
+
+            if isinstance(kill_switch_by_bot, dict) and ("trading_bot" in kill_switch_by_bot):
+                guardrail_kill_switch = bool(kill_switch_by_bot.get("trading_bot", False))
+                reasons = bot_reasons.get("trading_bot") or []
+            else:
+                guardrail_kill_switch = bool(guardrails.get("kill_switch_active", False))
                 reasons = guardrails.get("reasons") or []
+
+            effective_kill_switch = bool(guardrail_kill_switch or global_hard_stop_active)
+            if effective_kill_switch:
+                portfolio_guardrail_kill_switch = True
+                merged_reasons = list(reasons)
+                if global_hard_stop_active:
+                    for r in global_hard_stop_reasons:
+                        if r not in merged_reasons:
+                            merged_reasons.append(r)
                 strategy.apply_autonomy_profile({
                     "allow_new_entries": False,
                     "risk_multiplier": 0.0,
                     "mode": "capital_preservation",
                 })
                 print(
-                    "Global portfolio guardrail kill-switch active: "
-                    + ("; ".join(str(r) for r in reasons) or "risk thresholds breached")
+                    "Trading guardrail kill-switch active: "
+                    + ("; ".join(str(r) for r in merged_reasons) or "risk thresholds breached")
                 )
                 if ALERT_KILL_SWITCH_ENABLED:
                     notify_alert(
                         "portfolio_guardrail_kill_switch",
-                        "Global portfolio guardrail blocked new entries: "
-                        + ("; ".join(str(r) for r in reasons) or "risk thresholds breached"),
+                        "Trading guardrail blocked new entries: "
+                        + ("; ".join(str(r) for r in merged_reasons) or "risk thresholds breached"),
                         severity="critical",
                         min_interval=300,
                     )
@@ -448,7 +464,7 @@ def main():
                 portfolio_guardrail_kill_switch = False
                 notify_alert(
                     "portfolio_guardrail_recovered",
-                    "Global portfolio guardrail recovered; autonomous entry gating can resume.",
+                    "Trading guardrail recovered; autonomous entry gating can resume.",
                     severity="info",
                     min_interval=300,
                 )

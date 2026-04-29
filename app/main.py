@@ -153,6 +153,7 @@ _PORTFOLIO_NET_EXPOSURE_CAP_PCT = float(os.environ.get("PORTFOLIO_NET_EXPOSURE_C
 _PORTFOLIO_CORRELATION_CAP_PCT = float(os.environ.get("PORTFOLIO_CORRELATION_CAP_PCT", "0.70"))
 _PORTFOLIO_DAILY_LOSS_LIMIT_PCT = float(os.environ.get("PORTFOLIO_DAILY_LOSS_LIMIT_PCT", "0.03"))
 _PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT = float(os.environ.get("PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT", "0.70"))
+_PORTFOLIO_LIQUIDATION_RISK_EXPOSURE_PCT = float(os.environ.get("PORTFOLIO_LIQUIDATION_RISK_EXPOSURE_PCT", "1.20"))
 _RISK_ON_TECH_SYMBOLS = {
     "AAPL", "MSFT", "NVDA", "GOOGL", "META", "AMD", "TSLA", "AMZN", "PLTR", "COIN", "QQQ", "XLK",
 }
@@ -491,6 +492,31 @@ def _fetch_live_position_exposure_by_symbol():
         return exposure
     except Exception:
         return {}
+
+
+def _probe_trading_broker_health():
+    if TradingClient is None:
+        return {"healthy": True, "reason": "alpaca_client_unavailable"}
+
+    env = _read_bot_env("trading_bot")
+    api_key = str(env.get("ALPACA_API_KEY") or "").strip()
+    api_secret = str(env.get("ALPACA_API_SECRET") or "").strip()
+    base_url = str(env.get("ALPACA_BASE_URL") or "https://paper-api.alpaca.markets").strip()
+    if not api_key or not api_secret:
+        return {"healthy": True, "reason": "credentials_missing"}
+
+    try:
+        is_paper = "paper" in base_url.lower()
+        client = TradingClient(api_key, api_secret, paper=is_paper, url_override=base_url)
+        account = client.get_account()
+        status = str(getattr(account, "status", "unknown")).upper()
+        healthy = status in {"ACTIVE", "UNKNOWN"}
+        return {
+            "healthy": bool(healthy),
+            "reason": "ok" if healthy else f"account_status={status}",
+        }
+    except Exception as e:
+        return {"healthy": False, "reason": f"broker_probe_error={str(e)[:120]}"}
 
 
 def _live_regime_snapshot(bot_id):
@@ -1340,7 +1366,7 @@ def _build_portfolio_guardrails(investment=None):
 
     breached_net = net_exposure_pct > float(_PORTFOLIO_NET_EXPOSURE_CAP_PCT)
     breached_corr = risk_on_pct > float(_PORTFOLIO_CORRELATION_CAP_PCT)
-    kill_switch = bool(breached_net or breached_corr or breached_daily_loss)
+    trading_bot_kill_switch = bool(breached_net or breached_corr or breached_daily_loss)
 
     crypto_bot_kill_switch = bool(breached_daily_loss or breached_crypto)
     crypto_bot_reasons = []
@@ -1367,17 +1393,39 @@ def _build_portfolio_guardrails(investment=None):
             f"daily loss {daily_loss_pct:.1%} > limit {float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT):.1%}"
         )
 
+    broker_health = _probe_trading_broker_health()
+    broker_unhealthy = not bool((broker_health or {}).get("healthy", True))
+    liquidation_risk = net_exposure_pct > float(_PORTFOLIO_LIQUIDATION_RISK_EXPOSURE_PCT)
+
+    global_hard_stop_reasons = []
+    if breached_daily_loss:
+        global_hard_stop_reasons.append(
+            f"daily loss {daily_loss_pct:.1%} > limit {float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT):.1%}"
+        )
+    if liquidation_risk:
+        global_hard_stop_reasons.append(
+            f"liquidation risk: net exposure {net_exposure_pct:.1%} > hard cap {float(_PORTFOLIO_LIQUIDATION_RISK_EXPOSURE_PCT):.1%}"
+        )
+    if broker_unhealthy:
+        global_hard_stop_reasons.append(str((broker_health or {}).get("reason") or "broker health degraded"))
+
+    global_hard_stop_active = bool(global_hard_stop_reasons)
+
     top_exposures = sorted(exposure_by_symbol.items(), key=lambda kv: float(kv[1]), reverse=True)[:8]
     top_exposures = [{"symbol": k, "open_cost_basis": round(float(v), 2)} for k, v in top_exposures]
 
     return {
-        "kill_switch_active": kill_switch,
-        "reasons": reasons,
+        # Backward-compatible global field now means severe hard-stop only.
+        "kill_switch_active": global_hard_stop_active,
+        "reasons": global_hard_stop_reasons,
+        "global_hard_stop_active": global_hard_stop_active,
+        "global_hard_stop_reasons": global_hard_stop_reasons,
         "thresholds": {
             "net_exposure_cap_pct": float(_PORTFOLIO_NET_EXPOSURE_CAP_PCT),
             "correlation_cap_pct": float(_PORTFOLIO_CORRELATION_CAP_PCT),
             "daily_loss_limit_pct": float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT),
             "crypto_exposure_cap_pct": float(_PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT),
+            "liquidation_risk_exposure_pct": float(_PORTFOLIO_LIQUIDATION_RISK_EXPOSURE_PCT),
         },
         "metrics": {
             "portfolio_value": round(portfolio_value, 2),
@@ -1389,9 +1437,11 @@ def _build_portfolio_guardrails(investment=None):
             "risk_on_pct": round(risk_on_pct, 6),
             "daily_loss_amount": round(daily_loss_amount, 2),
             "daily_loss_pct": round(daily_loss_pct, 6),
+            "broker_health_ok": bool((broker_health or {}).get("healthy", True)),
+            "broker_health_reason": str((broker_health or {}).get("reason") or "ok"),
         },
         "kill_switch_by_bot": {
-            "trading_bot": kill_switch,
+            "trading_bot": trading_bot_kill_switch,
             "crypto_bot": crypto_bot_kill_switch,
         },
         "bot_reasons": {
