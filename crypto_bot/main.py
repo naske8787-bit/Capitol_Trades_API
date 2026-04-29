@@ -2,6 +2,8 @@ import time
 import os
 import sys
 import json
+import urllib.error
+import urllib.request
 
 from broker import Broker
 from config import (
@@ -23,6 +25,31 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
 from market_overlay import MarketOverlay
+
+
+_PORTFOLIO_GUARDRAILS_URL = os.getenv("PORTFOLIO_GUARDRAILS_URL", "http://127.0.0.1:8000/portfolio_guardrails")
+_PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS = int(os.getenv("PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS", "90"))
+_PORTFOLIO_GUARDRAILS_LAST = {"ts": 0.0, "data": {}}
+
+
+def _fetch_portfolio_guardrails():
+    now = time.time()
+    cached = _PORTFOLIO_GUARDRAILS_LAST.get("data") or {}
+    last_ts = float(_PORTFOLIO_GUARDRAILS_LAST.get("ts", 0.0) or 0.0)
+    if cached and (now - last_ts) < max(15, _PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS):
+        return cached
+
+    try:
+        req = urllib.request.Request(_PORTFOLIO_GUARDRAILS_URL, headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+            if isinstance(payload, dict):
+                _PORTFOLIO_GUARDRAILS_LAST["ts"] = now
+                _PORTFOLIO_GUARDRAILS_LAST["data"] = payload
+                return payload
+    except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError):
+        pass
+    return cached
 
 
 def _rank_multipliers(rows):
@@ -80,6 +107,7 @@ def main():
 
     print("Crypto bot started in paper-trading mode. Press Ctrl+C to stop.")
     print(f"Watching: {', '.join(CRYPTO_WATCHLIST)}")
+    portfolio_guardrail_kill_switch = False
 
     while True:
         now = time.time()
@@ -151,6 +179,25 @@ def main():
                 profile["market_overlay"] = overlay
 
             strategy.apply_autonomy_profile(profile)
+
+            guardrails = _fetch_portfolio_guardrails() or {}
+            guardrail_kill_switch = bool(guardrails.get("kill_switch_active", False))
+            if guardrail_kill_switch:
+                portfolio_guardrail_kill_switch = True
+                reasons = guardrails.get("reasons") or []
+                strategy.apply_autonomy_profile({
+                    "allow_new_entries": False,
+                    "risk_multiplier": 0.0,
+                    "mode": "capital_preservation",
+                })
+                print(
+                    "Global portfolio guardrail kill-switch active: "
+                    + ("; ".join(str(r) for r in reasons) or "risk thresholds breached")
+                )
+            elif portfolio_guardrail_kill_switch:
+                portfolio_guardrail_kill_switch = False
+                print("Global portfolio guardrail recovered: autonomous entry gating restored.")
+
             for line in strategy.auto_apply_improvements():
                 print(line)
             metrics = profile.get("metrics", {})

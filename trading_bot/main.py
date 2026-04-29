@@ -2,6 +2,7 @@ import time
 import json
 import os
 import sys
+import urllib.error
 import urllib.request
 from collections import deque
 
@@ -50,6 +51,9 @@ from market_overlay import MarketOverlay
 
 
 _ALERT_LAST_SENT_TS = {}
+_PORTFOLIO_GUARDRAILS_URL = os.getenv("PORTFOLIO_GUARDRAILS_URL", "http://127.0.0.1:8000/portfolio_guardrails")
+_PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS = int(os.getenv("PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS", "90"))
+_PORTFOLIO_GUARDRAILS_LAST = {"ts": 0.0, "data": {}}
 
 
 def _send_webhook_alert(payload):
@@ -115,6 +119,26 @@ def notify_alert(event_key, message, severity="warning", min_interval=None):
     sent = _send_telegram_alert(f"[trading_bot][{severity}] {message}") or sent
     if sent:
         _ALERT_LAST_SENT_TS[event_key] = now
+
+
+def _fetch_portfolio_guardrails():
+    now = time.time()
+    cached = _PORTFOLIO_GUARDRAILS_LAST.get("data") or {}
+    last_ts = float(_PORTFOLIO_GUARDRAILS_LAST.get("ts", 0.0) or 0.0)
+    if cached and (now - last_ts) < max(15, _PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS):
+        return cached
+
+    try:
+        req = urllib.request.Request(_PORTFOLIO_GUARDRAILS_URL, headers={"Accept": "application/json"})
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+            if isinstance(payload, dict):
+                _PORTFOLIO_GUARDRAILS_LAST["ts"] = now
+                _PORTFOLIO_GUARDRAILS_LAST["data"] = payload
+                return payload
+    except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError):
+        pass
+    return cached
 
 
 def _rank_multipliers(rows):
@@ -248,6 +272,7 @@ def main():
     setup_expectancy_window = deque(maxlen=30)
     symbol_error_counts = {}
     wf_cautious_active = False
+    portfolio_guardrail_kill_switch = False
     market_overlay = None
     if MARKET_OVERLAY_ENABLED:
         market_overlay = MarketOverlay(
@@ -396,6 +421,37 @@ def main():
                 print(f"  - {reason}")
             for update in strategy.auto_apply_improvements():
                 print(f"Auto-improvement: {update}")
+
+            guardrails = _fetch_portfolio_guardrails() or {}
+            guardrail_kill_switch = bool(guardrails.get("kill_switch_active", False))
+            if guardrail_kill_switch:
+                portfolio_guardrail_kill_switch = True
+                reasons = guardrails.get("reasons") or []
+                strategy.apply_autonomy_profile({
+                    "allow_new_entries": False,
+                    "risk_multiplier": 0.0,
+                    "mode": "capital_preservation",
+                })
+                print(
+                    "Global portfolio guardrail kill-switch active: "
+                    + ("; ".join(str(r) for r in reasons) or "risk thresholds breached")
+                )
+                if ALERT_KILL_SWITCH_ENABLED:
+                    notify_alert(
+                        "portfolio_guardrail_kill_switch",
+                        "Global portfolio guardrail blocked new entries: "
+                        + ("; ".join(str(r) for r in reasons) or "risk thresholds breached"),
+                        severity="critical",
+                        min_interval=300,
+                    )
+            elif portfolio_guardrail_kill_switch:
+                portfolio_guardrail_kill_switch = False
+                notify_alert(
+                    "portfolio_guardrail_recovered",
+                    "Global portfolio guardrail recovered; autonomous entry gating can resume.",
+                    severity="info",
+                    min_interval=300,
+                )
 
         # Auto-retrain on schedule
         if AUTO_RETRAIN_ENABLED:

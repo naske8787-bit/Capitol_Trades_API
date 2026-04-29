@@ -149,6 +149,14 @@ _LIVE_ACCOUNT_CACHE = {
 }
 _LIVE_ACCOUNT_CACHE_TTL_SECONDS = 45
 
+_PORTFOLIO_NET_EXPOSURE_CAP_PCT = float(os.environ.get("PORTFOLIO_NET_EXPOSURE_CAP_PCT", "0.85"))
+_PORTFOLIO_CORRELATION_CAP_PCT = float(os.environ.get("PORTFOLIO_CORRELATION_CAP_PCT", "0.70"))
+_PORTFOLIO_DAILY_LOSS_LIMIT_PCT = float(os.environ.get("PORTFOLIO_DAILY_LOSS_LIMIT_PCT", "0.03"))
+_RISK_ON_TECH_SYMBOLS = {
+    "AAPL", "MSFT", "NVDA", "GOOGL", "META", "AMD", "TSLA", "AMZN", "PLTR", "COIN", "QQQ", "XLK",
+}
+_RISK_ON_CRYPTO_SYMBOLS = {"BTC/USD", "ETH/USD", "SOL/USD"}
+
 
 def _read_json_body(environ):
     try:
@@ -987,6 +995,38 @@ def _estimate_open_cost_basis(trades):
     return round(sum(max(0.0, p["cost"]) for p in positions.values()), 2)
 
 
+def _estimate_open_cost_basis_by_symbol(trades):
+    positions = {}
+    for row in trades:
+        action = str(row.get("action") or "").upper()
+        symbol = str(row.get("symbol") or "").upper().strip()
+        qty = _f(row.get("qty"), 0.0)
+        price = _f(row.get("price"), 0.0)
+        if not symbol or qty <= 0 or price <= 0:
+            continue
+
+        pos = positions.setdefault(symbol, {"qty": 0.0, "cost": 0.0})
+        if action == "BUY":
+            pos["qty"] += qty
+            pos["cost"] += qty * price
+        elif action == "SELL" and pos["qty"] > 0:
+            sell_qty = min(qty, pos["qty"])
+            avg_cost = (pos["cost"] / pos["qty"]) if pos["qty"] > 0 else 0.0
+            pos["qty"] -= sell_qty
+            pos["cost"] -= avg_cost * sell_qty
+            if pos["qty"] <= 1e-9:
+                pos["qty"] = 0.0
+                pos["cost"] = 0.0
+
+    result = {}
+    for symbol, payload in positions.items():
+        cost = max(0.0, float(payload.get("cost", 0.0)))
+        if cost <= 0:
+            continue
+        result[symbol] = round(cost, 2)
+    return result
+
+
 def _parse_iso_ts(value):
     raw = str(value or "").strip()
     if not raw:
@@ -1195,6 +1235,94 @@ def _build_investment_progress(max_points=240):
             "estimated_net_pnl_if_liquidated": round(net_if_liquidated, 2),
             "estimated_combined_realized_pnl": round(combined_realized, 2),
         },
+    }
+
+
+def _build_portfolio_guardrails(investment=None):
+    inv = investment or _build_investment_progress(max_points=240)
+    latest = (inv or {}).get("latest") or {}
+    portfolio_value = max(0.0, float(latest.get("portfolio_value", 0.0) or 0.0))
+
+    trading_rows = _read_csv_rows(_TRADING_TRADE_LOG, max_rows=4000)
+    crypto_rows = _read_csv_rows(_CRYPTO_TRADE_LOG, max_rows=4000)
+    exposure_by_symbol = _estimate_open_cost_basis_by_symbol(trading_rows)
+    for symbol, value in _estimate_open_cost_basis_by_symbol(crypto_rows).items():
+        exposure_by_symbol[symbol] = round(float(exposure_by_symbol.get(symbol, 0.0)) + float(value), 2)
+
+    total_open_exposure = round(sum(exposure_by_symbol.values()), 2)
+    net_exposure_pct = (total_open_exposure / portfolio_value) if portfolio_value > 0 else 0.0
+
+    risk_on_exposure = 0.0
+    for symbol, value in exposure_by_symbol.items():
+        sym = str(symbol).upper()
+        if sym in _RISK_ON_TECH_SYMBOLS or sym in _RISK_ON_CRYPTO_SYMBOLS:
+            risk_on_exposure += float(value)
+    risk_on_pct = (risk_on_exposure / portfolio_value) if portfolio_value > 0 else 0.0
+
+    daily_loss_pct = 0.0
+    daily_loss_amount = 0.0
+    breached_daily_loss = False
+    portfolio_series = (inv or {}).get("portfolio") or []
+    if portfolio_series:
+        latest_point = portfolio_series[-1]
+        latest_ts = _parse_iso_ts(latest_point.get("t"))
+        latest_val = _f(latest_point.get("v"), 0.0)
+        if latest_ts and latest_val > 0:
+            target_ts = latest_ts - timedelta(hours=24)
+            anchor = None
+            for point in portfolio_series:
+                ts = _parse_iso_ts(point.get("t"))
+                if ts and ts <= target_ts:
+                    anchor = point
+            if anchor is None and portfolio_series:
+                anchor = portfolio_series[0]
+            anchor_val = _f((anchor or {}).get("v"), 0.0)
+            if anchor_val > 0:
+                pnl = latest_val - anchor_val
+                daily_loss_amount = min(0.0, pnl)
+                daily_loss_pct = (-daily_loss_amount / anchor_val) if daily_loss_amount < 0 else 0.0
+                breached_daily_loss = daily_loss_pct >= float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT)
+
+    breached_net = net_exposure_pct > float(_PORTFOLIO_NET_EXPOSURE_CAP_PCT)
+    breached_corr = risk_on_pct > float(_PORTFOLIO_CORRELATION_CAP_PCT)
+    kill_switch = bool(breached_net or breached_corr or breached_daily_loss)
+
+    reasons = []
+    if breached_net:
+        reasons.append(
+            f"net exposure {net_exposure_pct:.1%} > cap {float(_PORTFOLIO_NET_EXPOSURE_CAP_PCT):.1%}"
+        )
+    if breached_corr:
+        reasons.append(
+            f"risk-on concentration {risk_on_pct:.1%} > cap {float(_PORTFOLIO_CORRELATION_CAP_PCT):.1%}"
+        )
+    if breached_daily_loss:
+        reasons.append(
+            f"daily loss {daily_loss_pct:.1%} > limit {float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT):.1%}"
+        )
+
+    top_exposures = sorted(exposure_by_symbol.items(), key=lambda kv: float(kv[1]), reverse=True)[:8]
+    top_exposures = [{"symbol": k, "open_cost_basis": round(float(v), 2)} for k, v in top_exposures]
+
+    return {
+        "kill_switch_active": kill_switch,
+        "reasons": reasons,
+        "thresholds": {
+            "net_exposure_cap_pct": float(_PORTFOLIO_NET_EXPOSURE_CAP_PCT),
+            "correlation_cap_pct": float(_PORTFOLIO_CORRELATION_CAP_PCT),
+            "daily_loss_limit_pct": float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT),
+        },
+        "metrics": {
+            "portfolio_value": round(portfolio_value, 2),
+            "total_open_exposure": total_open_exposure,
+            "net_exposure_pct": round(net_exposure_pct, 6),
+            "risk_on_exposure": round(risk_on_exposure, 2),
+            "risk_on_pct": round(risk_on_pct, 6),
+            "daily_loss_amount": round(daily_loss_amount, 2),
+            "daily_loss_pct": round(daily_loss_pct, 6),
+        },
+        "top_exposures": top_exposures,
+        "timestamp": datetime.now(UTC).isoformat(),
     }
 
 
@@ -2447,6 +2575,8 @@ def _bot_copilot_answer(bot_id, message):
 def _bot_dashboard_payload():
     autonomy = _autonomy_dashboard_payload()
     auto_bots = autonomy.get("bots") or {}
+    investment = _build_investment_progress(max_points=240)
+    portfolio_guardrails = _build_portfolio_guardrails(investment=investment)
     return {
         "status": _check_bot_status(),
         "trading_bot": {
@@ -2483,7 +2613,8 @@ def _bot_dashboard_payload():
         },
         "autonomy": autonomy,
         "return_scorecard": _weekly_return_scorecard(target_return_pct=20.0),
-        "investment": _build_investment_progress(max_points=240),
+        "investment": investment,
+        "portfolio_guardrails": portfolio_guardrails,
         "timestamp": datetime.now(UTC).isoformat(),
     }
 
@@ -3068,6 +3199,10 @@ def app(environ, start_response):
 
     if method == "GET" and path == "/bot_dashboard_data":
         return json_response(start_response, _bot_dashboard_payload())
+
+    if method == "GET" and path == "/portfolio_guardrails":
+        investment = _build_investment_progress(max_points=240)
+        return json_response(start_response, _build_portfolio_guardrails(investment=investment))
 
     if method == "POST" and path == "/bot_copilot_chat":
         payload = _read_json_body(environ)
