@@ -155,7 +155,7 @@ _PORTFOLIO_DAILY_LOSS_LIMIT_PCT = float(os.environ.get("PORTFOLIO_DAILY_LOSS_LIM
 _RISK_ON_TECH_SYMBOLS = {
     "AAPL", "MSFT", "NVDA", "GOOGL", "META", "AMD", "TSLA", "AMZN", "PLTR", "COIN", "QQQ", "XLK",
 }
-_RISK_ON_CRYPTO_SYMBOLS = {"BTC/USD", "ETH/USD", "SOL/USD"}
+_RISK_ON_CRYPTO_SYMBOLS = {"BTC/USD", "ETH/USD", "SOL/USD", "BTCUSD", "ETHUSD", "SOLUSD"}
 
 
 def _read_json_body(environ):
@@ -445,6 +445,42 @@ def _fetch_live_trading_account_snapshot():
         _LIVE_ACCOUNT_CACHE["value"] = dict(fallback)
         return fallback
     return {}
+
+
+def _normalize_symbol_for_risk(symbol):
+    sym = str(symbol or "").strip().upper()
+    if sym.endswith("USD") and "/" not in sym and len(sym) > 3:
+        base = sym[:-3]
+        return f"{base}/USD"
+    return sym
+
+
+def _fetch_live_position_exposure_by_symbol():
+    if TradingClient is None:
+        return {}
+
+    env = _read_bot_env("trading_bot")
+    api_key = str(env.get("ALPACA_API_KEY") or "").strip()
+    api_secret = str(env.get("ALPACA_API_SECRET") or "").strip()
+    base_url = str(env.get("ALPACA_BASE_URL") or "https://paper-api.alpaca.markets").strip()
+    if not api_key or not api_secret:
+        return {}
+
+    try:
+        is_paper = "paper" in base_url.lower()
+        client = TradingClient(api_key, api_secret, paper=is_paper, url_override=base_url)
+        exposure = {}
+        for pos in client.get_all_positions() or []:
+            symbol = _normalize_symbol_for_risk(getattr(pos, "symbol", ""))
+            if not symbol:
+                continue
+            market_value = abs(_f(getattr(pos, "market_value", 0.0), 0.0))
+            if market_value <= 0.0:
+                continue
+            exposure[symbol] = round(float(exposure.get(symbol, 0.0)) + market_value, 2)
+        return exposure
+    except Exception:
+        return {}
 
 
 def _live_regime_snapshot(bot_id):
@@ -1243,18 +1279,20 @@ def _build_portfolio_guardrails(investment=None):
     latest = (inv or {}).get("latest") or {}
     portfolio_value = max(0.0, float(latest.get("portfolio_value", 0.0) or 0.0))
 
-    trading_rows = _read_csv_rows(_TRADING_TRADE_LOG, max_rows=4000)
-    crypto_rows = _read_csv_rows(_CRYPTO_TRADE_LOG, max_rows=4000)
-    exposure_by_symbol = _estimate_open_cost_basis_by_symbol(trading_rows)
-    for symbol, value in _estimate_open_cost_basis_by_symbol(crypto_rows).items():
-        exposure_by_symbol[symbol] = round(float(exposure_by_symbol.get(symbol, 0.0)) + float(value), 2)
+    exposure_by_symbol = _fetch_live_position_exposure_by_symbol()
+    if not exposure_by_symbol:
+        trading_rows = _read_csv_rows(_TRADING_TRADE_LOG, max_rows=4000)
+        crypto_rows = _read_csv_rows(_CRYPTO_TRADE_LOG, max_rows=4000)
+        exposure_by_symbol = _estimate_open_cost_basis_by_symbol(trading_rows)
+        for symbol, value in _estimate_open_cost_basis_by_symbol(crypto_rows).items():
+            exposure_by_symbol[symbol] = round(float(exposure_by_symbol.get(symbol, 0.0)) + float(value), 2)
 
     total_open_exposure = round(sum(exposure_by_symbol.values()), 2)
     net_exposure_pct = (total_open_exposure / portfolio_value) if portfolio_value > 0 else 0.0
 
     risk_on_exposure = 0.0
     for symbol, value in exposure_by_symbol.items():
-        sym = str(symbol).upper()
+        sym = _normalize_symbol_for_risk(symbol)
         if sym in _RISK_ON_TECH_SYMBOLS or sym in _RISK_ON_CRYPTO_SYMBOLS:
             risk_on_exposure += float(value)
     risk_on_pct = (risk_on_exposure / portfolio_value) if portfolio_value > 0 else 0.0
