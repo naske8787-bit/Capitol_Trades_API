@@ -221,6 +221,53 @@
             color: var(--muted);
         }
 
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .health-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .health-label {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .health-state {
+            border-radius: 999px;
+            padding: 2px 8px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        .health-state.healthy {
+            background: rgba(62,207,142,.15);
+            color: var(--ok);
+            border-color: rgba(62,207,142,.35);
+        }
+
+        .health-state.warn {
+            background: rgba(242, 201, 76, 0.15);
+            color: #f2c94c;
+            border-color: rgba(242, 201, 76, 0.35);
+        }
+
+        .health-state.critical {
+            background: rgba(255,123,114,.15);
+            color: var(--bad);
+            border-color: rgba(255,123,114,.35);
+        }
+
         @media (max-width: 1000px) {
             .half, .third { grid-column: span 12; }
         }
@@ -264,6 +311,52 @@
                 <tbody id="healthAlertsRows"></tbody>
             </table>
             <div class="small" style="margin-top:8px;color:#5a7a99;">Refreshes every 30 s. "Log Silent" = no log writes in >90 min (orange) or >3 h (red).</div>
+        </div>
+
+        <div class="card full" id="panel-system-health">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                <div>
+                    <div class="kpi-title" style="margin:0;">System Health Check</div>
+                    <div class="small">Aggregates guardrails, drift, execution quality, promotion stage, and capital pacing.</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <span id="systemHealthSummary" class="health-state warn">CHECKING...</span>
+                    <button class="ctl-btn" onclick="runSystemHealthCheck(true)">Run Health Check</button>
+                </div>
+            </div>
+            <div class="small" id="systemHealthTimestamp" style="margin-top:8px;">Last check: -</div>
+
+            <div class="health-grid">
+                <div class="card" style="padding:10px;">
+                    <div class="kpi-title" style="margin-bottom:6px;">Trading Bot</div>
+                    <div class="health-row"><span class="health-label">Kill Switch</span><span id="healthTradingGuardrail" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Drift</span><span id="healthTradingDrift" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Execution Quality</span><span id="healthTradingExec" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Promotion Stage</span><span id="healthTradingPromotion" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Capital Pacing</span><span id="healthTradingPacing" class="health-state warn">-</span></div>
+                </div>
+
+                <div class="card" style="padding:10px;">
+                    <div class="kpi-title" style="margin-bottom:6px;">Crypto Bot</div>
+                    <div class="health-row"><span class="health-label">Kill Switch</span><span id="healthCryptoGuardrail" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Drift</span><span id="healthCryptoDrift" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Execution Quality</span><span id="healthCryptoExec" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Promotion Stage</span><span id="healthCryptoPromotion" class="health-state warn">-</span></div>
+                    <div class="health-row"><span class="health-label">Capital Pacing</span><span id="healthCryptoPacing" class="health-state warn">-</span></div>
+                </div>
+
+                <div class="card" style="padding:10px;">
+                    <div class="kpi-title" style="margin-bottom:6px;">Quick Actions</div>
+                    <div class="small" style="margin-bottom:8px;">Use these checks to confirm reliability controls are live.</div>
+                    <div class="ctl-actions">
+                        <button class="ctl-btn" onclick="openApiPath('/portfolio_guardrails')">Guardrails JSON</button>
+                        <button class="ctl-btn" onclick="openApiPath('/execution_quality')">Execution JSON</button>
+                        <button class="ctl-btn" onclick="openApiPath('/promotion_status')">Promotion JSON</button>
+                        <button class="ctl-btn" onclick="openApiPath('/capital_pacing')">Pacing JSON</button>
+                    </div>
+                    <div class="small" style="margin-top:8px;" id="systemHealthNotes">Notes: -</div>
+                </div>
+            </div>
         </div>
 
         <div class="card third">
@@ -760,6 +853,7 @@
         let dashboardData = null;
         let actionHistoryItems = [];
         let latestDryRunPlanText = '';
+        let _healthCheckRunning = false;
 
         function statusPill(el, ok, label) {
             el.textContent = label;
@@ -774,6 +868,137 @@
         function money(v) {
             const n = Number(v || 0);
             return '$' + n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function _healthSeverityRank(severity) {
+            if (severity === 'critical') return 3;
+            if (severity === 'warn') return 2;
+            return 1;
+        }
+
+        function _setHealthState(id, severity, text) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('healthy', 'warn', 'critical');
+            const s = (severity === 'critical' || severity === 'warn') ? severity : 'healthy';
+            el.classList.add(s);
+            el.textContent = text || '-';
+        }
+
+        function _driftHealth(drift) {
+            const d = drift || {};
+            if (d.drift_active) {
+                return { severity: 'critical', label: `ACTIVE (${(Number(d.combined_multiplier || 1) * 100).toFixed(0)}%)` };
+            }
+            const psi = Number(d.psi_max || 0);
+            if (psi >= 0.10) return { severity: 'warn', label: `WATCH (psi=${psi.toFixed(2)})` };
+            return { severity: 'healthy', label: 'OK' };
+        }
+
+        function _execHealth(exec) {
+            const e = exec || {};
+            const sample = Number(e.sample_size || 0);
+            const rej = Number(e.rejection_rate || 0);
+            const p95Slip = e.p95_slippage_bps === null || e.p95_slippage_bps === undefined ? null : Number(e.p95_slippage_bps);
+            if (sample < 10) return { severity: 'warn', label: `WARMUP (${sample})` };
+            if (rej > 0.25 || (p95Slip !== null && p95Slip > 100)) return { severity: 'critical', label: 'DEGRADED' };
+            if (rej > 0.10 || (p95Slip !== null && p95Slip > 30)) return { severity: 'warn', label: 'WATCH' };
+            return { severity: 'healthy', label: 'OK' };
+        }
+
+        function _promotionHealth(promo) {
+            const p = promo || {};
+            const stage = String(p.stage || 'unknown').toLowerCase();
+            if (stage === 'live') return { severity: 'healthy', label: 'LIVE' };
+            if (stage === 'canary') return { severity: 'warn', label: 'CANARY' };
+            if (stage === 'shadow') return { severity: 'warn', label: 'SHADOW' };
+            return { severity: 'warn', label: stage.toUpperCase() };
+        }
+
+        function _pacingHealth(pacing) {
+            const p = pacing || {};
+            const mult = Number(p.multiplier || 1);
+            const reasons = Array.isArray(p.last_reasons) ? p.last_reasons : [];
+            if (mult <= 0.50) return { severity: 'critical', label: `DEFENSIVE (${mult.toFixed(2)})` };
+            if (mult <= 0.85) return { severity: 'warn', label: `CAUTIOUS (${mult.toFixed(2)})` };
+            if (reasons.length) return { severity: 'warn', label: `WATCH (${mult.toFixed(2)})` };
+            return { severity: 'healthy', label: `OK (${mult.toFixed(2)})` };
+        }
+
+        function _guardrailHealth(guardrails, botKey) {
+            const byBot = (guardrails && guardrails.kill_switch_by_bot) || {};
+            const globalStop = !!(guardrails && guardrails.global_hard_stop_active);
+            const botStop = !!byBot[botKey];
+            if (globalStop || botStop) return { severity: 'critical', label: 'ACTIVE' };
+            return { severity: 'healthy', label: 'OK' };
+        }
+
+        function openApiPath(path) {
+            window.open(path, '_blank', 'noopener,noreferrer');
+        }
+
+        async function runSystemHealthCheck(manual = false) {
+            if (_healthCheckRunning) return;
+            _healthCheckRunning = true;
+            const notesEl = document.getElementById('systemHealthNotes');
+            if (manual && notesEl) notesEl.textContent = 'Notes: running checks...';
+            try {
+                const [guardrails, exec, promo, pacing] = await Promise.all([
+                    fetch('/portfolio_guardrails').then(r => r.json()),
+                    fetch('/execution_quality').then(r => r.json()),
+                    fetch('/promotion_status').then(r => r.json()),
+                    fetch('/capital_pacing').then(r => r.json()),
+                ]);
+
+                const tGuard = _guardrailHealth(guardrails, 'trading_bot');
+                const cGuard = _guardrailHealth(guardrails, 'crypto_bot');
+                const tDrift = _driftHealth((guardrails || {}).drift_state ? guardrails.drift_state.trading_bot : {});
+                const cDrift = _driftHealth((guardrails || {}).drift_state ? guardrails.drift_state.crypto_bot : {});
+                const tExec = _execHealth((exec || {}).trading_bot || {});
+                const cExec = _execHealth((exec || {}).crypto_bot || {});
+                const tPromo = _promotionHealth((promo || {}).trading_bot || {});
+                const cPromo = _promotionHealth((promo || {}).crypto_bot || {});
+                const tPace = _pacingHealth((pacing || {}).trading_bot || {});
+                const cPace = _pacingHealth((pacing || {}).crypto_bot || {});
+
+                _setHealthState('healthTradingGuardrail', tGuard.severity, tGuard.label);
+                _setHealthState('healthTradingDrift', tDrift.severity, tDrift.label);
+                _setHealthState('healthTradingExec', tExec.severity, tExec.label);
+                _setHealthState('healthTradingPromotion', tPromo.severity, tPromo.label);
+                _setHealthState('healthTradingPacing', tPace.severity, tPace.label);
+
+                _setHealthState('healthCryptoGuardrail', cGuard.severity, cGuard.label);
+                _setHealthState('healthCryptoDrift', cDrift.severity, cDrift.label);
+                _setHealthState('healthCryptoExec', cExec.severity, cExec.label);
+                _setHealthState('healthCryptoPromotion', cPromo.severity, cPromo.label);
+                _setHealthState('healthCryptoPacing', cPace.severity, cPace.label);
+
+                const severities = [
+                    tGuard, tDrift, tExec, tPromo, tPace,
+                    cGuard, cDrift, cExec, cPromo, cPace,
+                ].map(x => x.severity);
+                const worst = severities.sort((a, b) => _healthSeverityRank(b) - _healthSeverityRank(a))[0] || 'healthy';
+                const summaryText = worst === 'critical' ? 'SYSTEM DEGRADED' : (worst === 'warn' ? 'SYSTEM WATCH' : 'SYSTEM HEALTHY');
+                _setHealthState('systemHealthSummary', worst, summaryText);
+
+                const tsEl = document.getElementById('systemHealthTimestamp');
+                if (tsEl) {
+                    const nowIso = new Date().toISOString().replace('T', ' ').slice(0, 19);
+                    tsEl.textContent = `Last check: ${nowIso} UTC`;
+                }
+                if (notesEl) {
+                    const tSample = Number(((exec || {}).trading_bot || {}).sample_size || 0);
+                    const cSample = Number(((exec || {}).crypto_bot || {}).sample_size || 0);
+                    notesEl.textContent = `Notes: execution samples trading=${tSample}, crypto=${cSample}`;
+                }
+            } catch (e) {
+                _setHealthState('systemHealthSummary', 'critical', 'CHECK FAILED');
+                const tsEl = document.getElementById('systemHealthTimestamp');
+                if (tsEl) tsEl.textContent = 'Last check: failed';
+                if (notesEl) notesEl.textContent = `Notes: ${e}`;
+            } finally {
+                _healthCheckRunning = false;
+            }
         }
 
         function setTab(tab) {
@@ -1913,6 +2138,7 @@
                 const res = await fetch('/bot_dashboard_data');
                 const data = await res.json();
                 renderDashboard(data);
+                runSystemHealthCheck(false);
             } catch (e) {
                 document.getElementById('lastUpdated').textContent = 'Failed to load dashboard data';
             }
@@ -1942,6 +2168,7 @@
         onActionTypeChange();
         setTab('trading_bot');
         refreshDashboard();
+        runSystemHealthCheck(false);
         setInterval(refreshDashboard, 15000);
         renderCompoundingChart();
     </script>
