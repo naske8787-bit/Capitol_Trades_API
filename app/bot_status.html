@@ -870,6 +870,13 @@
             return '$' + n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
+        function _ageMinutes(isoLike) {
+            if (!isoLike) return null;
+            const ts = Date.parse(String(isoLike));
+            if (!Number.isFinite(ts)) return null;
+            return Math.max(0, (Date.now() - ts) / 60000.0);
+        }
+
         function _healthSeverityRank(severity) {
             if (severity === 'critical') return 3;
             if (severity === 'warn') return 2;
@@ -1684,7 +1691,15 @@
             const rAsx = research.asx_bot || {};
             const rForex = research.forex_bot || {};
             const rTech = research.tech_research_bot || {};
-            const activeCount = [rTrading, rCrypto, rTech].filter(researchActive).length;
+            const techAgeMin = _ageMinutes(tr.generated_at);
+            const techFresh = techAgeMin !== null && techAgeMin <= 30;
+            const techStale = techAgeMin !== null && techAgeMin > 30;
+            const techOperational = techFresh || researchActive(rTech);
+            const activeCount = [
+                researchActive(rTrading),
+                researchActive(rCrypto),
+                techOperational,
+            ].filter(Boolean).length;
 
             researchPill(
                 document.getElementById('tradingResearchStatus'),
@@ -1708,8 +1723,12 @@
             );
             researchPill(
                 document.getElementById('techResearchStatus'),
-                researchActive(rTech),
-                researchActive(rTech) ? 'Research: Active' : 'Research: Idle'
+                !techStale && techOperational,
+                techStale
+                    ? `Research: Stale (${Math.round(techAgeMin)}m)`
+                    : (techOperational
+                        ? (techAgeMin !== null ? `Research: Active (${Math.round(techAgeMin)}m)` : 'Research: Active')
+                        : 'Research: Idle')
             );
             researchPill(
                 document.getElementById('allResearchStatus'),
