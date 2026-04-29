@@ -2965,7 +2965,8 @@ def _check_bot_status():
     asx_running = _bot_running("asx_bot")
     forex_running = _bot_running("forex_bot")
     tech_research_running = _bot_running("tech_research_bot")
-    return {
+
+    status = {
         "trading_bot": {
             "running": trading_running,
             "session": "trading_bot",
@@ -2999,6 +3000,21 @@ def _check_bot_status():
         "all_running": trading_running and crypto_running and asx_running and forex_running,
         "timestamp": datetime.now(UTC).isoformat(),
     }
+
+    # Prefer live guardrail-by-bot state over log-parsed kill-switch phrases.
+    try:
+        guardrails = _build_portfolio_guardrails()
+        kill_by_bot = guardrails.get("kill_switch_by_bot") or {}
+        reasons_by_bot = guardrails.get("bot_reasons") or {}
+        if isinstance(kill_by_bot, dict):
+            for bot_id in ("trading_bot", "crypto_bot"):
+                if bot_id in status and bot_id in kill_by_bot:
+                    status[bot_id]["health"]["kill_switch_active"] = bool(kill_by_bot.get(bot_id, False))
+                    status[bot_id]["health"]["kill_switch_reasons"] = reasons_by_bot.get(bot_id) or []
+    except Exception:
+        pass
+
+    return status
 
 
 def _bot_control(bot_id, action):
