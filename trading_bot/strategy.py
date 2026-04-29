@@ -73,6 +73,10 @@ from setup_validator import evaluate_equity_setup
 from regime_detector import detect_equity_regime
 from fundamentals import evaluate_company_fundamentals
 from long_term_policy import LongTermPolicy
+from execution_quality import ExecutionQualityTracker as _ExecQualTracker
+
+_EXEC_LOG_PATH = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "logs", "execution_quality.jsonl")
+_exec_tracker = _ExecQualTracker(_EXEC_LOG_PATH)
 
 
 class TradingStrategy:
@@ -1048,7 +1052,14 @@ class TradingStrategy:
                     print(f"Skipping BUY for {symbol}: {reason}.")
                     return None
 
-                broker.buy(symbol, qty)
+                _eq_rec = _exec_tracker.start_record("BUY", symbol, qty, current_price)
+                try:
+                    broker.buy(symbol, qty)
+                    _fill = _exec_tracker.poll_fill(broker, symbol, current_price)
+                    _exec_tracker.finish_record(_eq_rec, fill_price=_fill)
+                except Exception as _eq_exc:
+                    _exec_tracker.finish_record(_eq_rec, rejected=True, reject_reason=str(_eq_exc))
+                    raise
                 entry_context = self._build_adaptive_context(
                     predicted_change=float(entry_analysis.get("effective_predicted_change_pct", 0.0)) / 100.0,
                     trend_strength=float(entry_analysis.get("trend_strength_pct", 0.0)) / 100.0,
@@ -1114,7 +1125,14 @@ class TradingStrategy:
                 if local_position.get("entry_ts"):
                     hold_minutes = (time.time() - float(local_position["entry_ts"])) / 60.0
 
-                broker.sell(symbol, qty)
+                _eq_rec = _exec_tracker.start_record("SELL", symbol, qty, current_price)
+                try:
+                    broker.sell(symbol, qty)
+                    _fill = _exec_tracker.poll_fill(broker, symbol, current_price)
+                    _exec_tracker.finish_record(_eq_rec, fill_price=_fill)
+                except Exception as _eq_exc:
+                    _exec_tracker.finish_record(_eq_rec, rejected=True, reject_reason=str(_eq_exc))
+                    raise
                 self.experience_policy.observe_trade(
                     symbol=symbol,
                     entry_context=entry_context,

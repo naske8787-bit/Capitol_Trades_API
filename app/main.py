@@ -25,6 +25,7 @@ except Exception:
 
 from shared.regime_detector import detect_equity_regime, detect_crypto_regime
 from shared.drift_detector import load_drift_state
+from shared.execution_quality import load_execution_metrics
 
 from app.routes import ROUTES
 from app.utils.helpers import error_response, json_response
@@ -1311,6 +1312,19 @@ def _build_investment_progress(max_points=240):
             "estimated_net_pnl_if_liquidated": round(net_if_liquidated, 2),
             "estimated_combined_realized_pnl": round(combined_realized, 2),
         },
+    }
+
+
+def _build_execution_quality() -> dict:
+    """Build execution quality metrics for both bots from their JSONL logs."""
+    trading_log = os.path.join(_WORKSPACE, "trading_bot", "logs", "execution_quality.jsonl")
+    crypto_log  = os.path.join(_WORKSPACE, "crypto_bot",  "logs", "execution_quality.jsonl")
+    trading_metrics = load_execution_metrics(trading_log)
+    crypto_metrics  = load_execution_metrics(crypto_log)
+    return {
+        "trading_bot": trading_metrics,
+        "crypto_bot":  crypto_metrics,
+        "timestamp":   datetime.now(UTC).isoformat(),
     }
 
 
@@ -3397,6 +3411,9 @@ def app(environ, start_response):
     if method == "GET" and path == "/portfolio_guardrails":
         investment = _build_investment_progress(max_points=240)
         return json_response(start_response, _build_portfolio_guardrails(investment=investment))
+
+    if method == "GET" and path == "/execution_quality":
+        return json_response(start_response, _build_execution_quality())
 
     if method == "POST" and path == "/bot_copilot_chat":
         payload = _read_json_body(environ)

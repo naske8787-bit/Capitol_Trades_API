@@ -70,6 +70,10 @@ from proven_patterns import score_conditions_against_patterns, build_crypto_cond
 from setup_validator import evaluate_crypto_setup
 from regime_detector import detect_crypto_regime
 from long_term_policy import LongTermPolicy
+from execution_quality import ExecutionQualityTracker as _ExecQualTracker
+
+_EXEC_LOG_PATH = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "logs", "execution_quality.jsonl")
+_exec_tracker = _ExecQualTracker(_EXEC_LOG_PATH)
 
 
 class TradingStrategy:
@@ -942,7 +946,14 @@ class TradingStrategy:
                     print(f"Skipping BUY for {symbol}: {reason}.")
                     return None
 
-                broker.buy(symbol, qty)
+                _eq_rec = _exec_tracker.start_record("BUY", symbol, qty, current_price)
+                try:
+                    broker.buy(symbol, qty)
+                    _fill = _exec_tracker.poll_fill(broker, symbol, current_price)
+                    _exec_tracker.finish_record(_eq_rec, fill_price=_fill)
+                except Exception as _eq_exc:
+                    _exec_tracker.finish_record(_eq_rec, rejected=True, reject_reason=str(_eq_exc))
+                    raise
                 self.positions[symbol] = {
                     "entry_price": current_price,
                     "qty": qty,
@@ -973,7 +984,14 @@ class TradingStrategy:
 
                 current_price = broker.get_current_price(symbol)
                 entry_price = float(self.positions.get(symbol, {}).get("entry_price", current_price))
-                broker.sell(symbol, qty)
+                _eq_rec = _exec_tracker.start_record("SELL", symbol, qty, current_price)
+                try:
+                    broker.sell(symbol, qty)
+                    _fill = _exec_tracker.poll_fill(broker, symbol, current_price)
+                    _exec_tracker.finish_record(_eq_rec, fill_price=_fill)
+                except Exception as _eq_exc:
+                    _exec_tracker.finish_record(_eq_rec, rejected=True, reject_reason=str(_eq_exc))
+                    raise
                 pnl = (current_price - entry_price) * float(qty)
                 self.trade_history.append({
                     "ts": datetime.now(timezone.utc),
