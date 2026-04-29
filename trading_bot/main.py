@@ -273,6 +273,7 @@ def main():
     symbol_error_counts = {}
     wf_cautious_active = False
     portfolio_guardrail_kill_switch = False
+    runtime_risk_kill_switch = False
     market_overlay = None
     if MARKET_OVERLAY_ENABLED:
         market_overlay = MarketOverlay(
@@ -397,7 +398,9 @@ def main():
             closed_7d = int(metrics.get("closed_trades_7d", 0) or 0)
             pf_7d = float(metrics.get("profit_factor_7d", 0.0) or 0.0)
             dd_7d = float(metrics.get("max_drawdown_7d", 0.0) or 0.0)
-            if (closed_7d >= 8 and pf_7d < 0.95) or dd_7d > 0.08:
+            risk_kill_switch_now = bool((closed_7d >= 8 and pf_7d < 0.95) or dd_7d > 0.08)
+            if risk_kill_switch_now:
+                runtime_risk_kill_switch = True
                 strategy.apply_autonomy_profile({
                     "allow_new_entries": False,
                     "risk_multiplier": 0.0,
@@ -415,6 +418,22 @@ def main():
                             f"(closed_7d={closed_7d}, pf_7d={pf_7d:.2f}, dd_7d={dd_7d:.2%})."
                         ),
                         severity="critical",
+                        min_interval=300,
+                    )
+            elif runtime_risk_kill_switch:
+                runtime_risk_kill_switch = False
+                print(
+                    "Risk kill-switch recovered: quality metrics normalized; "
+                    "autonomous entry gating can resume."
+                )
+                if ALERT_KILL_SWITCH_ENABLED:
+                    notify_alert(
+                        "kill_switch_recovered",
+                        (
+                            "Risk kill-switch recovered; metrics normalized "
+                            f"(closed_7d={closed_7d}, pf_7d={pf_7d:.2f}, dd_7d={dd_7d:.2%})."
+                        ),
+                        severity="info",
                         min_interval=300,
                     )
             for reason in auto_profile.get("reasons", [])[:4]:
