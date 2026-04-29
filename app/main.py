@@ -27,6 +27,7 @@ from shared.regime_detector import detect_equity_regime, detect_crypto_regime
 from shared.drift_detector import load_drift_state
 from shared.execution_quality import load_execution_metrics
 from shared.promotion_pipeline import load_promotion_state
+from shared.confidence_pacer import load_capital_pacing_state
 
 from app.routes import ROUTES
 from app.utils.helpers import error_response, json_response
@@ -1337,6 +1338,17 @@ def _build_promotion_status() -> dict:
         "trading_bot": load_promotion_state(trading_state_dir, "trading"),
         "crypto_bot":  load_promotion_state(crypto_state_dir,  "crypto"),
         "timestamp":   datetime.now(UTC).isoformat(),
+    }
+
+
+def _build_capital_pacing() -> dict:
+    """Return confidence-based capital pacing state for both bots."""
+    trading_state_dir = os.path.join(_WORKSPACE, "trading_bot", "logs")
+    crypto_state_dir = os.path.join(_WORKSPACE, "crypto_bot", "logs")
+    return {
+        "trading_bot": load_capital_pacing_state(trading_state_dir, "trading"),
+        "crypto_bot": load_capital_pacing_state(crypto_state_dir, "crypto"),
+        "timestamp": datetime.now(UTC).isoformat(),
     }
 
 
@@ -3429,6 +3441,9 @@ def app(environ, start_response):
 
     if method == "GET" and path == "/promotion_status":
         return json_response(start_response, _build_promotion_status())
+
+    if method == "GET" and path == "/capital_pacing":
+        return json_response(start_response, _build_capital_pacing())
 
     if method == "POST" and path == "/promotion_pipeline":
         payload = _read_json_body(environ)

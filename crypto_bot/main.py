@@ -27,6 +27,7 @@ sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
 from market_overlay import MarketOverlay
 from drift_detector import DriftDetector
+from confidence_pacer import ConfidenceCapitalPacer
 
 _DRIFT_STATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
 
@@ -105,6 +106,7 @@ def main():
     broker = wait_for_account_ready()
     strategy = TradingStrategy()
     drift_detector = DriftDetector("crypto", _DRIFT_STATE_DIR)
+    capital_pacer = ConfidenceCapitalPacer("crypto", _DRIFT_STATE_DIR)
     last_setup_scorecard_ts = 0.0
     market_overlay = None
     if MARKET_OVERLAY_ENABLED:
@@ -331,16 +333,32 @@ def main():
         drift_mult = drift_detector.get_risk_multiplier()
         strategy.drift_risk_multiplier = drift_mult
         drift_detector.save()
+        drift_state = drift_detector.get_state()
 
         # Promotion pipeline: auto-advance canary→live or roll back canary→shadow.
-        _promo_events = _promotion_pipeline.evaluate_auto_advance(_exec_quality_tracker.get_metrics())
+        _exec_metrics = _exec_quality_tracker.get_metrics()
+        _promo_events = _promotion_pipeline.evaluate_auto_advance(_exec_metrics)
         for _ev in _promo_events:
             print(f"Promotion pipeline [{_promotion_pipeline.stage}]: {_ev}")
 
-        if drift_detector.get_state().get("drift_active"):
+        # Confidence pacing: reliability-driven capital deployment multiplier.
+        _pace_mult, _pace_reasons = capital_pacer.update(
+            exec_metrics=_exec_metrics,
+            drift_state=drift_state,
+            pipeline_stage=_promotion_pipeline.stage,
+        )
+        strategy.confidence_risk_multiplier = _pace_mult
+        capital_pacer.save()
+        if _pace_reasons:
+            print(
+                "Capital pacing active: "
+                f"mult={_pace_mult:.2f} reasons={_pace_reasons}"
+            )
+
+        if drift_state.get("drift_active"):
             print(
                 f"Crypto drift de-risk active: sizing multiplier={drift_mult:.2f} "
-                f"flags={drift_detector.get_state().get('flags', [])}"
+                f"flags={drift_state.get('flags', [])}"
             )
 
         print(

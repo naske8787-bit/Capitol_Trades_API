@@ -50,6 +50,7 @@ sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
 from market_overlay import MarketOverlay
 from drift_detector import DriftDetector
+from confidence_pacer import ConfidenceCapitalPacer
 
 _DRIFT_STATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
 _DRIFT_CALIB_REFRESH_SECONDS = int(os.getenv("DRIFT_CALIB_REFRESH_SECONDS", "900"))  # re-read trade log every 15 min
@@ -271,6 +272,7 @@ def main():
         equity_log_path=tracker.equity_log_path,
     )
     drift_detector = DriftDetector("trading", _DRIFT_STATE_DIR)
+    capital_pacer = ConfidenceCapitalPacer("trading", _DRIFT_STATE_DIR)
 
     symbols = WATCHLIST + IBKR_WATCHLIST
     if IBKR_WATCHLIST:
@@ -640,16 +642,31 @@ def main():
         drift_mult = drift_detector.get_risk_multiplier()
         strategy.drift_risk_multiplier = drift_mult
         drift_detector.save()
+        drift_state = drift_detector.get_state()
 
         # Promotion pipeline: auto-advance canary→live or roll back canary→shadow.
-        _promo_events = _promotion_pipeline.evaluate_auto_advance(_exec_quality_tracker.get_metrics())
+        _exec_metrics = _exec_quality_tracker.get_metrics()
+        _promo_events = _promotion_pipeline.evaluate_auto_advance(_exec_metrics)
         for _ev in _promo_events:
             print(f"Promotion pipeline [{_promotion_pipeline.stage}]: {_ev}")
             if ALERT_KILL_SWITCH_ENABLED:
                 notify_alert("promotion_pipeline_event", f"trading_bot: {_ev}",
                              severity="info", min_interval=300)
 
-        drift_state = drift_detector.get_state()
+        # Confidence pacing: reliability-driven capital deployment multiplier.
+        _pace_mult, _pace_reasons = capital_pacer.update(
+            exec_metrics=_exec_metrics,
+            drift_state=drift_state,
+            pipeline_stage=_promotion_pipeline.stage,
+        )
+        strategy.confidence_risk_multiplier = _pace_mult
+        capital_pacer.save()
+        if _pace_reasons:
+            print(
+                "Capital pacing active: "
+                f"mult={_pace_mult:.2f} reasons={_pace_reasons}"
+            )
+
         if drift_state.get("drift_active"):
             print(
                 f"Drift de-risk active: sizing multiplier={drift_mult:.2f} "

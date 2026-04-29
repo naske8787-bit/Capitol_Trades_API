@@ -88,6 +88,7 @@ class TradingStrategy:
         self.symbol_risk_multipliers = {}
         self.setup_rank_multipliers = {}
         self.drift_risk_multiplier = 1.0
+        self.confidence_risk_multiplier = 1.0
         self.blocked_symbols_by_improvement = set()
         self.active_setup_candidates = set()
         self.last_improvement_rebalance_ts = None
@@ -924,6 +925,7 @@ class TradingStrategy:
                 effective_risk *= float(self.symbol_risk_multipliers.get(symbol, 1.0))
                 effective_risk *= float(self.setup_rank_multipliers.get(symbol, 1.0))
                 effective_risk *= max(0.25, min(1.0, float(self.drift_risk_multiplier)))
+                effective_risk *= max(0.25, min(1.2, float(self.confidence_risk_multiplier)))
                 deployable_capital = capital
                 if LONG_HORIZON_ENABLED:
                     deployable_capital = max(0.0, capital * max(0.0, 1.0 - LONG_HORIZON_CASH_BUFFER_PCT))
