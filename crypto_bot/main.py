@@ -37,6 +37,15 @@ _PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS = int(os.getenv("PORTFOLIO_GUARDRAILS_CA
 _PORTFOLIO_GUARDRAILS_LAST = {"ts": 0.0, "data": {}}
 
 
+def _pacing_regime(multiplier):
+    val = float(multiplier or 1.0)
+    if val <= 0.50:
+        return "defensive"
+    if val <= 0.85:
+        return "cautious"
+    return "normal"
+
+
 def _fetch_portfolio_guardrails():
     now = time.time()
     cached = _PORTFOLIO_GUARDRAILS_LAST.get("data") or {}
@@ -107,6 +116,8 @@ def main():
     strategy = TradingStrategy()
     drift_detector = DriftDetector("crypto", _DRIFT_STATE_DIR)
     capital_pacer = ConfidenceCapitalPacer("crypto", _DRIFT_STATE_DIR)
+    last_pacing_mult = float(capital_pacer.multiplier)
+    last_pacing_regime = _pacing_regime(last_pacing_mult)
     last_setup_scorecard_ts = 0.0
     market_overlay = None
     if MARKET_OVERLAY_ENABLED:
@@ -354,6 +365,22 @@ def main():
                 "Capital pacing active: "
                 f"mult={_pace_mult:.2f} reasons={_pace_reasons}"
             )
+
+        current_pacing_regime = _pacing_regime(_pace_mult)
+        if current_pacing_regime != last_pacing_regime:
+            print(
+                "CRYPTO ALERT: capital pacing regime changed "
+                f"{last_pacing_regime} -> {current_pacing_regime} "
+                f"(mult={_pace_mult:.2f}, reasons={_pace_reasons})"
+            )
+        if abs(float(_pace_mult) - float(last_pacing_mult)) >= 0.15:
+            print(
+                "CRYPTO ALERT: capital pacing multiplier step-change "
+                f"{float(last_pacing_mult):.2f} -> {float(_pace_mult):.2f} "
+                f"(regime={current_pacing_regime})"
+            )
+        last_pacing_mult = float(_pace_mult)
+        last_pacing_regime = current_pacing_regime
 
         if drift_state.get("drift_active"):
             print(

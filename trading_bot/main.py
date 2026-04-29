@@ -63,6 +63,15 @@ _PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS = int(os.getenv("PORTFOLIO_GUARDRAILS_CA
 _PORTFOLIO_GUARDRAILS_LAST = {"ts": 0.0, "data": {}}
 
 
+def _pacing_regime(multiplier):
+    val = float(multiplier or 1.0)
+    if val <= 0.50:
+        return "defensive"
+    if val <= 0.85:
+        return "cautious"
+    return "normal"
+
+
 def _send_webhook_alert(payload):
     if not ALERT_WEBHOOK_URL:
         return False
@@ -273,6 +282,8 @@ def main():
     )
     drift_detector = DriftDetector("trading", _DRIFT_STATE_DIR)
     capital_pacer = ConfidenceCapitalPacer("trading", _DRIFT_STATE_DIR)
+    last_pacing_mult = float(capital_pacer.multiplier)
+    last_pacing_regime = _pacing_regime(last_pacing_mult)
 
     symbols = WATCHLIST + IBKR_WATCHLIST
     if IBKR_WATCHLIST:
@@ -666,6 +677,32 @@ def main():
                 "Capital pacing active: "
                 f"mult={_pace_mult:.2f} reasons={_pace_reasons}"
             )
+
+        current_pacing_regime = _pacing_regime(_pace_mult)
+        if current_pacing_regime != last_pacing_regime:
+            notify_alert(
+                "capital_pacing_regime_change",
+                (
+                    "Capital pacing regime changed "
+                    f"{last_pacing_regime} -> {current_pacing_regime} "
+                    f"(mult={_pace_mult:.2f}, reasons={_pace_reasons})"
+                ),
+                severity="warning" if current_pacing_regime in ("cautious", "defensive") else "info",
+                min_interval=300,
+            )
+        if abs(float(_pace_mult) - float(last_pacing_mult)) >= 0.15:
+            notify_alert(
+                "capital_pacing_step_change",
+                (
+                    "Capital pacing multiplier step-change "
+                    f"{float(last_pacing_mult):.2f} -> {float(_pace_mult):.2f} "
+                    f"(regime={current_pacing_regime})"
+                ),
+                severity="warning" if _pace_mult < last_pacing_mult else "info",
+                min_interval=300,
+            )
+        last_pacing_mult = float(_pace_mult)
+        last_pacing_regime = current_pacing_regime
 
         if drift_state.get("drift_active"):
             print(
