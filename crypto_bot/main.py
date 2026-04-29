@@ -181,22 +181,27 @@ def main():
             strategy.apply_autonomy_profile(profile)
 
             guardrails = _fetch_portfolio_guardrails() or {}
-            guardrail_kill_switch = bool(guardrails.get("kill_switch_active", False))
+            kill_switch_by_bot = guardrails.get("kill_switch_by_bot") or {}
+            bot_reasons = guardrails.get("bot_reasons") or {}
+            if isinstance(kill_switch_by_bot, dict) and ("crypto_bot" in kill_switch_by_bot):
+                guardrail_kill_switch = bool(kill_switch_by_bot.get("crypto_bot", False))
+            else:
+                guardrail_kill_switch = bool(guardrails.get("kill_switch_active", False))
             if guardrail_kill_switch:
                 portfolio_guardrail_kill_switch = True
-                reasons = guardrails.get("reasons") or []
+                reasons = bot_reasons.get("crypto_bot") or guardrails.get("reasons") or []
                 strategy.apply_autonomy_profile({
                     "allow_new_entries": False,
                     "risk_multiplier": 0.0,
                     "mode": "capital_preservation",
                 })
                 print(
-                    "Global portfolio guardrail kill-switch active: "
+                    "Crypto portfolio guardrail kill-switch active: "
                     + ("; ".join(str(r) for r in reasons) or "risk thresholds breached")
                 )
             elif portfolio_guardrail_kill_switch:
                 portfolio_guardrail_kill_switch = False
-                print("Global portfolio guardrail recovered: autonomous entry gating restored.")
+                print("Crypto portfolio guardrail recovered: autonomous entry gating restored.")
 
             for line in strategy.auto_apply_improvements():
                 print(line)

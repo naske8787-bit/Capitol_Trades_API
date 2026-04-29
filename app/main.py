@@ -152,6 +152,7 @@ _LIVE_ACCOUNT_CACHE_TTL_SECONDS = 45
 _PORTFOLIO_NET_EXPOSURE_CAP_PCT = float(os.environ.get("PORTFOLIO_NET_EXPOSURE_CAP_PCT", "0.85"))
 _PORTFOLIO_CORRELATION_CAP_PCT = float(os.environ.get("PORTFOLIO_CORRELATION_CAP_PCT", "0.70"))
 _PORTFOLIO_DAILY_LOSS_LIMIT_PCT = float(os.environ.get("PORTFOLIO_DAILY_LOSS_LIMIT_PCT", "0.03"))
+_PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT = float(os.environ.get("PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT", "0.70"))
 _RISK_ON_TECH_SYMBOLS = {
     "AAPL", "MSFT", "NVDA", "GOOGL", "META", "AMD", "TSLA", "AMZN", "PLTR", "COIN", "QQQ", "XLK",
 }
@@ -453,6 +454,15 @@ def _normalize_symbol_for_risk(symbol):
         base = sym[:-3]
         return f"{base}/USD"
     return sym
+
+
+def _is_crypto_risk_symbol(symbol):
+    sym = _normalize_symbol_for_risk(symbol)
+    if not sym:
+        return False
+    if sym in _RISK_ON_CRYPTO_SYMBOLS:
+        return True
+    return sym.endswith("/USD") or sym.endswith("/USDT")
 
 
 def _fetch_live_position_exposure_by_symbol():
@@ -1290,6 +1300,13 @@ def _build_portfolio_guardrails(investment=None):
     total_open_exposure = round(sum(exposure_by_symbol.values()), 2)
     net_exposure_pct = (total_open_exposure / portfolio_value) if portfolio_value > 0 else 0.0
 
+    crypto_open_exposure = 0.0
+    for symbol, value in exposure_by_symbol.items():
+        if _is_crypto_risk_symbol(symbol):
+            crypto_open_exposure += float(value)
+    crypto_exposure_pct = (crypto_open_exposure / portfolio_value) if portfolio_value > 0 else 0.0
+    breached_crypto = crypto_exposure_pct > float(_PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT)
+
     risk_on_exposure = 0.0
     for symbol, value in exposure_by_symbol.items():
         sym = _normalize_symbol_for_risk(symbol)
@@ -1325,6 +1342,17 @@ def _build_portfolio_guardrails(investment=None):
     breached_corr = risk_on_pct > float(_PORTFOLIO_CORRELATION_CAP_PCT)
     kill_switch = bool(breached_net or breached_corr or breached_daily_loss)
 
+    crypto_bot_kill_switch = bool(breached_daily_loss or breached_crypto)
+    crypto_bot_reasons = []
+    if breached_daily_loss:
+        crypto_bot_reasons.append(
+            f"daily loss {daily_loss_pct:.1%} > limit {float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT):.1%}"
+        )
+    if breached_crypto:
+        crypto_bot_reasons.append(
+            f"crypto exposure {crypto_exposure_pct:.1%} > cap {float(_PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT):.1%}"
+        )
+
     reasons = []
     if breached_net:
         reasons.append(
@@ -1349,15 +1377,26 @@ def _build_portfolio_guardrails(investment=None):
             "net_exposure_cap_pct": float(_PORTFOLIO_NET_EXPOSURE_CAP_PCT),
             "correlation_cap_pct": float(_PORTFOLIO_CORRELATION_CAP_PCT),
             "daily_loss_limit_pct": float(_PORTFOLIO_DAILY_LOSS_LIMIT_PCT),
+            "crypto_exposure_cap_pct": float(_PORTFOLIO_CRYPTO_EXPOSURE_CAP_PCT),
         },
         "metrics": {
             "portfolio_value": round(portfolio_value, 2),
             "total_open_exposure": total_open_exposure,
             "net_exposure_pct": round(net_exposure_pct, 6),
+            "crypto_open_exposure": round(crypto_open_exposure, 2),
+            "crypto_exposure_pct": round(crypto_exposure_pct, 6),
             "risk_on_exposure": round(risk_on_exposure, 2),
             "risk_on_pct": round(risk_on_pct, 6),
             "daily_loss_amount": round(daily_loss_amount, 2),
             "daily_loss_pct": round(daily_loss_pct, 6),
+        },
+        "kill_switch_by_bot": {
+            "trading_bot": kill_switch,
+            "crypto_bot": crypto_bot_kill_switch,
+        },
+        "bot_reasons": {
+            "trading_bot": reasons,
+            "crypto_bot": crypto_bot_reasons,
         },
         "top_exposures": top_exposures,
         "timestamp": datetime.now(UTC).isoformat(),
@@ -2782,6 +2821,7 @@ def _last_log_lines(path, n=8):
 _ERROR_PATTERNS = ("error", "traceback", "exception", "critical", "fatal")
 _WARN_PATTERNS = ("warning", "warn")
 _KILL_SWITCH_PATTERN = "kill-switch active"
+_KILL_SWITCH_RECOVER_PATTERNS = ("kill-switch recovered", "entry gating restored", "kill-switch inactive")
 _SOURCE_DEGRADED_PATTERN = "political feed degraded"
 _CONFIDENCE_PATTERN = "confidence="
 _BENIGN_RUNTIME_PATTERNS = (
@@ -2805,12 +2845,20 @@ def _bot_log_health(bot_id):
     source_degraded = False
     source_confidence = None
 
+    # Determine kill-switch state from the latest relevant log line.
+    for line in reversed(lines):
+        lower = line.lower()
+        if any(p in lower for p in _KILL_SWITCH_RECOVER_PATTERNS):
+            kill_switch_active = False
+            break
+        if _KILL_SWITCH_PATTERN in lower:
+            kill_switch_active = True
+            break
+
     for line in lines:
         lower = line.lower()
         if any(p in lower for p in _BENIGN_RUNTIME_PATTERNS):
             continue
-        if _KILL_SWITCH_PATTERN in lower:
-            kill_switch_active = True
         if _SOURCE_DEGRADED_PATTERN in lower:
             source_degraded = True
         if _CONFIDENCE_PATTERN in lower and "capitol_data_confidence" not in lower:
