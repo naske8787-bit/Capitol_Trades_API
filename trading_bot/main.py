@@ -37,6 +37,7 @@ from config import (
 )
 from performance_tracker import PerformanceTracker
 from strategy import TradingStrategy
+from strategy import _pipeline as _promotion_pipeline, _exec_tracker as _exec_quality_tracker
 from train import retrain_models
 from autonomy import AutonomousDecisionEngine
 from config import AUTONOMOUS_EXECUTION_ENABLED
@@ -639,6 +640,15 @@ def main():
         drift_mult = drift_detector.get_risk_multiplier()
         strategy.drift_risk_multiplier = drift_mult
         drift_detector.save()
+
+        # Promotion pipeline: auto-advance canary→live or roll back canary→shadow.
+        _promo_events = _promotion_pipeline.evaluate_auto_advance(_exec_quality_tracker.get_metrics())
+        for _ev in _promo_events:
+            print(f"Promotion pipeline [{_promotion_pipeline.stage}]: {_ev}")
+            if ALERT_KILL_SWITCH_ENABLED:
+                notify_alert("promotion_pipeline_event", f"trading_bot: {_ev}",
+                             severity="info", min_interval=300)
+
         drift_state = drift_detector.get_state()
         if drift_state.get("drift_active"):
             print(

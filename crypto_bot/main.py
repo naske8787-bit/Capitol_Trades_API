@@ -20,6 +20,7 @@ from config import (
 from data_fetcher import fetch_external_research_sentiment
 from influencer_monitor import monitor_influencers
 from strategy import TradingStrategy
+from strategy import _pipeline as _promotion_pipeline, _exec_tracker as _exec_quality_tracker
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
@@ -330,6 +331,12 @@ def main():
         drift_mult = drift_detector.get_risk_multiplier()
         strategy.drift_risk_multiplier = drift_mult
         drift_detector.save()
+
+        # Promotion pipeline: auto-advance canary→live or roll back canary→shadow.
+        _promo_events = _promotion_pipeline.evaluate_auto_advance(_exec_quality_tracker.get_metrics())
+        for _ev in _promo_events:
+            print(f"Promotion pipeline [{_promotion_pipeline.stage}]: {_ev}")
+
         if drift_detector.get_state().get("drift_active"):
             print(
                 f"Crypto drift de-risk active: sizing multiplier={drift_mult:.2f} "

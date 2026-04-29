@@ -71,9 +71,12 @@ from setup_validator import evaluate_crypto_setup
 from regime_detector import detect_crypto_regime
 from long_term_policy import LongTermPolicy
 from execution_quality import ExecutionQualityTracker as _ExecQualTracker
+from promotion_pipeline import PromotionPipeline as _PromotionPipeline
 
 _EXEC_LOG_PATH = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "logs", "execution_quality.jsonl")
 _exec_tracker = _ExecQualTracker(_EXEC_LOG_PATH)
+_PIPELINE_STATE_DIR = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "logs")
+_pipeline = _PromotionPipeline("crypto", _PIPELINE_STATE_DIR)
 
 
 class TradingStrategy:
@@ -946,6 +949,16 @@ class TradingStrategy:
                     print(f"Skipping BUY for {symbol}: {reason}.")
                     return None
 
+                # Promotion pipeline gate
+                if _pipeline.stage == "shadow":
+                    _pipeline.log_shadow("BUY", symbol, qty, current_price)
+                    print(f"[shadow] Would BUY {symbol}: {qty} units at ${current_price:.2f} — not submitted")
+                    return None
+                if _pipeline.stage == "canary":
+                    qty = round(qty * _pipeline.canary_size_fraction, 6)
+                    if qty <= 0:
+                        return None
+
                 _eq_rec = _exec_tracker.start_record("BUY", symbol, qty, current_price)
                 try:
                     broker.buy(symbol, qty)
@@ -984,6 +997,13 @@ class TradingStrategy:
 
                 current_price = broker.get_current_price(symbol)
                 entry_price = float(self.positions.get(symbol, {}).get("entry_price", current_price))
+
+                # Promotion pipeline gate
+                if _pipeline.stage == "shadow":
+                    _pipeline.log_shadow("SELL", symbol, qty, current_price)
+                    print(f"[shadow] Would SELL {symbol}: {qty} units at ${current_price:.2f} — not submitted")
+                    return None
+
                 _eq_rec = _exec_tracker.start_record("SELL", symbol, qty, current_price)
                 try:
                     broker.sell(symbol, qty)

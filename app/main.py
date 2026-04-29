@@ -26,6 +26,7 @@ except Exception:
 from shared.regime_detector import detect_equity_regime, detect_crypto_regime
 from shared.drift_detector import load_drift_state
 from shared.execution_quality import load_execution_metrics
+from shared.promotion_pipeline import load_promotion_state
 
 from app.routes import ROUTES
 from app.utils.helpers import error_response, json_response
@@ -1324,6 +1325,17 @@ def _build_execution_quality() -> dict:
     return {
         "trading_bot": trading_metrics,
         "crypto_bot":  crypto_metrics,
+        "timestamp":   datetime.now(UTC).isoformat(),
+    }
+
+
+def _build_promotion_status() -> dict:
+    """Return current promotion stage and recent pipeline events for both bots."""
+    trading_state_dir = os.path.join(_WORKSPACE, "trading_bot", "logs")
+    crypto_state_dir  = os.path.join(_WORKSPACE, "crypto_bot",  "logs")
+    return {
+        "trading_bot": load_promotion_state(trading_state_dir, "trading"),
+        "crypto_bot":  load_promotion_state(crypto_state_dir,  "crypto"),
         "timestamp":   datetime.now(UTC).isoformat(),
     }
 
@@ -3414,6 +3426,29 @@ def app(environ, start_response):
 
     if method == "GET" and path == "/execution_quality":
         return json_response(start_response, _build_execution_quality())
+
+    if method == "GET" and path == "/promotion_status":
+        return json_response(start_response, _build_promotion_status())
+
+    if method == "POST" and path == "/promotion_pipeline":
+        payload = _read_json_body(environ)
+        bot = str(payload.get("bot") or "").strip().lower()
+        stage = str(payload.get("stage") or "").strip().lower()
+        if bot not in ("trading_bot", "crypto_bot"):
+            return error_response(start_response, "bot must be 'trading_bot' or 'crypto_bot'",
+                                  status="400 Bad Request")
+        if stage not in ("shadow", "canary", "live"):
+            return error_response(start_response, "stage must be 'shadow', 'canary', or 'live'",
+                                  status="400 Bad Request")
+        bot_key = "trading" if bot == "trading_bot" else "crypto"
+        state_dir = os.path.join(_WORKSPACE, bot, "logs")
+        try:
+            from shared.promotion_pipeline import PromotionPipeline
+            pp = PromotionPipeline(bot_key, state_dir)
+            pp.set_stage(stage, reason="manual_api")
+            return json_response(start_response, {"ok": True, "bot": bot, "stage": stage})
+        except Exception as _pp_exc:
+            return error_response(start_response, str(_pp_exc), status="500 Internal Server Error")
 
     if method == "POST" and path == "/bot_copilot_chat":
         payload = _read_json_body(environ)

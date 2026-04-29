@@ -74,9 +74,12 @@ from regime_detector import detect_equity_regime
 from fundamentals import evaluate_company_fundamentals
 from long_term_policy import LongTermPolicy
 from execution_quality import ExecutionQualityTracker as _ExecQualTracker
+from promotion_pipeline import PromotionPipeline as _PromotionPipeline
 
 _EXEC_LOG_PATH = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "logs", "execution_quality.jsonl")
 _exec_tracker = _ExecQualTracker(_EXEC_LOG_PATH)
+_PIPELINE_STATE_DIR = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "logs")
+_pipeline = _PromotionPipeline("trading", _PIPELINE_STATE_DIR)
 
 
 class TradingStrategy:
@@ -1052,6 +1055,14 @@ class TradingStrategy:
                     print(f"Skipping BUY for {symbol}: {reason}.")
                     return None
 
+                # Promotion pipeline gate
+                if _pipeline.stage == "shadow":
+                    _pipeline.log_shadow("BUY", symbol, qty, current_price)
+                    print(f"[shadow] Would BUY {symbol}: {qty} shares at ${current_price:.2f} — not submitted")
+                    return None
+                if _pipeline.stage == "canary":
+                    qty = max(1, int(qty * _pipeline.canary_size_fraction))
+
                 _eq_rec = _exec_tracker.start_record("BUY", symbol, qty, current_price)
                 try:
                     broker.buy(symbol, qty)
@@ -1124,6 +1135,12 @@ class TradingStrategy:
                 hold_minutes = 0.0
                 if local_position.get("entry_ts"):
                     hold_minutes = (time.time() - float(local_position["entry_ts"])) / 60.0
+
+                # Promotion pipeline gate
+                if _pipeline.stage == "shadow":
+                    _pipeline.log_shadow("SELL", symbol, qty, current_price)
+                    print(f"[shadow] Would SELL {symbol}: {qty} shares at ${current_price:.2f} — not submitted")
+                    return None
 
                 _eq_rec = _exec_tracker.start_record("SELL", symbol, qty, current_price)
                 try:
