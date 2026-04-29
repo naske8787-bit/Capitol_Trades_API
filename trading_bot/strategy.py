@@ -57,6 +57,9 @@ from config import (
     LONG_HORIZON_ENABLED,
     LONG_HORIZON_MAX_RISK_PER_TRADE,
     LONG_HORIZON_MONTHLY_CONTRIBUTION,
+    GROWTH_MOMENTUM_BUY_ENABLED,
+    GROWTH_MOMENTUM_MIN_TREND_MULTIPLIER,
+    GROWTH_MOMENTUM_MIN_RETURN_MULTIPLIER,
 )
 from data_fetcher import fetch_capitol_trades, fetch_stock_data, preprocess_data, fetch_vix_level, fetch_news_sentiment, fetch_sector_momentum
 from data_fetcher import fetch_global_macro_sentiment
@@ -965,6 +968,27 @@ class TradingStrategy:
                         return "BUY"
                     # With strong macro backing, a moderate model edge is enough
                     if macro_boost and has_model_edge and positive_momentum:
+                        return "BUY"
+
+                # Growth-momentum path: buys strongly trending stocks independently of
+                # Capitol Trades political signal (which can be up to 45 days stale).
+                # Requires a tighter technical bar to compensate for absent political confirmation.
+                if GROWTH_MOMENTUM_BUY_ENABLED:
+                    growth_trend = (
+                        trend_strength >= MIN_TREND_STRENGTH_PCT * GROWTH_MOMENTUM_MIN_TREND_MULTIPLIER
+                        and current_price > short_trend
+                        and short_trend > long_trend
+                    )
+                    growth_momentum = recent_return >= BUY_THRESHOLD_PCT * GROWTH_MOMENTUM_MIN_RETURN_MULTIPLIER
+                    macro_backing = sector_tailwind or news_bullish
+                    if (
+                        has_model_edge
+                        and growth_trend
+                        and growth_momentum
+                        and macro_backing
+                        and not news_bearish
+                    ):
+                        self.last_analysis[symbol]["entry_path"] = "growth_momentum"
                         return "BUY"
 
             return "HOLD"

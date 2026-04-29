@@ -253,6 +253,13 @@ LONG_TERM_MAX_PORTFOLIO_DRAWDOWN_PCT = float(os.getenv("LONG_TERM_MAX_PORTFOLIO_
 LONG_TERM_MAX_TOTAL_EXPOSURE_PCT = float(os.getenv("LONG_TERM_MAX_TOTAL_EXPOSURE_PCT", "0.85"))
 LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT = float(os.getenv("LONG_TERM_MAX_SYMBOL_EXPOSURE_PCT", "0.12"))
 
+# Growth-momentum buy pathway: buy strongly trending stocks independently of Capitol Trades signal.
+# Requires a higher technical bar (2× trend, 2× momentum) + macro backing to compensate
+# for the absence of political confirmation. Acts as a complement, not a replacement.
+GROWTH_MOMENTUM_BUY_ENABLED = os.getenv("GROWTH_MOMENTUM_BUY_ENABLED", "true").lower() == "true"
+GROWTH_MOMENTUM_MIN_TREND_MULTIPLIER = float(os.getenv("GROWTH_MOMENTUM_MIN_TREND_MULTIPLIER", "1.5"))
+GROWTH_MOMENTUM_MIN_RETURN_MULTIPLIER = float(os.getenv("GROWTH_MOMENTUM_MIN_RETURN_MULTIPLIER", "2.0"))
+
 # Long-horizon capital compounding controls
 LONG_HORIZON_ENABLED = os.getenv("LONG_HORIZON_ENABLED", "true").lower() == "true"
 LONG_HORIZON_MONTHLY_CONTRIBUTION = float(os.getenv("LONG_HORIZON_MONTHLY_CONTRIBUTION", "1000"))
