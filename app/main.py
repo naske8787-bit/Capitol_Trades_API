@@ -509,11 +509,14 @@ def _probe_trading_broker_health():
         is_paper = "paper" in base_url.lower()
         client = TradingClient(api_key, api_secret, paper=is_paper, url_override=base_url)
         account = client.get_account()
-        status = str(getattr(account, "status", "unknown")).upper()
+        status_raw = str(getattr(account, "status", "unknown"))
+        status = status_raw.upper()
+        if "." in status:
+            status = status.rsplit(".", 1)[-1]
         healthy = status in {"ACTIVE", "UNKNOWN"}
         return {
             "healthy": bool(healthy),
-            "reason": "ok" if healthy else f"account_status={status}",
+            "reason": "ok" if healthy else f"account_status={status_raw}",
         }
     except Exception as e:
         return {"healthy": False, "reason": f"broker_probe_error={str(e)[:120]}"}
