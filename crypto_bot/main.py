@@ -35,8 +35,10 @@ _PORTFOLIO_GUARDRAILS_LAST = {"ts": 0.0, "data": {}}
 def _fetch_portfolio_guardrails():
     now = time.time()
     cached = _PORTFOLIO_GUARDRAILS_LAST.get("data") or {}
+    ttl_seconds = max(15, _PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS)
     last_ts = float(_PORTFOLIO_GUARDRAILS_LAST.get("ts", 0.0) or 0.0)
-    if cached and (now - last_ts) < max(15, _PORTFOLIO_GUARDRAILS_CACHE_TTL_SECONDS):
+    age = now - last_ts
+    if cached and age < ttl_seconds:
         return cached
 
     try:
@@ -48,8 +50,10 @@ def _fetch_portfolio_guardrails():
                 _PORTFOLIO_GUARDRAILS_LAST["data"] = payload
                 return payload
     except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError):
-        pass
-    return cached
+        # Use short-lived cache only; stale values should not keep bots paused.
+        if cached and age < ttl_seconds:
+            return cached
+    return {}
 
 
 def _rank_multipliers(rows):
@@ -108,7 +112,6 @@ def main():
     print("Crypto bot started in paper-trading mode. Press Ctrl+C to stop.")
     print(f"Watching: {', '.join(CRYPTO_WATCHLIST)}")
     portfolio_guardrail_kill_switch = False
-    runtime_risk_kill_switch = False
 
     while True:
         now = time.time()
@@ -240,9 +243,7 @@ def main():
             closed_7d = int(metrics.get("closed_trades_7d", 0) or 0)
             pf_7d = float(metrics.get("profit_factor_7d", 0.0) or 0.0)
             dd_7d = float(metrics.get("max_drawdown_7d", 0.0) or 0.0)
-            risk_kill_switch_now = bool((closed_7d >= 8 and pf_7d < 0.95) or dd_7d > 0.10)
-            if risk_kill_switch_now:
-                runtime_risk_kill_switch = True
+            if (closed_7d >= 8 and pf_7d < 0.95) or dd_7d > 0.10:
                 strategy.apply_autonomy_profile({
                     "allow_new_entries": False,
                     "risk_multiplier": 0.0,
@@ -251,12 +252,6 @@ def main():
                 print(
                     "Risk kill-switch active: pausing new entries "
                     f"(closed_7d={closed_7d}, pf_7d={pf_7d:.2f}, dd_7d={dd_7d:.2%})."
-                )
-            elif runtime_risk_kill_switch:
-                runtime_risk_kill_switch = False
-                print(
-                    "Risk kill-switch recovered: quality metrics normalized; "
-                    "autonomous entry gating can resume."
                 )
             dominant_topics = ",".join((research.get("dominant_topics") or [])[:4]) or "none"
             strategy_notes = " | ".join((research.get("strategy_notes") or [])[:2]) or "none"
