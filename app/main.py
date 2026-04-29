@@ -24,6 +24,7 @@ except Exception:
     TradingClient = None
 
 from shared.regime_detector import detect_equity_regime, detect_crypto_regime
+from shared.drift_detector import load_drift_state
 
 from app.routes import ROUTES
 from app.utils.helpers import error_response, json_response
@@ -1417,6 +1418,24 @@ def _build_portfolio_guardrails(investment=None):
     top_exposures = sorted(exposure_by_symbol.items(), key=lambda kv: float(kv[1]), reverse=True)[:8]
     top_exposures = [{"symbol": k, "open_cost_basis": round(float(v), 2)} for k, v in top_exposures]
 
+    # Read persisted drift states written by each bot.
+    trading_drift = load_drift_state(
+        os.path.join(_WORKSPACE, "trading_bot", "logs"), "trading"
+    )
+    crypto_drift = load_drift_state(
+        os.path.join(_WORKSPACE, "crypto_bot", "logs"), "crypto"
+    )
+    if trading_drift.get("drift_active") and trading_drift.get("flags"):
+        for flag in trading_drift["flags"]:
+            flag_str = f"drift: {flag}"
+            if flag_str not in reasons:
+                reasons.append(flag_str)
+    if crypto_drift.get("drift_active") and crypto_drift.get("flags"):
+        for flag in crypto_drift["flags"]:
+            flag_str = f"drift: {flag}"
+            if flag_str not in crypto_bot_reasons:
+                crypto_bot_reasons.append(flag_str)
+
     return {
         # Backward-compatible global field now means severe hard-stop only.
         "kill_switch_active": global_hard_stop_active,
@@ -1450,6 +1469,26 @@ def _build_portfolio_guardrails(investment=None):
         "bot_reasons": {
             "trading_bot": reasons,
             "crypto_bot": crypto_bot_reasons,
+        },
+        "drift_state": {
+            "trading_bot": {
+                "drift_active":       bool(trading_drift.get("drift_active", False)),
+                "combined_multiplier": float(trading_drift.get("combined_multiplier", 1.0)),
+                "flags":              list(trading_drift.get("flags") or []),
+                "psi_max":            float(trading_drift.get("psi_max", 0.0)),
+                "calibration_accuracy": trading_drift.get("calibration_accuracy"),
+                "regime_flip":        bool(trading_drift.get("regime_flip", False)),
+                "reference_obs":      int(trading_drift.get("reference_obs", 0)),
+            },
+            "crypto_bot": {
+                "drift_active":       bool(crypto_drift.get("drift_active", False)),
+                "combined_multiplier": float(crypto_drift.get("combined_multiplier", 1.0)),
+                "flags":              list(crypto_drift.get("flags") or []),
+                "psi_max":            float(crypto_drift.get("psi_max", 0.0)),
+                "calibration_accuracy": crypto_drift.get("calibration_accuracy"),
+                "regime_flip":        bool(crypto_drift.get("regime_flip", False)),
+                "reference_obs":      int(crypto_drift.get("reference_obs", 0)),
+            },
         },
         "top_exposures": top_exposures,
         "timestamp": datetime.now(UTC).isoformat(),

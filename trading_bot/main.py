@@ -48,6 +48,11 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
 from market_overlay import MarketOverlay
+from drift_detector import DriftDetector
+
+_DRIFT_STATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
+_DRIFT_CALIB_REFRESH_SECONDS = int(os.getenv("DRIFT_CALIB_REFRESH_SECONDS", "900"))  # re-read trade log every 15 min
+_drift_calib_last_ts = 0.0
 
 
 _ALERT_LAST_SENT_TS = {}
@@ -264,6 +269,7 @@ def main():
         trade_log_path=tracker.trade_log_path,
         equity_log_path=tracker.equity_log_path,
     )
+    drift_detector = DriftDetector("trading", _DRIFT_STATE_DIR)
 
     symbols = WATCHLIST + IBKR_WATCHLIST
     if IBKR_WATCHLIST:
@@ -547,6 +553,16 @@ def main():
                 if bool(analysis.get("setup_passed", False)):
                     setup_expectancy_window.append(float(analysis.get("setup_expectancy_pct", 0.0) or 0.0) / 100.0)
                 market_flag = "OK" if analysis.get("market_favorable", True) else "WEAK"
+
+                # Feed drift detector with signal features and regime label.
+                drift_detector.update_features({
+                    "predicted_change":  float(analysis.get("predicted_change_pct", 0.0) or 0.0) / 100.0,
+                    "trend_strength":    float(analysis.get("trend_strength_pct", 0.0) or 0.0) / 100.0,
+                    "recent_return":     float(analysis.get("recent_return_pct", 0.0) or 0.0) / 100.0,
+                    "news_score":        float(analysis.get("news_score", 0.0) or 0.0),
+                })
+                drift_detector.update_regime(str(analysis.get("market_regime", "unknown") or "unknown"))
+
                 print(
                     f"{symbol}: {signal} | "
                     f"predicted_change={analysis.get('predicted_change_pct', 0.0):.2f}% | "
@@ -613,6 +629,29 @@ def main():
                 print(
                     "Setup-decay de-risk active: rolling validated setup expectancy "
                     f"{rolling_expectancy * 100:.2f}% over {len(setup_expectancy_window)} observations."
+                )
+
+        # Drift detection: update calibration from trade log, apply de-risk multiplier.
+        global _drift_calib_last_ts
+        if now - _drift_calib_last_ts >= _DRIFT_CALIB_REFRESH_SECONDS:
+            drift_detector.update_calibration_from_log(tracker.trade_log_path)
+            _drift_calib_last_ts = now
+        drift_mult = drift_detector.get_risk_multiplier()
+        strategy.drift_risk_multiplier = drift_mult
+        drift_detector.save()
+        drift_state = drift_detector.get_state()
+        if drift_state.get("drift_active"):
+            print(
+                f"Drift de-risk active: sizing multiplier={drift_mult:.2f} "
+                f"flags={drift_state.get('flags', [])}"
+            )
+            if ALERT_KILL_SWITCH_ENABLED:
+                notify_alert(
+                    "drift_derisk_active",
+                    f"Drift detected; sizing reduced to {drift_mult:.0%}. "
+                    f"Flags: {', '.join(drift_state.get('flags', []))}",
+                    severity="warning",
+                    min_interval=1800,
                 )
 
         cycle_snapshot = tracker.record_equity_snapshot(broker, note="hourly_cycle")

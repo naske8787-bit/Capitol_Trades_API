@@ -84,6 +84,7 @@ class TradingStrategy:
         self.last_trade_times = {}
         self.symbol_risk_multipliers = {}
         self.setup_rank_multipliers = {}
+        self.drift_risk_multiplier = 1.0
         self.blocked_symbols_by_improvement = set()
         self.active_setup_candidates = set()
         self.last_improvement_rebalance_ts = None
@@ -1016,6 +1017,7 @@ class TradingStrategy:
                 effective_risk_per_trade *= regime_risk
                 effective_risk_per_trade *= float(self.symbol_risk_multipliers.get(symbol, 1.0))
                 effective_risk_per_trade *= float(self.setup_rank_multipliers.get(symbol, 1.0))
+                effective_risk_per_trade *= max(0.25, min(1.0, float(self.drift_risk_multiplier)))
                 if bool(entry_analysis.get("research_force_buy_triggered", False)):
                     effective_risk_per_trade *= max(0.05, min(1.0, float(TECH_RESEARCH_FORCE_BUY_RISK_MULTIPLIER)))
                 deployable_capital = capital

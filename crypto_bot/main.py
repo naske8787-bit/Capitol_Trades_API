@@ -25,6 +25,9 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT_DIR, "shared"))
 from scorecard_runtime import build_or_load_setup_scorecard, select_active_candidates, candidate_symbol_set
 from market_overlay import MarketOverlay
+from drift_detector import DriftDetector
+
+_DRIFT_STATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
 
 
 _PORTFOLIO_GUARDRAILS_URL = os.getenv("PORTFOLIO_GUARDRAILS_URL", "http://127.0.0.1:8000/portfolio_guardrails")
@@ -100,6 +103,7 @@ def wait_for_account_ready(max_retries=10):
 def main():
     broker = wait_for_account_ready()
     strategy = TradingStrategy()
+    drift_detector = DriftDetector("crypto", _DRIFT_STATE_DIR)
     last_setup_scorecard_ts = 0.0
     market_overlay = None
     if MARKET_OVERLAY_ENABLED:
@@ -290,6 +294,16 @@ def main():
             try:
                 signal = strategy.analyze_signal(symbol)
                 analysis = strategy.last_analysis.get(symbol, {})
+
+                # Feed drift detector with signal features and current regime.
+                drift_detector.update_features({
+                    "trend_strength":  float(analysis.get("trend_strength_pct", 0.0) or 0.0) / 100.0,
+                    "momentum":        float(analysis.get("momentum_pct", 0.0) or 0.0) / 100.0,
+                    "rsi_norm":        (float(analysis.get("rsi", 50.0) or 50.0) - 50.0) / 50.0,
+                    "ext_research":    float(analysis.get("external_research_score", 0.0) or 0.0),
+                })
+                drift_detector.update_regime(str(analysis.get("market_regime", "unknown") or "unknown"))
+
                 print(
                     f"{symbol}: {signal} | "
                     f"trend={analysis.get('trend_strength_pct', 0.0):.2f}% | "
@@ -311,6 +325,16 @@ def main():
                 time.sleep(1)
             except Exception as e:
                 print(f"Error processing {symbol}: {e}")
+
+        # Drift detection: apply de-risk multiplier and persist state.
+        drift_mult = drift_detector.get_risk_multiplier()
+        strategy.drift_risk_multiplier = drift_mult
+        drift_detector.save()
+        if drift_detector.get_state().get("drift_active"):
+            print(
+                f"Crypto drift de-risk active: sizing multiplier={drift_mult:.2f} "
+                f"flags={drift_detector.get_state().get('flags', [])}"
+            )
 
         print(
             f"Portfolio snapshot: cash=${broker.get_account_balance():.2f}, "
