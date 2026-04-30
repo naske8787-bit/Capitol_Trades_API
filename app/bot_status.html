@@ -636,6 +636,49 @@
             </table>
         </div>
 
+        <!-- ── OBSERVABILITY CARDS ─────────────────────────────────── -->
+        <div class="card half" id="panel-live-trades">
+            <div class="kpi-title">What the Bot Traded Today</div>
+            <div id="liveTrades" style="font-size:0.88rem;line-height:1.7;">
+                <span style="color:#5a7a99;">Loading…</span>
+            </div>
+            <div class="small" style="margin-top:8px;color:#5a7a99;" id="liveTradesTs"></div>
+        </div>
+
+        <div class="card half" id="panel-open-positions">
+            <div class="kpi-title">What the Bot Currently Holds</div>
+            <div id="openPositions" style="font-size:0.88rem;line-height:1.7;">
+                <span style="color:#5a7a99;">Loading…</span>
+            </div>
+            <div class="small" style="margin-top:8px;color:#5a7a99;" id="openPositionsTs"></div>
+        </div>
+
+        <div class="card full" id="panel-last-signals">
+            <div class="kpi-title">How Each Stock Was Evaluated This Cycle</div>
+            <div class="small" style="margin-bottom:10px;color:#5a7a99;">Shows what the bot decided for each symbol and <em>why</em>. Updated every cycle.</div>
+            <div id="lastSignals" style="font-size:0.88rem;line-height:1.7;">
+                <span style="color:#5a7a99;">Loading…</span>
+            </div>
+            <div class="small" style="margin-top:8px;color:#5a7a99;" id="lastSignalsTs"></div>
+        </div>
+
+        <div class="card half" id="panel-data-health">
+            <div class="kpi-title">Data Freshness</div>
+            <div id="dataHealth" style="font-size:0.88rem;line-height:1.9;">
+                <span style="color:#5a7a99;">Loading…</span>
+            </div>
+            <div class="small" style="margin-top:8px;color:#5a7a99;" id="dataHealthTs"></div>
+        </div>
+
+        <div class="card half" id="panel-bot-heartbeat">
+            <div class="kpi-title">Bot Activity Status</div>
+            <div id="botHeartbeat" style="font-size:0.88rem;line-height:1.9;">
+                <span style="color:#5a7a99;">Loading…</span>
+            </div>
+            <div class="small" style="margin-top:8px;color:#5a7a99;" id="botHeartbeatTs"></div>
+        </div>
+        <!-- ── END OBSERVABILITY CARDS ─────────────────────────────── -->
+
         <div class="card full" id="panel-logs" style="display:none;">
             <div class="kpi-title">Recent Crypto Bot Log</div>
             <div id="cryptoLog" class="mono" style="white-space:pre-wrap;font-size:0.84rem;line-height:1.42;max-height:280px;overflow-y:auto;background:#121a24;border:1px solid #2a3440;border-radius:8px;padding:10px;"></div>
@@ -2152,12 +2195,196 @@
             }
         }
 
+        // ── OBSERVABILITY HELPERS ──────────────────────────────────────
+
+        function _obsAgo(isoTs) {
+            if (!isoTs) return '';
+            const d = new Date(isoTs);
+            if (isNaN(d)) return '';
+            const secs = Math.floor((Date.now() - d.getTime()) / 1000);
+            if (secs < 60) return `${secs}s ago`;
+            if (secs < 3600) return `${Math.floor(secs / 60)}m ago`;
+            if (secs < 86400) return `${Math.floor(secs / 3600)}h ago`;
+            return `${Math.floor(secs / 86400)}d ago`;
+        }
+
+        function _obsSecsAgo(seconds) {
+            if (seconds === null || seconds === undefined) return 'unknown';
+            const s = Number(seconds);
+            if (isNaN(s)) return 'unknown';
+            if (s < 60) return `${s}s ago`;
+            if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+            if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+            return `${Math.floor(s / 86400)}d ago`;
+        }
+
+        function _obsColor(condition) {
+            // condition: 'good' | 'warn' | 'bad' | 'neutral'
+            if (condition === 'good') return '#3ecf8e';
+            if (condition === 'warn') return '#f59f00';
+            if (condition === 'bad') return '#f85149';
+            return '#93a4b7';
+        }
+
+        function _obsFmt(val, decimals) {
+            const n = Number(val);
+            if (isNaN(n)) return '-';
+            return n.toFixed(decimals === undefined ? 2 : decimals);
+        }
+
+        function renderLiveTrades(data) {
+            const el = document.getElementById('liveTrades');
+            const tsEl = document.getElementById('liveTradesTs');
+            if (!el) return;
+            const trades = (data && data.trades) || [];
+            if (!trades.length) {
+                el.innerHTML = '<span style="color:#5a7a99;">No trades recorded yet.</span>';
+                return;
+            }
+            const rows = trades.map(t => {
+                const ago = _obsAgo(t.timestamp);
+                const action = (t.action || '').toUpperCase();
+                const color = action === 'BUY' ? '#3ecf8e' : action === 'SELL' ? '#f85149' : '#93a4b7';
+                const path = t.entry_path && t.entry_path !== 'unknown' ? ` <span style="color:#5a7a99;font-size:0.8em;">[${t.entry_path}]</span>` : '';
+                const price = t.price ? ` @ $${_obsFmt(t.price)}` : '';
+                const qty = t.qty ? ` ${_obsFmt(t.qty, 0)} shares` : '';
+                return `<div><span style="color:${color};font-weight:600;">${action}</span> <strong>${t.symbol || '-'}</strong>${qty}${price}${path} <span style="color:#5a7a99;">${ago}</span></div>`;
+            });
+            el.innerHTML = rows.join('');
+            if (tsEl) tsEl.textContent = `Showing last ${trades.length} trade(s)`;
+        }
+
+        function renderOpenPositions(data) {
+            const el = document.getElementById('openPositions');
+            const tsEl = document.getElementById('openPositionsTs');
+            if (!el) return;
+            const positions = (data && data.positions) || [];
+            if (!positions.length) {
+                el.innerHTML = '<span style="color:#5a7a99;">No open positions.</span>';
+                if (tsEl) tsEl.textContent = 'Source: ' + (data && data.source || 'unknown');
+                return;
+            }
+            const rows = positions.map(p => {
+                const pl = p.unrealized_pl;
+                const plpct = p.unrealized_plpc;
+                let plHtml = '';
+                if (pl !== null && pl !== undefined) {
+                    const sign = Number(pl) >= 0 ? '+' : '';
+                    const color = Number(pl) >= 0 ? '#3ecf8e' : '#f85149';
+                    const pctStr = plpct !== null && plpct !== undefined ? ` (${sign}${_obsFmt(Number(plpct) * 100, 1)}%)` : '';
+                    plHtml = ` → <span style="color:${color};font-weight:600;">${sign}$${_obsFmt(Math.abs(Number(pl)))}${pctStr}</span>`;
+                }
+                const qty = p.qty ? `${_obsFmt(Number(p.qty), 0)} shares` : '-';
+                const entry = p.entry_price ? `entry $${_obsFmt(p.entry_price)}` : '';
+                const current = p.current_price ? ` · now $${_obsFmt(p.current_price)}` : '';
+                return `<div><strong>${p.symbol || '-'}</strong>: ${qty}${entry ? ', ' + entry : ''}${current}${plHtml}</div>`;
+            });
+            el.innerHTML = rows.join('');
+            if (tsEl) tsEl.textContent = `${positions.length} position(s) · source: ${data.source || 'unknown'}`;
+        }
+
+        function renderLastSignals(data) {
+            const el = document.getElementById('lastSignals');
+            const tsEl = document.getElementById('lastSignalsTs');
+            if (!el) return;
+            const signals = (data && data.signals) || [];
+            if (!signals.length) {
+                el.innerHTML = '<span style="color:#5a7a99;">No signal data yet — waiting for bot cycle.</span>';
+                return;
+            }
+            // Group: BUY, HOLD, SKIP/REJECT
+            const buys = signals.filter(s => (s.entry_path || '').toLowerCase().includes('buy') || (s.reason || '').toLowerCase().includes('buy'));
+            const holds = signals.filter(s => (s.reason || '').toLowerCase().includes('hold') || (s.reason || '').toLowerCase().includes('no_signal') || (s.reason || '').toLowerCase().includes('no signal'));
+            const others = signals.filter(s => !buys.includes(s) && !holds.includes(s));
+            const renderGroup = (arr, color) => arr.map(s => {
+                const pct = s.predicted_change_pct ? ` · model: ${Number(s.predicted_change_pct) >= 0 ? '+' : ''}${_obsFmt(s.predicted_change_pct, 2)}%` : '';
+                const path = s.entry_path && s.entry_path !== 'unknown' ? ` [${s.entry_path}]` : '';
+                const reason = s.reason && s.reason !== 'unknown' ? ` — ${s.reason}` : '';
+                return `<div><span style="color:${color};font-weight:600;">${s.symbol || '-'}</span>${path}${pct}${reason}</div>`;
+            }).join('');
+            let html = '';
+            if (buys.length) html += `<div style="margin-bottom:6px;"><span style="color:#5a7a99;font-size:0.8em;">BUYING</span>${renderGroup(buys, '#3ecf8e')}</div>`;
+            if (holds.length) html += `<div style="margin-bottom:6px;"><span style="color:#5a7a99;font-size:0.8em;">HOLDING / NO ACTION</span>${renderGroup(holds, '#93a4b7')}</div>`;
+            if (others.length) html += `<div><span style="color:#5a7a99;font-size:0.8em;">SKIPPED / REJECTED</span>${renderGroup(others, '#f59f00')}</div>`;
+            el.innerHTML = html || '<span style="color:#5a7a99;">No signals.</span>';
+            if (tsEl) {
+                const latestTs = signals.map(s => s.timestamp).filter(Boolean).sort().pop();
+                tsEl.textContent = latestTs ? `Last evaluated ${_obsAgo(latestTs)} · ${signals.length} symbol(s)` : `${signals.length} symbol(s)`;
+            }
+        }
+
+        function renderDataHealth(data) {
+            const el = document.getElementById('dataHealth');
+            const tsEl = document.getElementById('dataHealthTs');
+            if (!el) return;
+            const sources = (data && data.sources) || {};
+            if (!Object.keys(sources).length) {
+                el.innerHTML = '<span style="color:#5a7a99;">No health data yet.</span>';
+                return;
+            }
+            const rows = Object.entries(sources).map(([name, info]) => {
+                const status = (info.status || 'unknown').toLowerCase();
+                const color = status === 'healthy' ? '#3ecf8e' : (status === 'stale' ? '#f59f00' : '#f85149');
+                const label = status === 'healthy' ? 'Fresh' : (status === 'stale' ? 'Stale' : 'Unknown');
+                const ageStr = info.age_seconds !== undefined && info.age_seconds !== null ? ` (${_obsSecsAgo(info.age_seconds)})` : '';
+                const confStr = info.confidence !== undefined ? ` · confidence ${_obsFmt(Number(info.confidence) * 100, 0)}%` : '';
+                const displayName = name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return `<div><strong>${displayName}</strong>: <span style="color:${color};">${label}</span>${ageStr}${confStr}</div>`;
+            });
+            el.innerHTML = rows.join('');
+            if (tsEl && data.timestamp) tsEl.textContent = `Checked ${_obsAgo(data.timestamp)}`;
+        }
+
+        function renderBotHeartbeat(data) {
+            const el = document.getElementById('botHeartbeat');
+            const tsEl = document.getElementById('botHeartbeatTs');
+            if (!el) return;
+            const bots = (data && data.bots) || {};
+            if (!Object.keys(bots).length) {
+                el.innerHTML = '<span style="color:#5a7a99;">No heartbeat data yet.</span>';
+                return;
+            }
+            const rows = Object.entries(bots).map(([name, info]) => {
+                const status = (info.status || 'unknown').toLowerCase();
+                const color = status === 'running' ? '#3ecf8e' : (status === 'stale' ? '#f59f00' : '#f85149');
+                const label = status === 'running' ? 'Running' : (status === 'stale' ? 'Silent' : status === 'stopped' ? 'Stopped' : 'Unknown');
+                const ageStr = info.last_output_age_seconds !== null && info.last_output_age_seconds !== undefined
+                    ? ` · last activity ${_obsSecsAgo(info.last_output_age_seconds)}` : '';
+                const displayName = name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return `<div><strong>${displayName}</strong>: <span style="color:${color};font-weight:600;">${label}</span>${ageStr}</div>`;
+            });
+            el.innerHTML = rows.join('');
+            if (tsEl && data.timestamp) tsEl.textContent = `Checked ${_obsAgo(data.timestamp)}`;
+        }
+
+        async function refreshObservability() {
+            try {
+                const [trades, positions, signals, health, heartbeat] = await Promise.all([
+                    fetch('/bot_live_trades').then(r => r.json()).catch(() => null),
+                    fetch('/bot_open_positions').then(r => r.json()).catch(() => null),
+                    fetch('/bot_last_signals').then(r => r.json()).catch(() => null),
+                    fetch('/bot_data_health').then(r => r.json()).catch(() => null),
+                    fetch('/bot_heartbeat').then(r => r.json()).catch(() => null),
+                ]);
+                if (trades) renderLiveTrades(trades);
+                if (positions) renderOpenPositions(positions);
+                if (signals) renderLastSignals(signals);
+                if (health) renderDataHealth(health);
+                if (heartbeat) renderBotHeartbeat(heartbeat);
+            } catch (e) {
+                console.warn('Observability refresh error:', e);
+            }
+        }
+
+        // ── END OBSERVABILITY HELPERS ──────────────────────────────────
+
         async function refreshDashboard() {
             try {
                 const res = await fetch('/bot_dashboard_data');
                 const data = await res.json();
                 renderDashboard(data);
                 runSystemHealthCheck(false);
+                refreshObservability();
             } catch (e) {
                 document.getElementById('lastUpdated').textContent = 'Failed to load dashboard data';
             }
