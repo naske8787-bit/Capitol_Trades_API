@@ -13,11 +13,19 @@ has_systemd_unit() {
 
 echo "=== HEALTH $(date -u +"%Y-%m-%dT%H:%M:%SZ") ==="
 
+declare -A BOT_UNITS=(
+  [trading_bot]="capitol-trading-bot.service"
+  [crypto_bot]="capitol-crypto-bot.service"
+)
+
 for s in trading_bot crypto_bot; do
+  unit="${BOT_UNITS[$s]}"
   if tmux has-session -t "$s" 2>/dev/null; then
     echo "UP   tmux:$s"
+  elif command -v systemctl >/dev/null 2>&1 && has_systemd_unit "$unit" && [[ "$(systemctl is-active "$unit" || true)" == "active" ]]; then
+    echo "UP   systemd:$unit"
   else
-    echo "DOWN tmux:$s"
+    echo "DOWN $s"
     fail=1
   fi
 done
