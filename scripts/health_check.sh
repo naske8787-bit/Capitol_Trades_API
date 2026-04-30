@@ -11,14 +11,39 @@ has_systemd_unit() {
   [[ "$state" != "not-found" ]]
 }
 
+check_log_freshness() {
+  local label="$1"
+  local file_path="$2"
+  local max_age_seconds="$3"
+
+  if [[ ! -f "$file_path" ]]; then
+    echo "$label log: missing ($file_path)"
+    fail=1
+    return
+  fi
+
+  local now ts age
+  now="$(date +%s)"
+  ts="$(stat -c %Y "$file_path" 2>/dev/null || echo 0)"
+  age=$((now - ts))
+
+  if (( age > max_age_seconds )); then
+    echo "$label log: stale ${age}s ($file_path)"
+    fail=1
+  else
+    echo "$label log: fresh ${age}s"
+  fi
+}
+
 echo "=== HEALTH $(date -u +"%Y-%m-%dT%H:%M:%SZ") ==="
 
 declare -A BOT_UNITS=(
   [trading_bot]="capitol-trading-bot.service"
   [crypto_bot]="capitol-crypto-bot.service"
+  [tech_research_bot]="capitol-tech-research-bot.service"
 )
 
-for s in trading_bot crypto_bot; do
+for s in trading_bot crypto_bot tech_research_bot; do
   unit="${BOT_UNITS[$s]}"
   if tmux has-session -t "$s" 2>/dev/null; then
     echo "UP   tmux:$s"
@@ -52,6 +77,16 @@ if command -v systemctl >/dev/null 2>&1; then
     echo "dashboard: inactive"
     fail=1
   fi
+fi
+
+# Detect silent loops where a supervisor runs but the bot does not produce output.
+check_log_freshness "crypto" "$ROOT_DIR/crypto_bot/bot.log" 10800
+check_log_freshness "research" "$ROOT_DIR/tech_research_bot/bot.log" 10800
+
+# Catch repeated Alpaca auth failures for crypto preflight.
+if [[ -f "$ROOT_DIR/crypto_bot/supervisor.log" ]] && tail -n 40 "$ROOT_DIR/crypto_bot/supervisor.log" | grep -q "Preflight failed: Alpaca auth returned HTTP 401"; then
+  echo "crypto preflight: AUTH 401"
+  fail=1
 fi
 
 api_code="$(curl -sS -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/health || echo 000)"
